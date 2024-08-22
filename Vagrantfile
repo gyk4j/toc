@@ -8,80 +8,16 @@
 Vagrant.configure("2") do |config|
   config.vm.define "main" do |main|
     main.vm.box = "ubuntu/jammy64"
-    main.vm.hostname = "main.local"
+    main.vm.hostname = "main.toc.local"
     main.vm.network "private_network", ip: "192.168.56.10", hostname: true
-    main.vm.provision "shell", inline: <<-SHELL
-      # Reference: https://docs.docker.com/engine/install/ubuntu/
-      # Add Docker's official GPG key:
-      apt-get update
-      apt-get install -y ca-certificates curl
-      install -m 0755 -d /etc/apt/keyrings
-      curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
-      chmod a+r /etc/apt/keyrings/docker.asc
-
-      # Add the repository to Apt sources:
-      echo \
-        "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
-        $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
-        tee /etc/apt/sources.list.d/docker.list > /dev/null
-      apt-get update
-    
-      # Install Docker
-      apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
-        
-      systemctl start docker
-      docker version
-      
-      # Post-installation steps
-      
-      # Manage Docker as a non-root user
-      groupadd docker
-      usermod -aG docker vagrant
-      newgrp docker
-      
-      # Configure Docker to start on boot with systemd
-      systemctl enable docker.service
-      systemctl enable containerd.service
-    SHELL
+    main.vm.provision "shell", name: "main", path: "v-ubuntu22.sh"
   end
   
   config.vm.define "stepup" do |stepup|
     stepup.vm.box = "ubuntu/jammy64"
-    stepup.vm.hostname = "stepup.local"
+    stepup.vm.hostname = "stepup.toc.local"
     stepup.vm.network "private_network", ip: "192.168.56.20", hostname: true
-    stepup.vm.provision "shell", inline: <<-SHELL
-      # Reference: https://docs.docker.com/engine/install/ubuntu/
-      # Add Docker's official GPG key:
-      apt-get update
-      apt-get install -y ca-certificates curl
-      install -m 0755 -d /etc/apt/keyrings
-      curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
-      chmod a+r /etc/apt/keyrings/docker.asc
-
-      # Add the repository to Apt sources:
-      echo \
-        "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
-        $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
-        tee /etc/apt/sources.list.d/docker.list > /dev/null
-      apt-get update
-
-      # Install Docker
-      apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
-        
-      systemctl start docker
-      docker version
-
-      # Post-installation steps
-
-      # Manage Docker as a non-root user
-      groupadd docker
-      usermod -aG docker vagrant
-      newgrp docker
-
-      # Configure Docker to start on boot with systemd
-      systemctl enable docker.service
-      systemctl enable containerd.service
-    SHELL
+    stepup.vm.provision "shell", name: "stepup", path: "v-ubuntu22.sh"
   end
 
   # The most common configuration options are documented and commented below.
@@ -148,29 +84,5 @@ Vagrant.configure("2") do |config|
   # Enable provisioning with a shell script. Additional provisioners such as
   # Ansible, Chef, Docker, Puppet and Salt are also available. Please see the
   # documentation for more information about their specific syntax and use.
-  # config.vm.provision "shell", inline: <<-SHELL
-        # Running as root. No need for `sudo`
-        # Reference: https://docs.docker.com/engine/install/centos/
-        # yum update
-        # yum install -y yum-utils
-        # yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
-        
-        # Install specific version of Docker engine as CentOS Stream 9 will go 
-        # out-of-date, and newest Docker engine may no longer work in future.
-        # Specify the version that is used and tested to work.
-        # yum install -y docker-ce-3:27.1.2-1.el9 docker-ce-cli-1:27.1.2-1.el9 containerd.io docker-buildx-plugin docker-compose-plugin
-        # systemctl start docker
-        # docker version
-        
-        # Post-installation steps
-        
-        # Manage Docker as a non-root user
-        # groupadd docker
-        # usermod -aG docker vagrant
-        # newgrp docker
-        
-        # Configure Docker to start on boot with systemd
-        # systemctl enable docker.service
-        # systemctl enable containerd.service
-  # SHELL
+  # config.vm.provision "shell", path: "v-centos9s.sh"
 end
