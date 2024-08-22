@@ -2,5 +2,5 @@ FROM php:apache
 
 RUN apt update && apt upgrade
 
-WORKDIR /usr/local/apache2/htdocs/
+WORKDIR /var/www/html
 COPY ./public-html/ /var/www/html
