@@ -12,3 +12,14 @@ services:
     ports:
       - "3306:3306"
       - "33060:33060"
+  file:
+    build: ./file
+    restart: always
+    environment:
+      USER: user
+      PASS: password
+    ports:
+      - "445:445"
+    volumes:
+      - "./file/storage:/storage"
+      
