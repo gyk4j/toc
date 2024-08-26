@@ -1,9 +1,14 @@
 services:
   web:
     build: ./web
+    depends_on:
+      - db
+      - file
     ports:
       - "80:80"
       - "443:443"
+    volumes:
+      - "./mount/storage:/storage"
   db:
     build: ./db
     restart: always
@@ -21,5 +26,5 @@ services:
     ports:
       - "445:445"
     volumes:
-      - "./file/storage:/storage"
+      - "./mount/storage:/storage"
       

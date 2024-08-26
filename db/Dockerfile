@@ -1,4 +1,4 @@
-FROM mysql
+FROM mysql:lts
 
 ENV MYSQL_ROOT_PASSWORD=password
 ENV MYSQL_DATABASE=db
