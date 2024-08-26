@@ -1,10 +1,10 @@
 FROM dockurr/samba
 
-# VOLUME /storage
+# VOLUME /media/storage
 
 RUN apk update
 
-WORKDIR /storage
+WORKDIR /media/storage
 
 ENV USER=user
 ENV PASS=password
