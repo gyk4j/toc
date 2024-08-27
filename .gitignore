@@ -23,4 +23,8 @@ go.work
 # Vagrant
 .vagrant
 
+# Data
+mount/mail
+mount/storage
+
 
