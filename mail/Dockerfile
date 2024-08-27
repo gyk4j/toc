@@ -18,7 +18,6 @@ COPY initialdata.sh /root
 COPY imapserver.xml /root/conf
 COPY smtpserver.xml /root/conf
 COPY pop3server.xml /root/conf
-COPY keystore /root/conf
 
 RUN chmod +x /root/startup.sh
 RUN chmod +x /root/initialdata.sh
