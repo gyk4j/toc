@@ -24,7 +24,6 @@ go.work
 .vagrant
 
 # Data
-mount/mail
+mount/mail/*
+!mount/mail/.gitkeep
 mount/storage
-
-
