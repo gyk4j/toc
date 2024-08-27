@@ -22,4 +22,4 @@ COPY pop3server.xml /root/conf
 RUN chmod +x /root/startup.sh
 RUN chmod +x /root/initialdata.sh
 
-ENTRYPOINT ["/root/startup.sh"]
+ENTRYPOINT ["/bin/bash", "/root/startup.sh"]
