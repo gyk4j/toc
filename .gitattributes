@@ -8,6 +8,7 @@
 *.py text eol=lf
 *.rb text eol=lf
 *.tcl text eol=lf
+*.conf text eol=lf
 
 # Declare files that will always have CRLF line endings on checkout.
 *.sln text eol=crlf

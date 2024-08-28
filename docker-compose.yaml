@@ -37,4 +37,19 @@ services:
       - "993:993"
     volumes:
       - "./mount/mail:/root/var"
-      
+  dns:
+    build: ./dns
+    environment:
+      DNS1: "1.0.0.1"
+      DNS2: "1.1.1.1"
+    ports:
+      - 53:53/udp
+      - 53:53/tcp
+    extra_hosts:
+      - "mail=192.168.56.10"
+    cap_add:
+      - NET_ADMIN
+    volumes:
+      - ./dns/dnsmasq.d/:/etc/dnsmasq.d/
+      - ./dns/dnsmasq.conf:/etc/dnsmasq.conf
+      - ./dns/banner_add_hosts:/etc/banner_add_hosts
