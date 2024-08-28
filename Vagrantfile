@@ -7,6 +7,10 @@
 # you're doing.
 Vagrant.configure("2") do |config|
   config.vm.define "main" do |main|
+    main.vm.provider "virtualbox" do |v|
+      v.memory = 2048
+      v.cpus = 1
+    end
     main.vm.box = "ubuntu/jammy64"
     main.vm.hostname = "main.toc.local"
     main.vm.network "private_network", ip: "192.168.56.10", hostname: true
@@ -14,6 +18,10 @@ Vagrant.configure("2") do |config|
   end
   
   config.vm.define "stepup" do |stepup|
+    stepup.vm.provider "virtualbox" do |v|
+      v.memory = 2048
+      v.cpus = 1
+    end
     stepup.vm.box = "ubuntu/jammy64"
     stepup.vm.hostname = "stepup.toc.local"
     stepup.vm.network "private_network", ip: "192.168.56.20", hostname: true
