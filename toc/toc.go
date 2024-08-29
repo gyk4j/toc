@@ -19,10 +19,12 @@ func main() {
 func Exec(container string) {
   cmd := exec.Command("docker", "exec", container, "cat", "/etc/hostname")
   var out strings.Builder
-	cmd.Stdout = &out
+  cmd.Stdout = &out
   err := cmd.Run()
   if err != nil {
-		log.Fatal(err)
-	}
-	fmt.Printf("%s: %s\n", container, out.String())
+    log.Fatal(err)
+  }
+  // Shell output has a new line at the end.
+  // So excluding our own \n new line in Printf.
+  fmt.Printf("%s: %s", container, out.String())
 }
