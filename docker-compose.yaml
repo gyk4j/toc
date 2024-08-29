@@ -1,6 +1,9 @@
+name: toc
+
 services:
   web:
     build: ./web
+    hostname: apache-server
     depends_on:
       - db
       - file
@@ -11,6 +14,7 @@ services:
       - "./mount/storage:/storage"
   db:
     build: ./db
+    hostname: mysql-server
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: password
@@ -19,6 +23,7 @@ services:
       - "33060:33060"
   file:
     build: ./file
+    hostname: samba-server
     restart: always
     environment:
       USER: user
@@ -28,7 +33,8 @@ services:
     volumes:
       - "./mount/storage:/storage"
   mail:
-    build: ./mail 
+    build: ./mail
+    hostname: apache-james-server
     ports:
       - "25:25"
       - "465:465"
@@ -37,19 +43,30 @@ services:
       - "993:993"
     volumes:
       - "./mount/mail:/root/var"
-  dns:
-    build: ./dns
-    environment:
-      DNS1: "1.0.0.1"
-      DNS2: "1.1.1.1"
-    ports:
-      - 53:53/udp
-      - 53:53/tcp
-    extra_hosts:
-      - "mail=192.168.56.10"
-    cap_add:
-      - NET_ADMIN
+  # dns:
+    # build: ./dns
+    # hostname: dnsmasq-server
+    # environment:
+      # DNS1: "1.0.0.1"
+      # DNS2: "1.1.1.1"
+    # ports:
+      # - 53:53/udp
+      # - 53:53/tcp
+    # extra_hosts:
+      # - "mail=192.168.56.10"
+    # cap_add:
+      # - NET_ADMIN
+    # volumes:
+      # - ./dns/dnsmasq.d/:/etc/dnsmasq.d/
+      # - ./dns/dnsmasq.conf:/etc/dnsmasq.conf
+      # - ./dns/banner_add_hosts:/etc/banner_add_hosts
+  toc:
+    build: ./toc
+    hostname: toc-controller
+    depends_on:
+      - web
+      - db
+      - file
+      - mail
     volumes:
-      - ./dns/dnsmasq.d/:/etc/dnsmasq.d/
-      - ./dns/dnsmasq.conf:/etc/dnsmasq.conf
-      - ./dns/banner_add_hosts:/etc/banner_add_hosts
+      - /var/run/docker.sock:/var/run/docker.sock

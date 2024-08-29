@@ -16,5 +16,17 @@ FROM alpine:latest AS run
 
 WORKDIR /opt/toc/
 
-COPY --from=build /opt/toc/toc .
-ENTRYPOINT ["./toc"]
+RUN apk update && apk upgrade && apk add iputils docker-cli
+
+CMD ping -c 1 db ; \
+    ping -c 1 file ; \
+    ping -c 1 mail ; \
+    ping -c 1 web ; \
+    docker exec toc-db-1 cat /etc/hostname ; \
+    docker exec toc-file-1 cat /etc/hostname ; \
+    docker exec toc-mail-1 cat /etc/hostname ; \
+    docker exec toc-web-1 cat /etc/hostname ; \
+    sleep 120
+
+# COPY --from=build /opt/toc/toc .
+# ENTRYPOINT ["./toc"]
