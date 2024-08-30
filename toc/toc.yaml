@@ -1,0 +1,275 @@
+swagger: '2.0'
+info:
+  version: 1.0.0
+  title: TOC API
+  description: An API to create backup and restoration
+  termsOfService: "http://gyk4j.github.io/terms/"
+  contact:
+    email: "147011991+gyk4j@users.noreply.github.com"
+  license:
+    name: "Eclipse Public License 2.0 (EPL)"
+    url: "https://www.eclipse.org/legal/epl-2.0/"
+host: toc
+basePath: /v1
+tags:
+- name: "backup"
+  description: "For creating new backup snapshots and querying backup info"
+  externalDocs:
+    description: "Find out more about TOC"
+    url: "https://github.com/gyk4j/toc"
+- name: "restoration"
+  description: "For performing backup restoration and querying restoration info and status"
+  externalDocs:
+    description: "Find out more about TOC"
+    url: "https://github.com/gyk4j/toc"
+- name: "transfer"
+  description: "For transferring backup snapshots and querying transfer info and status"
+  externalDocs:
+    description: "Find out more about TOC"
+    url: "https://github.com/gyk4j/toc"
+schemes:
+- "http"
+paths:
+  /backup:
+    post:
+      tags:
+      - "backup"
+      summary: "Create a new backup snapshot"
+      description: "Create a new backup snapshot"
+      operationId: "createBackup"
+      consumes:
+      - "application/json"
+      - "application/xml"
+      produces:
+      - "application/json"
+      - "application/xml"
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        "405":
+          description: "Invalid input"
+  /backup/findByStatus:
+    get:
+      tags:
+      - "backup"
+      summary: "Finds Backups by status"
+      description: "Multiple status values can be provided with comma separated strings"
+      operationId: "findBackupsByStatus"
+      produces:
+      - "application/json"
+      - "application/xml"
+      parameters:
+      - name: "status"
+        in: "query"
+        description: "Status values that need to be considered for filter"
+        required: true
+        type: "array"
+        items:
+          type: "string"
+          default: "available"
+          enum:
+          - "in-progress"
+          - "completed"
+          - "failed"
+        collectionFormat: "multi"
+        x-exportParamName: "Status"
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Backup"
+        "400":
+          description: "Invalid status value"
+  /backup/{backupId}:
+    get:
+      tags:
+      - "backup"
+      summary: "Find backup by ID"
+      description: "Returns a single backup snapshot"
+      operationId: "getBackupById"
+      produces:
+      - "application/json"
+      - "application/xml"
+      parameters:
+      - name: "backupId"
+        in: "path"
+        description: "ID of backup to return"
+        required: true
+        type: "integer"
+        format: "int64"
+        x-exportParamName: "BackupId"
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/Backup"
+        "400":
+          description: "Invalid ID supplied"
+        "404":
+          description: "Backup not found"
+  /session/backup:
+    post:
+      tags:
+      - "session"
+      summary: "Create an snapshot for a backup"
+      description: ""
+      operationId: "createBackup"
+      consumes:
+      - "application/json"
+      - "application/xml"
+      produces:
+      - "application/json"
+      - "application/xml"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Snapshot placed for creating the backup"
+        required: true
+        schema:
+          $ref: "#/definitions/Backup"
+        x-exportParamName: "Body"
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/Backup"
+        "400":
+          description: "Invalid Backup"
+  /session/backup/{backupId}:
+    get:
+      tags:
+      - "session"
+      summary: "Find backup by ID"
+      description: "For valid response try integer IDs with value >= 1 and <= 10.\
+        \ Other values will generated exceptions"
+      operationId: "getBackupById"
+      produces:
+      - "application/json"
+      - "application/xml"
+      parameters:
+      - name: "backupId"
+        in: "path"
+        description: "ID of backup that needs to be fetched"
+        required: true
+        type: "integer"
+        format: "int64"
+        x-exportParamName: "BackupId"
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/Backup"
+        "400":
+          description: "Invalid ID supplied"
+        "404":
+          description: "Backup not found"
+  /restoration:
+    post:
+      tags:
+      - "restoration"
+      summary: "Create restoration"
+      description: "Create restoration"
+      operationId: "createRestoration"
+      consumes:
+      - "application/json"
+      - "application/xml"
+      produces:
+      - "application/json"
+      - "application/xml"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Created restoration object"
+        required: true
+        schema:
+          $ref: "#/definitions/Restoration"
+        x-exportParamName: "Body"
+      responses:
+        default:
+          description: "successful operation"
+        
+definitions:
+  ApiResponse:
+    type: "object"
+    properties:
+      code:
+        type: "integer"
+        format: "int32"
+      type:
+        type: "string"
+      message:
+        type: "string"
+    example:
+      code: 0
+      type: "type"
+      message: "message"
+  Backup:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      status:
+        type: "string"
+        description: "Backup Status"
+        enum:
+        - "queued"
+        - "in-progress"
+        - "completed"
+        - "failed"
+      complete:
+        type: "boolean"
+    xml:
+      name: "Backup"
+    example:
+      name: "name"
+      id: 1
+  Restoration:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      status:
+        type: "string"
+        description: "Restoration Status"
+        enum:
+        - "queued"
+        - "in-progress"
+        - "completed"
+        - "failed"
+      complete:
+        type: "boolean"
+    xml:
+      name: "Restoration"
+    example:
+      name: "name"
+      id: 1
+  Transfer:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      status:
+        type: "string"
+        description: "Transfer Status"
+        enum:
+        - "queued"
+        - "in-progress"
+        - "completed"
+        - "failed"
+      complete:
+        type: "boolean"
+    xml:
+      name: "Transfer"
+    example:
+      name: "name"
+      id: 1
+externalDocs:
+  description: "Find out more about TOC"
+  url: "https://github.com/gyk4j/toc"
