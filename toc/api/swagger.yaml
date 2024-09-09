@@ -1,16 +1,17 @@
-swagger: '2.0'
+---
+swagger: "2.0"
 info:
-  version: 1.0.0
-  title: TOC API
-  description: An API to create backup and restoration
+  description: "An API to create backup and restoration"
+  version: "1.0.0"
+  title: "TOC API"
   termsOfService: "http://gyk4j.github.io/terms/"
   contact:
     email: "147011991+gyk4j@users.noreply.github.com"
   license:
     name: "Eclipse Public License 2.0 (EPL)"
     url: "https://www.eclipse.org/legal/epl-2.0/"
-host: toc
-basePath: /v1
+host: "toc"
+basePath: "/v1"
 tags:
 - name: "backup"
   description: "For creating new backup snapshots and querying backup info"
@@ -18,7 +19,8 @@ tags:
     description: "Find out more about TOC"
     url: "https://github.com/gyk4j/toc"
 - name: "restoration"
-  description: "For performing backup restoration and querying restoration info and status"
+  description: "For performing backup restoration and querying restoration info and\
+    \ status"
   externalDocs:
     description: "Find out more about TOC"
     url: "https://github.com/gyk4j/toc"
@@ -29,6 +31,168 @@ tags:
     url: "https://github.com/gyk4j/toc"
 schemes:
 - "http"
+paths:
+  /backups:
+    get:
+      tags:
+      - "backup"
+      summary: "Query backup info"
+      description: "Retrieve information and state of all backups and their snapshots"
+      operationId: "getBackup"
+      produces:
+      - "application/json"
+      parameters: []
+      responses:
+        "200":
+          description: "Backup info retrieved"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Backup"
+        "403":
+          description: "Forbidden from querying backup info"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        "404":
+          description: "Backup not found"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        "405":
+          description: "Bad request"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        "500":
+          description: "TOC controller error"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        "503":
+          description: "Service unavailable"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+    post:
+      tags:
+      - "backup"
+      summary: "Create a new backup snapshot"
+      description: "Create a new backup snapshot"
+      operationId: "newBackup"
+      produces:
+      - "application/json"
+      parameters: []
+      responses:
+        "200":
+          description: "Backup started"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        "403":
+          description: "Forbidden from creating duplicate/repeat backup"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        "404":
+          description: "Main backup server not found"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        "405":
+          description: "Bad request"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        "500":
+          description: "Main TOC controller error"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        "502":
+          description: "Bad gateway. Main backup server error"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        "503":
+          description: "Service unavailable on main TOC controller"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        "504":
+          description: "Gateway timeout. Main backup server did not reply."
+          schema:
+            $ref: "#/definitions/ApiResponse"
+  /backups/{backupId}:
+    get:
+      tags:
+      - "backup"
+      summary: "Find backup by ID"
+      description: "Query a single backup"
+      operationId: "getBackupById"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "backupId"
+        in: "path"
+        description: "ID of backup to return"
+        required: true
+        type: "integer"
+        format: "int64"
+        x-exportParamName: "BackupId"
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/Backup"
+        "400":
+          description: "Invalid ID supplied"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        "404":
+          description: "Backup not found"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+  /restorations:
+    post:
+      tags:
+      - "restoration"
+      summary: "Start a backup restoration attempt"
+      description: "Run backup restoration and return immediately without waiting"
+      operationId: "newRestoration"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Backup and associated snapshots for restoration"
+        required: true
+        schema:
+          $ref: "#/definitions/Backup"
+        x-exportParamName: "Body"
+      responses:
+        "200":
+          description: "Restoration started"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        "403":
+          description: "Forbidden from creating duplicate/repeat restoration"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        "404":
+          description: "Stepup backup server not found"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        "405":
+          description: "Bad request"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        "500":
+          description: "Stepup TOC controller error"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        "502":
+          description: "Bad gateway. Stepup backup server error"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        "503":
+          description: "Service unavailable on stepup TOC controller"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        "504":
+          description: "Gateway timeout. Stepup backup server did not reply."
+          schema:
+            $ref: "#/definitions/ApiResponse"
 definitions:
   ApiResponse:
     type: "object"
@@ -115,167 +279,7 @@ definitions:
     xml:
       name: "Transfer"
     example:
-      id: 1    
-paths:
-  /backups:
-    post:
-      tags:
-      - "backup"
-      summary: "Create a new backup snapshot"
-      description: "Create a new backup snapshot"
-      operationId: "newBackup"
-      produces:
-      - "application/json"
-      responses:
-        "200":
-          description: "Backup started"
-          schema:
-            $ref: "#/definitions/ApiResponse"
-        "403":
-          description: "Forbidden from creating duplicate/repeat backup"
-          schema:
-            $ref: "#/definitions/ApiResponse"
-        "404":
-          description: "Main backup server not found"
-          schema:
-            $ref: "#/definitions/ApiResponse"
-        "405":
-          description: "Bad request"
-          schema:
-            $ref: "#/definitions/ApiResponse"
-        "500":
-          description: "Main TOC controller error"
-          schema:
-            $ref: "#/definitions/ApiResponse"
-        "502":
-          description: "Bad gateway. Main backup server error"
-          schema:
-            $ref: "#/definitions/ApiResponse"
-        "503":
-          description: "Service unavailable on main TOC controller"
-          schema:
-            $ref: "#/definitions/ApiResponse"
-        "504":
-          description: "Gateway timeout. Main backup server did not reply."
-          schema:
-            $ref: "#/definitions/ApiResponse"
-    get:
-      tags:
-      - "backup"
-      summary: "Query backup info"
-      description: "Retrieve information and state of all backups and their snapshots"
-      operationId: "getBackup"
-      produces:
-      - "application/json"
-      responses:
-        "200":
-          description: "Backup info retrieved"
-          schema:
-            type: "array"
-            items:
-              $ref: "#/definitions/Backup"
-        "403":
-          description: "Forbidden from querying backup info"
-          schema:
-            $ref: "#/definitions/ApiResponse"
-        "404":
-          description: "Backup not found"
-          schema:
-            $ref: "#/definitions/ApiResponse"
-        "405":
-          description: "Bad request"
-          schema:
-            $ref: "#/definitions/ApiResponse"
-        "500":
-          description: "TOC controller error"
-          schema:
-            $ref: "#/definitions/ApiResponse"
-        "503":
-          description: "Service unavailable"
-          schema:
-            $ref: "#/definitions/ApiResponse"
-  /backups/{backupId}:
-    get:
-      tags:
-      - "backup"
-      summary: "Find backup by ID"
-      description: "Query a single backup"
-      operationId: "getBackupById"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "backupId"
-        in: "path"
-        description: "ID of backup to return"
-        required: true
-        type: "integer"
-        format: "int64"
-        x-exportParamName: "BackupId"
-      responses:
-        "200":
-          description: "successful operation"
-          schema:
-            $ref: "#/definitions/Backup"
-        "400":
-          description: "Invalid ID supplied"
-          schema:
-            $ref: "#/definitions/ApiResponse"
-        "404":
-          description: "Backup not found"
-          schema:
-            $ref: "#/definitions/ApiResponse"
-  /restorations:
-    post:
-      tags:
-      - "restoration"
-      summary: "Start a backup restoration attempt"
-      description: "Run backup restoration and return immediately without waiting"
-      operationId: "newRestoration"
-      consumes:
-      - "application/json"
-      produces:
-      - "application/json"
-      parameters:
-      - in: "body"
-        name: "body"
-        description: "Backup and associated snapshots for restoration"
-        required: true
-        schema:
-          $ref: "#/definitions/Backup"
-        x-exportParamName: "Body"
-      responses:
-        "200":
-          description: "Restoration started"
-          schema:
-            $ref: "#/definitions/ApiResponse"
-        "403":
-          description: "Forbidden from creating duplicate/repeat restoration"
-          schema:
-            $ref: "#/definitions/ApiResponse"
-        "404":
-          description: "Stepup backup server not found"
-          schema:
-            $ref: "#/definitions/ApiResponse"
-        "405":
-          description: "Bad request"
-          schema:
-            $ref: "#/definitions/ApiResponse"
-        "500":
-          description: "Stepup TOC controller error"
-          schema:
-            $ref: "#/definitions/ApiResponse"
-        "502":
-          description: "Bad gateway. Stepup backup server error"
-          schema:
-            $ref: "#/definitions/ApiResponse"
-        "503":
-          description: "Service unavailable on stepup TOC controller"
-          schema:
-            $ref: "#/definitions/ApiResponse"
-        "504":
-          description: "Gateway timeout. Stepup backup server did not reply."
-          schema:
-            $ref: "#/definitions/ApiResponse"
+      id: 1
 externalDocs:
   description: "Find out more about TOC"
   url: "https://github.com/gyk4j/toc"
