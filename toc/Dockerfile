@@ -1,32 +1,14 @@
-FROM alpine:latest AS build
+FROM golang:1.10 AS build
+WORKDIR /go/src
+COPY go ./go
+COPY main.go .
 
-WORKDIR /opt/toc/
+ENV CGO_ENABLED=0
+RUN go get -d -v ./...
 
-RUN apk update && apk upgrade && apk add go gcc musl musl-dev
-RUN go version && /usr/bin/x86_64-alpine-linux-musl-gcc -v
+RUN go build -a -installsuffix cgo -o swagger .
 
-COPY toc.go .
-RUN CC=/usr/bin/x86_64-alpine-linux-musl-gcc \
-  go build \
-    --ldflags '-linkmode external -extldflags "-static"' \
-    toc.go
-# RUN ls -la && ./toc && sleep 10
-
-FROM alpine:latest AS run
-
-WORKDIR /opt/toc/
-
-RUN apk update && apk upgrade && apk add iputils docker-cli
-
-#CMD ping -c 1 db ; \
-#    ping -c 1 file ; \
-#    ping -c 1 mail ; \
-#    ping -c 1 web ; \
-#    docker exec toc-db-1 cat /etc/hostname ; \
-#    docker exec toc-file-1 cat /etc/hostname ; \
-#    docker exec toc-mail-1 cat /etc/hostname ; \
-#    docker exec toc-web-1 cat /etc/hostname ; \
-#    sleep 120
-
-COPY --from=build /opt/toc/toc .
-ENTRYPOINT ["./toc"]
+FROM scratch AS runtime
+COPY --from=build /go/src/swagger ./
+EXPOSE 8080/tcp
+ENTRYPOINT ["./swagger"]
