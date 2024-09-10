@@ -10,12 +10,22 @@
 
 package swagger
 
-type Transfer struct {
+import (
+	"time"
+)
+
+type Log struct {
 
 	Id int64 `json:"id,omitempty"`
 
-	Backup *Backup `json:"backup,omitempty"`
+	Time time.Time `json:"time,omitempty"`
 
-	// Transfer Status
+	// Archive Status
 	Status string `json:"status,omitempty"`
+
+	Url string `json:"url,omitempty"`
+
+	Xml interface{} `json:"xml,omitempty"`
+
+	Example interface{} `json:"example,omitempty"`
 }

@@ -78,9 +78,44 @@ var routes = Routes{
 	},
 
 	Route{
+		"ExportLog",
+		strings.ToUpper("Get"),
+		"/v1/logs",
+		ExportLog,
+	},
+
+	Route{
+		"GetQuota",
+		strings.ToUpper("Get"),
+		"/v1/quotas",
+		GetQuota,
+	},
+
+	Route{
+		"GetRestoration",
+		strings.ToUpper("Get"),
+		"/v1/restorations",
+		GetRestoration,
+	},
+
+	Route{
+		"GetRestorationById",
+		strings.ToUpper("Get"),
+		"/v1/restorations/{restorationId}",
+		GetRestorationById,
+	},
+
+	Route{
 		"NewRestoration",
 		strings.ToUpper("Post"),
 		"/v1/restorations",
 		NewRestoration,
+	},
+
+	Route{
+		"NewSynchronization",
+		strings.ToUpper("Post"),
+		"/v1/synchronizations",
+		NewSynchronization,
 	},
 }

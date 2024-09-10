@@ -10,12 +10,12 @@
 
 package swagger
 
-type Transfer struct {
+type Statuses string
 
-	Id int64 `json:"id,omitempty"`
-
-	Backup *Backup `json:"backup,omitempty"`
-
-	// Transfer Status
-	Status string `json:"status,omitempty"`
-}
+// List of Statuses
+const (
+	QUEUED Statuses = "queued"
+	IN_PROGRESS Statuses = "in-progress"
+	COMPLETED Statuses = "completed"
+	FAILED Statuses = "failed"
+)

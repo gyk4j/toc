@@ -10,12 +10,13 @@
 
 package swagger
 
-type Transfer struct {
+type Severity string
 
-	Id int64 `json:"id,omitempty"`
-
-	Backup *Backup `json:"backup,omitempty"`
-
-	// Transfer Status
-	Status string `json:"status,omitempty"`
-}
+// List of Severity
+const (
+	ERROR_ Severity = "error"
+	WARNING Severity = "warning"
+	INFO Severity = "info"
+	DEBUG Severity = "debug"
+	TRACE Severity = "trace"
+)
