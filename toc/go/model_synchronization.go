@@ -10,12 +10,20 @@
 
 package swagger
 
-type Transfer struct {
+import (
+	"time"
+)
+
+type Synchronization struct {
 
 	Id int64 `json:"id,omitempty"`
 
-	Backup *Backup `json:"backup,omitempty"`
+	Time time.Time `json:"time,omitempty"`
 
-	// Transfer Status
+	// Synchronization Status
 	Status string `json:"status,omitempty"`
+
+	Xml interface{} `json:"xml,omitempty"`
+
+	Example interface{} `json:"example,omitempty"`
 }

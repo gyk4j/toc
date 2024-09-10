@@ -10,12 +10,17 @@
 
 package swagger
 
-type Transfer struct {
+type Quota struct {
 
 	Id int64 `json:"id,omitempty"`
 
-	Backup *Backup `json:"backup,omitempty"`
+	Path string `json:"path,omitempty"`
 
-	// Transfer Status
-	Status string `json:"status,omitempty"`
+	Soft int64 `json:"soft,omitempty"`
+
+	Hard int64 `json:"hard,omitempty"`
+
+	Xml interface{} `json:"xml,omitempty"`
+
+	Example interface{} `json:"example,omitempty"`
 }

@@ -15,4 +15,7 @@ type Restoration struct {
 	Id int64 `json:"id,omitempty"`
 
 	Backup *Backup `json:"backup,omitempty"`
+
+	// Restoration Status
+	Status string `json:"status,omitempty"`
 }

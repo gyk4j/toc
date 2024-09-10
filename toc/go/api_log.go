@@ -10,12 +10,11 @@
 
 package swagger
 
-type Transfer struct {
+import (
+	"net/http"
+)
 
-	Id int64 `json:"id,omitempty"`
-
-	Backup *Backup `json:"backup,omitempty"`
-
-	// Transfer Status
-	Status string `json:"status,omitempty"`
+func ExportLog(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
+	w.WriteHeader(http.StatusOK)
 }

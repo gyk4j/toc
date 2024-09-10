@@ -10,12 +10,12 @@
 
 package swagger
 
-type Transfer struct {
+type Servers string
 
-	Id int64 `json:"id,omitempty"`
-
-	Backup *Backup `json:"backup,omitempty"`
-
-	// Transfer Status
-	Status string `json:"status,omitempty"`
-}
+// List of Servers
+const (
+	WEB Servers = "web"
+	FILE Servers = "file"
+	DB Servers = "db"
+	MAIL Servers = "mail"
+)

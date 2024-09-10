@@ -10,12 +10,10 @@
 
 package swagger
 
-type Transfer struct {
+type Connections string
 
-	Id int64 `json:"id,omitempty"`
-
-	Backup *Backup `json:"backup,omitempty"`
-
-	// Transfer Status
-	Status string `json:"status,omitempty"`
-}
+// List of Connections
+const (
+	ONLINE Connections = "online"
+	OFFLINE Connections = "offline"
+)
