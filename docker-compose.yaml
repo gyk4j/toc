@@ -85,6 +85,9 @@ services:
       - mail
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+    extra_hosts:
+      - "main:192.168.56.10"
+      - "stepup:192.168.56.20"
     # networks:
       # static_net:
         # ipv4_address: 10.5.1.5

@@ -13,7 +13,7 @@ func main() {
   Exec("toc-file-1")
   Exec("toc-mail-1")
   Exec("toc-web-1")
-  time.Sleep(2 * time.Minute)
+  time.Sleep(60 * time.Minute)
 }
 
 func Exec(container string) {
