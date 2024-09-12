@@ -11,10 +11,10 @@ Vagrant.configure("2") do |config|
       v.memory = 2048
       v.cpus = 1
     end
-    main.vm.box = "ubuntu/jammy64"
+    main.vm.box = "boxomatic/alpine-3.20"
     main.vm.hostname = "main.toc.local"
     main.vm.network "private_network", ip: "192.168.56.10", hostname: true
-    main.vm.provision "shell", name: "main", path: "v-ubuntu22.sh"
+    main.vm.provision "shell", name: "main", path: "v-alpine320.sh"
   end
   
   config.vm.define "stepup" do |stepup|
@@ -22,10 +22,10 @@ Vagrant.configure("2") do |config|
       v.memory = 2048
       v.cpus = 1
     end
-    stepup.vm.box = "ubuntu/jammy64"
+    stepup.vm.box = "boxomatic/alpine-3.20"
     stepup.vm.hostname = "stepup.toc.local"
     stepup.vm.network "private_network", ip: "192.168.56.20", hostname: true
-    stepup.vm.provision "shell", name: "stepup", path: "v-ubuntu22.sh"
+    stepup.vm.provision "shell", name: "stepup", path: "v-alpine320.sh"
   end
 
   # The most common configuration options are documented and commented below.
