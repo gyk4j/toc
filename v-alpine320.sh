@@ -24,7 +24,12 @@ newgrp docker
 
 rc-service docker start
 rc-service docker status
-docker version
+
+# For Alpine, docker daemon is not ready immediately after installation, 
+# despite the docker service status being reported as "started".
+# The VM needs to be restarted with `vagrant reload` first, and will work fine.
+# Thus, commenting out the `docker version` during provisioning.
+# docker version
 
 # Configure Docker to start on boot with OpenRC
 rc-update add docker boot
