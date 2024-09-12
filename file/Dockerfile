@@ -1,10 +1,9 @@
 FROM dockurr/samba
 
-# VOLUME /media/storage
+# RUN apk update
 
-RUN apk update
-
-WORKDIR /media/storage
+# Hard-coded to /storage in smb.conf, samba.sh and Dockerfile
+WORKDIR /storage
 
 ENV USER=user
 ENV PASS=password
