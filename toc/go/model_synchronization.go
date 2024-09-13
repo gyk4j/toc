@@ -22,8 +22,4 @@ type Synchronization struct {
 
 	// Synchronization Status
 	Status string `json:"status,omitempty"`
-
-	Xml interface{} `json:"xml,omitempty"`
-
-	Example interface{} `json:"example,omitempty"`
 }

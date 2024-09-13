@@ -24,8 +24,4 @@ type Log struct {
 	Status string `json:"status,omitempty"`
 
 	Url string `json:"url,omitempty"`
-
-	Xml interface{} `json:"xml,omitempty"`
-
-	Example interface{} `json:"example,omitempty"`
 }

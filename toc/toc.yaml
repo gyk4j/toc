@@ -178,12 +178,12 @@ definitions:
         type: "string"
         description: "Synchronization Status"
         enum: *STATUSES
-      xml:
-        name: "Synchronization"
-      example:
-        id: 1
-        time: "20241231T235959Z"
-        status: "in-progress"
+    xml:
+      name: "Synchronization"
+    example:
+      id: 1
+      time: "20241231T235959Z"
+      status: "in-progress"
   Quota:
     type: "object"
     properties:
@@ -198,13 +198,13 @@ definitions:
       hard:
         type: "integer"
         format: "int64"
-      xml:
-        name: "Synchronization"
-      example:
-        id: 1
-        path: "/home/toc/"
-        soft: 838860800
-        hard: 1073741824
+    xml:
+      name: "Synchronization"
+    example:
+      id: 1
+      path: "/home/toc/"
+      soft: 838860800
+      hard: 1073741824
   Log:
     type: "object"
     properties:
@@ -220,13 +220,13 @@ definitions:
         enum: *STATUSES
       url:
         type: "string"
-      xml:
-        name: "Log"
-      example:
-        id: 1
-        time: "20241231T235959Z"
-        status: "completed"
-        url: "/static/logs-20240910T064100Z.zip"
+    xml:
+      name: "Log"
+    example:
+      id: 1
+      time: "20241231T235959Z"
+      status: "completed"
+      url: "/static/logs-20240910T064100Z.zip"
   Archive:
     type: "object"
     properties:
@@ -242,13 +242,13 @@ definitions:
         enum: *STATUSES
       url:
         type: "string"
-      xml:
-        name: "Archive"
-      example:
-        id: 1
-        time: "20241231T235959Z"
-        status: "pending"
-        url: "/archives/1"
+    xml:
+      name: "Archive"
+    example:
+      id: 1
+      time: "20241231T235959Z"
+      status: "pending"
+      url: "/archives/1"
 paths:
   /backups:
     post:
@@ -553,7 +553,7 @@ paths:
           schema:
             $ref: "#/definitions/ApiResponse"
   /logs:
-    get:
+    post:
       tags:
         - "log"
       summary: "Export logs"
@@ -584,6 +584,105 @@ paths:
             $ref: "#/definitions/ApiResponse"
         "503":
           description: "Service unavailable"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+  /archives:
+    post:
+      tags:
+        - "archive"
+      summary: "Archive data"
+      description: "Create a ZIP archive of backup snapshot data"
+      operationId: "archiveData"
+      produces:
+        - "application/json"
+      responses:
+        "200":
+          description: "Data archived"
+          schema:
+            $ref: "#/definitions/Archive"
+        "403":
+          description: "Forbidden from archiving data"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        "404":
+          description: "Data not found"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        "405":
+          description: "Bad request"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        "500":
+          description: "TOC controller error"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        "503":
+          description: "Service unavailable"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+    get:
+      tags:
+        - "archive"
+      summary: "Query archive info"
+      description: "Retrieve progress, information and state of all archives"
+      operationId: "getArchive"
+      produces:
+        - "application/json"
+      responses:
+        "200":
+          description: "Archive info retrieved"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Archive"
+        "403":
+          description: "Forbidden from querying archive info"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        "404":
+          description: "Archive not found"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        "405":
+          description: "Bad request"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        "500":
+          description: "TOC controller error"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        "503":
+          description: "Service unavailable"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+  /archives/{archiveId}:
+    get:
+      tags:
+        - "archive"
+      summary: "Find archive by ID"
+      description: "Query a single archive"
+      operationId: "getArchiveById"
+      produces:
+        - "application/json"
+      parameters:
+        - name: "archiveId"
+          in: "path"
+          description: "ID of archive to return"
+          required: true
+          type: "integer"
+          format: "int64"
+          x-exportParamName: "ArchiveId"
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/Archive"
+        "400":
+          description: "Invalid ID supplied"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        "404":
+          description: "Archive not found"
           schema:
             $ref: "#/definitions/ApiResponse"
 externalDocs:
