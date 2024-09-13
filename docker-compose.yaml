@@ -84,6 +84,7 @@ services:
       - file
       - mail
     volumes:
+      - .:/opt/toc/
       - /var/run/docker.sock:/var/run/docker.sock
     extra_hosts:
       - "main:192.168.56.10"

@@ -1,32 +1,32 @@
 FROM alpine:latest AS build
 
-WORKDIR /opt/toc/
-
 RUN apk update && apk upgrade && apk add go gcc musl musl-dev
 RUN go version && /usr/bin/x86_64-alpine-linux-musl-gcc -v
 
+WORKDIR /usr/local/src
+
 COPY toc.go .
 RUN CC=/usr/bin/x86_64-alpine-linux-musl-gcc \
-  go build \
-    --ldflags '-linkmode external -extldflags "-static"' \
-    toc.go
+  go build -o /usr/local/bin/toc toc.go
 # RUN ls -la && ./toc && sleep 10
 
 FROM alpine:latest AS run
 
-WORKDIR /opt/toc/
+RUN apk update && apk upgrade && apk add iputils docker-cli docker-cli-compose
 
-RUN apk update && apk upgrade && apk add iputils docker-cli
+VOLUME /opt/toc/
+
+WORKDIR /opt/toc/
 
 #CMD ping -c 1 db ; \
 #    ping -c 1 file ; \
 #    ping -c 1 mail ; \
 #    ping -c 1 web ; \
-#    docker exec toc-db-1 cat /etc/hostname ; \
-#    docker exec toc-file-1 cat /etc/hostname ; \
-#    docker exec toc-mail-1 cat /etc/hostname ; \
-#    docker exec toc-web-1 cat /etc/hostname ; \
+#CMD docker compose exec db cat /etc/hostname ; \
+#    docker compose exec file cat /etc/hostname ; \
+#    docker compose exec mail cat /etc/hostname ; \
+#    docker compose exec web cat /etc/hostname ; \
 #    sleep 120
 
-COPY --from=build /opt/toc/toc .
-ENTRYPOINT ["./toc"]
+COPY --from=build /usr/local/bin/toc /usr/local/bin/toc
+ENTRYPOINT ["/usr/local/bin/toc"]
