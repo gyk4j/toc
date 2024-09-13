@@ -19,8 +19,4 @@ type Quota struct {
 	Soft int64 `json:"soft,omitempty"`
 
 	Hard int64 `json:"hard,omitempty"`
-
-	Xml interface{} `json:"xml,omitempty"`
-
-	Example interface{} `json:"example,omitempty"`
 }

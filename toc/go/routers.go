@@ -57,6 +57,27 @@ var routes = Routes{
 	},
 
 	Route{
+		"ArchiveData",
+		strings.ToUpper("Post"),
+		"/v1/archives",
+		ArchiveData,
+	},
+
+	Route{
+		"GetArchive",
+		strings.ToUpper("Get"),
+		"/v1/archives",
+		GetArchive,
+	},
+
+	Route{
+		"GetArchiveById",
+		strings.ToUpper("Get"),
+		"/v1/archives/{archiveId}",
+		GetArchiveById,
+	},
+
+	Route{
 		"GetBackup",
 		strings.ToUpper("Get"),
 		"/v1/backups",
@@ -79,7 +100,7 @@ var routes = Routes{
 
 	Route{
 		"ExportLog",
-		strings.ToUpper("Get"),
+		strings.ToUpper("Post"),
 		"/v1/logs",
 		ExportLog,
 	},
