@@ -27,3 +27,6 @@ go.work
 mount/mail/*
 !mount/mail/.gitkeep
 mount/storage
+
+# Swagger/OpenAPI 2.0 generated skeleton stub
+template/
