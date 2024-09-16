@@ -12,19 +12,68 @@ package swagger
 
 import (
 	"net/http"
+  "encoding/json"
+  "time"
+  "fmt"
+  "log"
+  "strconv"
+  
+  "github.com/gorilla/mux"
 )
 
+var archives = make([]Archive, 0)
+
 func ArchiveData(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
-	w.WriteHeader(http.StatusOK)
+  now := time.Now()
+  
+  archive := Archive{
+    Id: int64(len(archives)),
+    Time: now,
+    Status: string(QUEUED),
+    Url: fmt.Sprintf("/archives/%d", len(archives)),
+  }
+  
+  archives = append(archives, archive)
+
+	payload, err := json.Marshal(archive)
+	if err != nil {
+		log.Println(err)
+	}
+  
+  w.Header().Set("Content-Type", "application/json; charset=UTF-8")
+  w.WriteHeader(http.StatusOK)
+  w.Write(payload)
 }
 
 func GetArchive(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
-	w.WriteHeader(http.StatusOK)
+  payload, err := json.Marshal(archives)
+	if err != nil {
+		log.Println(err)
+	}
+
+  w.Header().Set("Content-Type", "application/json; charset=UTF-8")
+  w.WriteHeader(http.StatusOK)
+  w.Write(payload)
 }
 
 func GetArchiveById(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
-	w.WriteHeader(http.StatusOK)
+  vars := mux.Vars(r)
+  archiveId := vars["archiveId"]
+  
+  id, err := strconv.Atoi(archiveId)
+  if err != nil {
+    w.WriteHeader(http.StatusBadRequest)
+  }  else if id < 0 || id >= len(archives) {
+    w.WriteHeader(http.StatusNotFound)
+  } else {
+    archive := archives[id]
+    payload, err := json.Marshal(archive)
+    if err != nil {
+      log.Println(err)
+    }
+
+    w.Header().Set("Content-Type", "application/json; charset=UTF-8")
+    w.WriteHeader(http.StatusOK)
+    w.Write(payload)
+  }
 }

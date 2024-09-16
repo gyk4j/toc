@@ -83,12 +83,15 @@ definitions:
       code:
         type: "integer"
         format: "int32"
+        x-omitempty: false
       type:
         type: "string"
+        x-omitempty: false
         description: "Severity level"
         enum: *SEVERITY
       message:
         type: "string"
+        x-omitempty: false
     example:
       code: 0
       type: "type"
@@ -99,14 +102,18 @@ definitions:
       id:
         type: "integer"
         format: "int64"
+        x-omitempty: false
       file:
         type: "string"
+        x-omitempty: false
       status:
         type: "string"
+        x-omitempty: false
         description: "Snapshot Status"
         enum: *STATUSES
       complete:
         type: "boolean"
+        x-omitempty: false
     xml:
       name: "snapshot"
     example:
@@ -120,11 +127,14 @@ definitions:
       id:
         type: "integer"
         format: "int64"
+        x-omitempty: false
       time:
         type: "string"
         format: "date-time"
+        x-omitempty: false
       snapshots:
         type: "array"
+        x-omitempty: false
         items:
           $ref: "#/definitions/Snapshot"
     xml:
@@ -138,10 +148,13 @@ definitions:
       id:
         type: "integer"
         format: "int64"
+        x-omitempty: false
       backup:
         $ref: "#/definitions/Backup"
+        x-omitempty: false
       status:
         type: "string"
+        x-omitempty: false
         description: "Restoration Status"
         enum: *STATUSES
     xml:
@@ -154,10 +167,13 @@ definitions:
       id:
         type: "integer"
         format: "int64"
+        x-omitempty: false
       backup:
         $ref: "#/definitions/Backup"
+        x-omitempty: false
       status:
         type: "string"
+        x-omitempty: false
         description: "Transfer Status"
         enum: *STATUSES
     xml:
@@ -171,11 +187,14 @@ definitions:
       id:
         type: "integer"
         format: "int64"
+        x-omitempty: false
       time:
         type: "string"
         format: "date-time"
+        x-omitempty: false
       status:
         type: "string"
+        x-omitempty: false
         description: "Synchronization Status"
         enum: *STATUSES
     xml:
@@ -190,14 +209,18 @@ definitions:
       id:
         type: "integer"
         format: "int64"
+        x-omitempty: false
       path:
         type: "string"
+        x-omitempty: false
       soft:
         type: "integer"
         format: "int64"
+        x-omitempty: false
       hard:
         type: "integer"
         format: "int64"
+        x-omitempty: false
     xml:
       name: "Synchronization"
     example:
@@ -211,15 +234,19 @@ definitions:
       id:
         type: "integer"
         format: "int64"
+        x-omitempty: false
       time:
         type: "string"
         format: "date-time"
+        x-omitempty: false
       status:
         type: "string"
+        x-omitempty: false
         description: "Archive Status"
         enum: *STATUSES
       url:
         type: "string"
+        x-omitempty: false
     xml:
       name: "Log"
     example:
@@ -233,15 +260,19 @@ definitions:
       id:
         type: "integer"
         format: "int64"
+        x-omitempty: false
       time:
         type: "string"
         format: "date-time"
+        x-omitempty: false
       status:
         type: "string"
+        x-omitempty: false
         description: "Archive Status"
         enum: *STATUSES
       url:
         type: "string"
+        x-omitempty: false
     xml:
       name: "Archive"
     example:
