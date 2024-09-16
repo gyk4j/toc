@@ -50,33 +50,33 @@ tags:
 schemes:
   - "http"
 definitions:
-  Severity:
-    type: string
-    enum: &SEVERITY
-      - error
-      - warning
-      - info
-      - debug
-      - trace
-  Connections:
-    type: string
-    enum: &CONNECTIONS
-      - online
-      - offline
-  Statuses:
-    type: string
-    enum: &STATUSES
-      - queued
-      - in-progress
-      - completed
-      - failed
-  Servers:
-    type: string
-    enum: &SERVERS
-      - web
-      - file
-      - db
-      - mail
+  # Severity:
+    # type: string
+    # enum: &SEVERITY
+      # - error
+      # - warning
+      # - info
+      # - debug
+      # - trace
+  # Connections:
+    # type: string
+    # enum: &CONNECTIONS
+      # - online
+      # - offline
+  # Statuses:
+    # type: string
+    # enum: &STATUSES
+      # - queued
+      # - in-progress
+      # - completed
+      # - failed
+  # Servers:
+    # type: string
+    # enum: &SERVERS
+      # - web
+      # - file
+      # - db
+      # - mail
   ApiResponse:
     type: "object"
     properties:
@@ -88,13 +88,13 @@ definitions:
         type: "string"
         x-omitempty: false
         description: "Severity level"
-        enum: *SEVERITY
+        enum: [ error, warning, info, debug, trace ]
       message:
         type: "string"
         x-omitempty: false
     example:
       code: 0
-      type: "type"
+      type: "info"
       message: "message"
   Snapshot:
     type: "object"
@@ -110,7 +110,7 @@ definitions:
         type: "string"
         x-omitempty: false
         description: "Snapshot Status"
-        enum: *STATUSES
+        enum: [ queued, in-progress, completed, failed ]
       complete:
         type: "boolean"
         x-omitempty: false
@@ -140,7 +140,7 @@ definitions:
     xml:
       name: "Backup"
     example:
-      time: "20241231T235959Z"
+      time: "2024-12-31T23:59:59Z"
       id: 1
   Restoration:
     type: "object"
@@ -156,31 +156,31 @@ definitions:
         type: "string"
         x-omitempty: false
         description: "Restoration Status"
-        enum: *STATUSES
+        enum: [ queued, in-progress, completed, failed ]
     xml:
       name: "Restoration"
     example:
       id: 1
-  Transfer:
-    type: "object"
-    properties:
-      id:
-        type: "integer"
-        format: "int64"
-        x-omitempty: false
-      backup:
-        $ref: "#/definitions/Backup"
-        x-omitempty: false
-      status:
-        type: "string"
-        x-omitempty: false
-        description: "Transfer Status"
-        enum: *STATUSES
-    xml:
-      name: "Transfer"
-    example:
-      id: 1
-      status: "failed"
+  # Transfer:
+    # type: "object"
+    # properties:
+      # id:
+        # type: "integer"
+        # format: "int64"
+        # x-omitempty: false
+      # backup:
+        # $ref: "#/definitions/Backup"
+        # x-omitempty: false
+      # status:
+        # type: "string"
+        # x-omitempty: false
+        # description: "Transfer Status"
+        # enum: [ queued, in-progress, completed, failed ]
+    # xml:
+      # name: "Transfer"
+    # example:
+      # id: 1
+      # status: "failed"
   Synchronization:
     type: "object"
     properties:
@@ -196,12 +196,12 @@ definitions:
         type: "string"
         x-omitempty: false
         description: "Synchronization Status"
-        enum: *STATUSES
+        enum: [ queued, in-progress, completed, failed ]
     xml:
       name: "Synchronization"
     example:
       id: 1
-      time: "20241231T235959Z"
+      time: "2024-12-31T23:59:59Z"
       status: "in-progress"
   Quota:
     type: "object"
@@ -243,7 +243,7 @@ definitions:
         type: "string"
         x-omitempty: false
         description: "Archive Status"
-        enum: *STATUSES
+        enum: [ queued, in-progress, completed, failed ]
       url:
         type: "string"
         x-omitempty: false
@@ -251,7 +251,7 @@ definitions:
       name: "Log"
     example:
       id: 1
-      time: "20241231T235959Z"
+      time: "2024-12-31T23:59:59Z"
       status: "completed"
       url: "/static/logs-20240910T064100Z.zip"
   Archive:
@@ -269,7 +269,7 @@ definitions:
         type: "string"
         x-omitempty: false
         description: "Archive Status"
-        enum: *STATUSES
+        enum: [ queued, in-progress, completed, failed ]
       url:
         type: "string"
         x-omitempty: false
@@ -277,8 +277,8 @@ definitions:
       name: "Archive"
     example:
       id: 1
-      time: "20241231T235959Z"
-      status: "pending"
+      time: "2024-12-31T23:59:59Z"
+      status: "queued"
       url: "/archives/1"
 paths:
   /backups:
@@ -518,7 +518,7 @@ paths:
         "200":
           description: "Synchronization started"
           schema:
-            $ref: "#/definitions/ApiResponse"
+            $ref: "#/definitions/Synchronization"
         "403":
           description: "Forbidden from starting synchronization"
           schema:
