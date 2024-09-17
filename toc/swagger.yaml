@@ -1,7 +1,7 @@
 swagger: '2.0'
 info:
   version: 1.0.0
-  title: TOC API
+  title: toc
   description: An API to create backup and restoration
   termsOfService: "http://gyk4j.github.io/terms/"
   contact:
@@ -9,7 +9,7 @@ info:
   license:
     name: "Eclipse Public License 2.0 (EPL)"
     url: "https://www.eclipse.org/legal/epl-2.0/"
-host: toc
+host: 127.0.0.1:8080
 basePath: /v1
 tags:
   - name: "backup"
