@@ -5,7 +5,7 @@ RUN go version && /usr/bin/x86_64-alpine-linux-musl-gcc -v
 
 WORKDIR /usr/local/src
 
-COPY toc.go .
+COPY server.bak/toc.go .
 RUN CC=/usr/bin/x86_64-alpine-linux-musl-gcc \
   go build -o /usr/local/bin/toc toc.go
 # RUN ls -la && ./toc && sleep 10

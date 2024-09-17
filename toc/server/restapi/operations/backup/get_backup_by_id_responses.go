@@ -10,7 +10,7 @@ import (
 
 	"github.com/go-openapi/runtime"
 
-	"github.com/gyk4j/toc/toc/models"
+	"github.com/gyk4j/toc/toc/server/models"
 )
 
 // GetBackupByIDOKCode is the HTTP code returned for type GetBackupByIDOK

@@ -13,15 +13,15 @@ import (
 	"github.com/go-openapi/runtime/middleware"
   "github.com/go-openapi/strfmt"
 
-	"github.com/gyk4j/toc/toc/restapi/operations"
-	"github.com/gyk4j/toc/toc/restapi/operations/archive"
-	"github.com/gyk4j/toc/toc/restapi/operations/backup"
-	logops "github.com/gyk4j/toc/toc/restapi/operations/log"
-	"github.com/gyk4j/toc/toc/restapi/operations/quota"
-	"github.com/gyk4j/toc/toc/restapi/operations/restoration"
-	"github.com/gyk4j/toc/toc/restapi/operations/synchronization"
+	"github.com/gyk4j/toc/toc/server/restapi/operations"
+	"github.com/gyk4j/toc/toc/server/restapi/operations/archive"
+	"github.com/gyk4j/toc/toc/server/restapi/operations/backup"
+	logops "github.com/gyk4j/toc/toc/server/restapi/operations/log"
+	"github.com/gyk4j/toc/toc/server/restapi/operations/quota"
+	"github.com/gyk4j/toc/toc/server/restapi/operations/restoration"
+	"github.com/gyk4j/toc/toc/server/restapi/operations/synchronization"
   
-  "github.com/gyk4j/toc/toc/models"
+  "github.com/gyk4j/toc/toc/server/models"
 )
 
 //go:generate swagger generate server --target ..\..\sw --name Toc --spec ..\swagger.yaml --principal interface{}
