@@ -14,7 +14,7 @@ import (
 	"github.com/go-openapi/runtime/middleware"
 	"github.com/go-openapi/validate"
 
-	"github.com/gyk4j/toc/toc/models"
+	"github.com/gyk4j/toc/toc/server/models"
 )
 
 // NewNewRestorationParams creates a new NewRestorationParams object

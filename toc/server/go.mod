@@ -1,4 +1,4 @@
-module github.com/gyk4j/toc/toc
+module github.com/gyk4j/toc/toc/server
 
 go 1.20
 
