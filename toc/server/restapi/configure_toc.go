@@ -4,14 +4,12 @@ package restapi
 
 import (
 	"crypto/tls"
+	"log"
 	"net/http"
-  "log"
-  "time"
 
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/runtime/middleware"
-  "github.com/go-openapi/strfmt"
 
 	"github.com/gyk4j/toc/toc/server/restapi/operations"
 	"github.com/gyk4j/toc/toc/server/restapi/operations/archive"
@@ -20,8 +18,8 @@ import (
 	"github.com/gyk4j/toc/toc/server/restapi/operations/quota"
 	"github.com/gyk4j/toc/toc/server/restapi/operations/restoration"
 	"github.com/gyk4j/toc/toc/server/restapi/operations/synchronization"
-  
-  "github.com/gyk4j/toc/toc/server/models"
+
+	"github.com/gyk4j/toc/toc/server/services"
 )
 
 //go:generate swagger generate server --target ..\..\sw --name Toc --spec ..\swagger.yaml --principal interface{}
@@ -48,37 +46,44 @@ func configureAPI(api *operations.TocAPI) http.Handler {
 
 	api.JSONProducer = runtime.JSONProducer()
 
-	if api.ArchiveArchiveDataHandler == nil {
-		api.ArchiveArchiveDataHandler = archive.ArchiveDataHandlerFunc(func(params archive.ArchiveDataParams) middleware.Responder {
-			return middleware.NotImplemented("operation archive.ArchiveData has not yet been implemented")
-		})
-	}
+	api.ArchiveArchiveDataHandler = archive.ArchiveDataHandlerFunc(func(params archive.ArchiveDataParams) middleware.Responder {
+		services.ArchiveData()
+		res := archive.NewArchiveDataOK()
+		return res
+	})
+
 	if api.LogExportLogHandler == nil {
 		api.LogExportLogHandler = logops.ExportLogHandlerFunc(func(params logops.ExportLogParams) middleware.Responder {
 			return middleware.NotImplemented("operation log.ExportLog has not yet been implemented")
 		})
 	}
-	if api.ArchiveGetArchiveHandler == nil {
-		api.ArchiveGetArchiveHandler = archive.GetArchiveHandlerFunc(func(params archive.GetArchiveParams) middleware.Responder {
-			return middleware.NotImplemented("operation archive.GetArchive has not yet been implemented")
-		})
-	}
-	//if api.ArchiveGetArchiveByIDHandler == nil {
-		api.ArchiveGetArchiveByIDHandler = archive.GetArchiveByIDHandlerFunc(func(params archive.GetArchiveByIDParams) middleware.Responder {
-			api.Logger("Hello %d!", params.ArchiveID)
-      //return middleware.NotImplemented("xxx operation archive.GetArchiveByID has not yet been implemented")
-      a := models.Archive{
-        ID: params.ArchiveID,
-        Status: "in-progress",
-        Time: strfmt.DateTime(time.Now()),
-        URL: "/v1/archives/",
-      }
-      res := archive.NewGetArchiveByIDOK()
-      res.SetPayload(&a)
-      return res
-		})
-	//}
-  
+
+	api.ArchiveGetArchiveHandler = archive.GetArchiveHandlerFunc(func(params archive.GetArchiveParams) middleware.Responder {
+		var res middleware.Responder
+
+		a := services.GetArchives()
+		if a != nil {
+			res = archive.NewGetArchiveOK().WithPayload(a)
+		} else {
+			res = archive.NewGetArchiveNotFound()
+		}
+
+		return res
+	})
+
+	api.ArchiveGetArchiveByIDHandler = archive.GetArchiveByIDHandlerFunc(func(params archive.GetArchiveByIDParams) middleware.Responder {
+		var res middleware.Responder
+
+		a := services.GetArchiveByID(params.ArchiveID)
+		if a != nil {
+			res = archive.NewGetArchiveByIDOK()
+		} else {
+			res = archive.NewGetArchiveByIDNotFound()
+		}
+
+		return res
+	})
+
 	if api.BackupGetBackupHandler == nil {
 		api.BackupGetBackupHandler = backup.GetBackupHandlerFunc(func(params backup.GetBackupParams) middleware.Responder {
 			return middleware.NotImplemented("operation backup.GetBackup has not yet been implemented")
