@@ -52,11 +52,18 @@ func configureAPI(api *operations.TocAPI) http.Handler {
 		return res
 	})
 
-	if api.LogExportLogHandler == nil {
-		api.LogExportLogHandler = logops.ExportLogHandlerFunc(func(params logops.ExportLogParams) middleware.Responder {
-			return middleware.NotImplemented("operation log.ExportLog has not yet been implemented")
-		})
-	}
+	api.LogExportLogHandler = logops.ExportLogHandlerFunc(func(params logops.ExportLogParams) middleware.Responder {
+		var res middleware.Responder
+
+		l := services.NewLog()
+		if l != nil {
+			res = logops.NewExportLogOK().WithPayload(l)
+		} else {
+			res = logops.NewExportLogInternalServerError()
+		}
+
+		return res
+	})
 
 	api.ArchiveGetArchiveHandler = archive.GetArchiveHandlerFunc(func(params archive.GetArchiveParams) middleware.Responder {
 		var res middleware.Responder
