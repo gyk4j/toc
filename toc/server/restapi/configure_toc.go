@@ -135,11 +135,19 @@ func configureAPI(api *operations.TocAPI) http.Handler {
 			return middleware.NotImplemented("operation restoration.NewRestoration has not yet been implemented")
 		})
 	}
-	if api.SynchronizationNewSynchronizationHandler == nil {
-		api.SynchronizationNewSynchronizationHandler = synchronization.NewSynchronizationHandlerFunc(func(params synchronization.NewSynchronizationParams) middleware.Responder {
-			return middleware.NotImplemented("operation synchronization.NewSynchronization has not yet been implemented")
-		})
-	}
+
+	api.SynchronizationNewSynchronizationHandler = synchronization.NewSynchronizationHandlerFunc(func(params synchronization.NewSynchronizationParams) middleware.Responder {
+		var res middleware.Responder
+
+		s := services.NewSynchronization()
+		if s != nil {
+			res = synchronization.NewNewSynchronizationOK().WithPayload(s)
+		} else {
+			res = synchronization.NewNewSynchronizationServiceUnavailable()
+		}
+
+		return res
+	})
 
 	api.PreServerShutdown = func() {}
 
