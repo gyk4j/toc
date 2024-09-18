@@ -101,11 +101,20 @@ func configureAPI(api *operations.TocAPI) http.Handler {
 			return middleware.NotImplemented("operation backup.GetBackupByID has not yet been implemented")
 		})
 	}
-	if api.QuotaGetQuotaHandler == nil {
-		api.QuotaGetQuotaHandler = quota.GetQuotaHandlerFunc(func(params quota.GetQuotaParams) middleware.Responder {
-			return middleware.NotImplemented("operation quota.GetQuota has not yet been implemented")
-		})
-	}
+
+	api.QuotaGetQuotaHandler = quota.GetQuotaHandlerFunc(func(params quota.GetQuotaParams) middleware.Responder {
+		var res middleware.Responder
+
+		qs := services.GetQuotas()
+		if qs != nil {
+			res = quota.NewGetQuotaOK().WithPayload(qs)
+		} else {
+			res = quota.NewGetQuotaServiceUnavailable()
+		}
+
+		return res
+	})
+
 	if api.RestorationGetRestorationHandler == nil {
 		api.RestorationGetRestorationHandler = restoration.GetRestorationHandlerFunc(func(params restoration.GetRestorationParams) middleware.Responder {
 			return middleware.NotImplemented("operation restoration.GetRestoration has not yet been implemented")
