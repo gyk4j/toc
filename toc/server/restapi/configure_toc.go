@@ -131,16 +131,41 @@ func configureAPI(api *operations.TocAPI) http.Handler {
 		return res
 	})
 
-	if api.RestorationGetRestorationHandler == nil {
-		api.RestorationGetRestorationHandler = restoration.GetRestorationHandlerFunc(func(params restoration.GetRestorationParams) middleware.Responder {
-			return middleware.NotImplemented("operation restoration.GetRestoration has not yet been implemented")
-		})
-	}
-	if api.RestorationGetRestorationByIDHandler == nil {
-		api.RestorationGetRestorationByIDHandler = restoration.GetRestorationByIDHandlerFunc(func(params restoration.GetRestorationByIDParams) middleware.Responder {
-			return middleware.NotImplemented("operation restoration.GetRestorationByID has not yet been implemented")
-		})
-	}
+	api.RestorationGetRestorationHandler = restoration.GetRestorationHandlerFunc(func(params restoration.GetRestorationParams) middleware.Responder {
+		var res middleware.Responder
+
+		r := services.GetRestorations()
+		if r != nil {
+			res = restoration.NewGetRestorationOK().WithPayload(r)
+		} else {
+			apires := models.APIResponse{
+				Code:    http.StatusServiceUnavailable,
+				Message: "Service unavailable",
+				Type:    models.APIResponseTypeError,
+			}
+			res = restoration.NewGetRestorationServiceUnavailable().WithPayload(&apires)
+		}
+
+		return res
+	})
+
+	api.RestorationGetRestorationByIDHandler = restoration.GetRestorationByIDHandlerFunc(func(params restoration.GetRestorationByIDParams) middleware.Responder {
+		var res middleware.Responder
+
+		r := services.GetRestorationByID(params.RestorationID)
+		if r != nil {
+			res = restoration.NewGetRestorationByIDOK().WithPayload(r)
+		} else {
+			apires := models.APIResponse{
+				Code:    http.StatusNotFound,
+				Message: "Not found",
+				Type:    models.APIResponseTypeError,
+			}
+			res = restoration.NewGetRestorationByIDNotFound().WithPayload(&apires)
+		}
+
+		return res
+	})
 
 	api.BackupNewBackupHandler = backup.NewBackupHandlerFunc(func(params backup.NewBackupParams) middleware.Responder {
 		var res middleware.Responder
@@ -150,8 +175,8 @@ func configureAPI(api *operations.TocAPI) http.Handler {
 			// Swagger definition dictates an API response as payload.
 			// To re-generate if required.
 			apires := models.APIResponse{
-				Code:    200,
-				Message: "",
+				Code:    http.StatusOK,
+				Message: "OK",
 				Type:    models.APIResponseTypeInfo,
 			}
 			res = backup.NewNewBackupOK().WithPayload(&apires)
@@ -167,11 +192,30 @@ func configureAPI(api *operations.TocAPI) http.Handler {
 		return res
 	})
 
-	if api.RestorationNewRestorationHandler == nil {
-		api.RestorationNewRestorationHandler = restoration.NewRestorationHandlerFunc(func(params restoration.NewRestorationParams) middleware.Responder {
-			return middleware.NotImplemented("operation restoration.NewRestoration has not yet been implemented")
-		})
-	}
+	api.RestorationNewRestorationHandler = restoration.NewRestorationHandlerFunc(func(params restoration.NewRestorationParams) middleware.Responder {
+		var res middleware.Responder
+
+		r := services.NewRestoration()
+		if r != nil {
+			// Swagger definition dictates an API response as payload.
+			// To re-generate if required.
+			apires := models.APIResponse{
+				Code:    http.StatusOK,
+				Message: "OK",
+				Type:    models.APIResponseTypeInfo,
+			}
+			res = restoration.NewNewRestorationOK().WithPayload(&apires)
+		} else {
+			apires := models.APIResponse{
+				Code:    http.StatusInternalServerError,
+				Message: "Internal server error",
+				Type:    models.APIResponseTypeError,
+			}
+			res = restoration.NewNewRestorationInternalServerError().WithPayload(&apires)
+		}
+
+		return res
+	})
 
 	api.SynchronizationNewSynchronizationHandler = synchronization.NewSynchronizationHandlerFunc(func(params synchronization.NewSynchronizationParams) middleware.Responder {
 		var res middleware.Responder
