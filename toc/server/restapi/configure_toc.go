@@ -11,6 +11,7 @@ import (
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/runtime/middleware"
 
+	"github.com/gyk4j/toc/toc/server/models"
 	"github.com/gyk4j/toc/toc/server/restapi/operations"
 	"github.com/gyk4j/toc/toc/server/restapi/operations/archive"
 	"github.com/gyk4j/toc/toc/server/restapi/operations/backup"
@@ -91,16 +92,31 @@ func configureAPI(api *operations.TocAPI) http.Handler {
 		return res
 	})
 
-	if api.BackupGetBackupHandler == nil {
-		api.BackupGetBackupHandler = backup.GetBackupHandlerFunc(func(params backup.GetBackupParams) middleware.Responder {
-			return middleware.NotImplemented("operation backup.GetBackup has not yet been implemented")
-		})
-	}
-	if api.BackupGetBackupByIDHandler == nil {
-		api.BackupGetBackupByIDHandler = backup.GetBackupByIDHandlerFunc(func(params backup.GetBackupByIDParams) middleware.Responder {
-			return middleware.NotImplemented("operation backup.GetBackupByID has not yet been implemented")
-		})
-	}
+	api.BackupGetBackupHandler = backup.GetBackupHandlerFunc(func(params backup.GetBackupParams) middleware.Responder {
+		var res middleware.Responder
+
+		b := services.GetBackups()
+		if b != nil {
+			res = backup.NewGetBackupOK().WithPayload(b)
+		} else {
+			res = backup.NewGetBackupServiceUnavailable()
+		}
+
+		return res
+	})
+
+	api.BackupGetBackupByIDHandler = backup.GetBackupByIDHandlerFunc(func(params backup.GetBackupByIDParams) middleware.Responder {
+		var res middleware.Responder
+
+		b := services.GetBackupByID(params.BackupID)
+		if b != nil {
+			res = backup.NewGetBackupByIDOK().WithPayload(b)
+		} else {
+			res = backup.NewGetBackupByIDNotFound()
+		}
+
+		return res
+	})
 
 	api.QuotaGetQuotaHandler = quota.GetQuotaHandlerFunc(func(params quota.GetQuotaParams) middleware.Responder {
 		var res middleware.Responder
@@ -125,11 +141,32 @@ func configureAPI(api *operations.TocAPI) http.Handler {
 			return middleware.NotImplemented("operation restoration.GetRestorationByID has not yet been implemented")
 		})
 	}
-	if api.BackupNewBackupHandler == nil {
-		api.BackupNewBackupHandler = backup.NewBackupHandlerFunc(func(params backup.NewBackupParams) middleware.Responder {
-			return middleware.NotImplemented("operation backup.NewBackup has not yet been implemented")
-		})
-	}
+
+	api.BackupNewBackupHandler = backup.NewBackupHandlerFunc(func(params backup.NewBackupParams) middleware.Responder {
+		var res middleware.Responder
+
+		b := services.NewBackup()
+		if b != nil {
+			// Swagger definition dictates an API response as payload.
+			// To re-generate if required.
+			apires := models.APIResponse{
+				Code:    200,
+				Message: "",
+				Type:    models.APIResponseTypeInfo,
+			}
+			res = backup.NewNewBackupOK().WithPayload(&apires)
+		} else {
+			apires := models.APIResponse{
+				Code:    http.StatusInternalServerError,
+				Message: "Internal server error",
+				Type:    models.APIResponseTypeError,
+			}
+			res = backup.NewNewBackupInternalServerError().WithPayload(&apires)
+		}
+
+		return res
+	})
+
 	if api.RestorationNewRestorationHandler == nil {
 		api.RestorationNewRestorationHandler = restoration.NewRestorationHandlerFunc(func(params restoration.NewRestorationParams) middleware.Responder {
 			return middleware.NotImplemented("operation restoration.NewRestoration has not yet been implemented")
