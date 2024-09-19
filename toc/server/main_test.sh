@@ -22,7 +22,10 @@ echo --- Test get backup by invalid ID
 curl -sSL -X GET  http://localhost:8080/v1/backups/999 | json_pp
 
 echo --- Test new restoration
-curl -sSL -X POST http://localhost:8080/v1/restorations | json_pp
+curl -sSL -X POST http://localhost:8080/v1/restorations \
+  -d "$(curl -sSL -X GET  http://localhost:8080/v1/backups/0)" \
+  -H "Content-Type: application/json" \
+  | json_pp
 
 echo --- Test get all restorations
 curl -sSL -X GET  http://localhost:8080/v1/restorations | json_pp
