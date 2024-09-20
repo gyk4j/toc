@@ -27,11 +27,9 @@ func GetArchives() []*models.Archive {
 }
 
 func GetArchiveByID(id int64) *models.Archive {
-	a := models.Archive{
-		ID:     id,
-		Status: "in-progress",
-		Time:   strfmt.DateTime(time.Now()),
-		URL:    "/v1/archives/" + strconv.FormatInt(id, 10),
+	if id >= 0 && id < int64(len(archives)) {
+		return archives[id]
+	} else {
+		return nil
 	}
-	return &a
 }
