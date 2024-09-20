@@ -26,7 +26,7 @@ type NewBackupOK struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIResponse `json:"body,omitempty"`
+	Payload *models.Backup `json:"body,omitempty"`
 }
 
 // NewNewBackupOK creates NewBackupOK with default headers values
@@ -36,13 +36,13 @@ func NewNewBackupOK() *NewBackupOK {
 }
 
 // WithPayload adds the payload to the new backup o k response
-func (o *NewBackupOK) WithPayload(payload *models.APIResponse) *NewBackupOK {
+func (o *NewBackupOK) WithPayload(payload *models.Backup) *NewBackupOK {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the new backup o k response
-func (o *NewBackupOK) SetPayload(payload *models.APIResponse) {
+func (o *NewBackupOK) SetPayload(payload *models.Backup) {
 	o.Payload = payload
 }
 
