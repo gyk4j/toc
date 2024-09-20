@@ -1,14 +1,29 @@
 package controllers
 
 import (
+	"net/http"
+
 	"github.com/go-openapi/runtime/middleware"
+	"github.com/gyk4j/toc/toc/server/models"
 	"github.com/gyk4j/toc/toc/server/restapi/operations/archive"
 	"github.com/gyk4j/toc/toc/server/services"
 )
 
 func NewArchive(params archive.ArchiveDataParams) middleware.Responder {
-	services.ArchiveData()
-	res := archive.NewArchiveDataOK()
+	var res middleware.Responder
+
+	a := services.ArchiveData()
+	if a != nil {
+		res = archive.NewArchiveDataOK().WithPayload(a)
+	} else {
+		apires := models.APIResponse{
+			Code:    http.StatusInternalServerError,
+			Message: "Internal server error",
+			Type:    models.APIResponseTypeError,
+		}
+		res = archive.NewArchiveDataInternalServerError().WithPayload(&apires)
+	}
+
 	return res
 }
 
@@ -19,7 +34,12 @@ func GetArchive(params archive.GetArchiveParams) middleware.Responder {
 	if a != nil {
 		res = archive.NewGetArchiveOK().WithPayload(a)
 	} else {
-		res = archive.NewGetArchiveNotFound()
+		apires := models.APIResponse{
+			Code:    http.StatusNotFound,
+			Message: "Not found",
+			Type:    models.APIResponseTypeError,
+		}
+		res = archive.NewGetArchiveNotFound().WithPayload(&apires)
 	}
 
 	return res
@@ -30,9 +50,14 @@ func GetArchiveByID(params archive.GetArchiveByIDParams) middleware.Responder {
 
 	a := services.GetArchiveByID(params.ArchiveID)
 	if a != nil {
-		res = archive.NewGetArchiveByIDOK()
+		res = archive.NewGetArchiveByIDOK().WithPayload(a)
 	} else {
-		res = archive.NewGetArchiveByIDNotFound()
+		apires := models.APIResponse{
+			Code:    http.StatusNotFound,
+			Message: "Not found",
+			Type:    models.APIResponseTypeError,
+		}
+		res = archive.NewGetArchiveByIDNotFound().WithPayload(&apires)
 	}
 
 	return res

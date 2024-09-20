@@ -41,7 +41,12 @@ func GetBackups(params backup.GetBackupParams) middleware.Responder {
 	if b != nil {
 		res = backup.NewGetBackupOK().WithPayload(b)
 	} else {
-		res = backup.NewGetBackupServiceUnavailable()
+		apires := models.APIResponse{
+			Code:    http.StatusServiceUnavailable,
+			Message: "Service unavailable",
+			Type:    models.APIResponseTypeError,
+		}
+		res = backup.NewGetBackupServiceUnavailable().WithPayload(&apires)
 	}
 
 	return res
@@ -54,7 +59,12 @@ func GetBackupByID(params backup.GetBackupByIDParams) middleware.Responder {
 	if b != nil {
 		res = backup.NewGetBackupByIDOK().WithPayload(b)
 	} else {
-		res = backup.NewGetBackupByIDNotFound()
+		apires := models.APIResponse{
+			Code:    http.StatusNotFound,
+			Message: "Not found",
+			Type:    models.APIResponseTypeError,
+		}
+		res = backup.NewGetBackupByIDNotFound().WithPayload(&apires)
 	}
 
 	return res
