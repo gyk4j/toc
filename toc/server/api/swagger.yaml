@@ -294,7 +294,7 @@ paths:
         "200":
           description: "Backup started"
           schema:
-            $ref: "#/definitions/ApiResponse"
+            $ref: "#/definitions/Backup"
         "403":
           description: "Forbidden from creating duplicate/repeat backup"
           schema:
@@ -411,7 +411,7 @@ paths:
         "200":
           description: "Restoration started"
           schema:
-            $ref: "#/definitions/ApiResponse"
+            $ref: "#/definitions/Restoration"
         "403":
           description: "Forbidden from creating duplicate/repeat restoration"
           schema:

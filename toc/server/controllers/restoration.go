@@ -14,14 +14,7 @@ func NewRestoration(params restoration.NewRestorationParams) middleware.Responde
 
 	r := services.NewRestoration()
 	if r != nil {
-		// Swagger definition dictates an API response as payload.
-		// To re-generate if required.
-		apires := models.APIResponse{
-			Code:    http.StatusOK,
-			Message: "OK",
-			Type:    models.APIResponseTypeInfo,
-		}
-		res = restoration.NewNewRestorationOK().WithPayload(&apires)
+		res = restoration.NewNewRestorationOK().WithPayload(r)
 	} else {
 		apires := models.APIResponse{
 			Code:    http.StatusInternalServerError,

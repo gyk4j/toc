@@ -252,7 +252,7 @@ func init() {
           "200": {
             "description": "Backup started",
             "schema": {
-              "$ref": "#/definitions/ApiResponse"
+              "$ref": "#/definitions/Backup"
             }
           },
           "403": {
@@ -531,7 +531,7 @@ func init() {
           "200": {
             "description": "Restoration started",
             "schema": {
-              "$ref": "#/definitions/ApiResponse"
+              "$ref": "#/definitions/Restoration"
             }
           },
           "403": {
@@ -1261,7 +1261,7 @@ func init() {
           "200": {
             "description": "Backup started",
             "schema": {
-              "$ref": "#/definitions/ApiResponse"
+              "$ref": "#/definitions/Backup"
             }
           },
           "403": {
@@ -1540,7 +1540,7 @@ func init() {
           "200": {
             "description": "Restoration started",
             "schema": {
-              "$ref": "#/definitions/ApiResponse"
+              "$ref": "#/definitions/Restoration"
             }
           },
           "403": {

@@ -26,7 +26,7 @@ type NewRestorationOK struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.APIResponse `json:"body,omitempty"`
+	Payload *models.Restoration `json:"body,omitempty"`
 }
 
 // NewNewRestorationOK creates NewRestorationOK with default headers values
@@ -36,13 +36,13 @@ func NewNewRestorationOK() *NewRestorationOK {
 }
 
 // WithPayload adds the payload to the new restoration o k response
-func (o *NewRestorationOK) WithPayload(payload *models.APIResponse) *NewRestorationOK {
+func (o *NewRestorationOK) WithPayload(payload *models.Restoration) *NewRestorationOK {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the new restoration o k response
-func (o *NewRestorationOK) SetPayload(payload *models.APIResponse) {
+func (o *NewRestorationOK) SetPayload(payload *models.Restoration) {
 	o.Payload = payload
 }
 

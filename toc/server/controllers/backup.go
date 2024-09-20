@@ -14,14 +14,7 @@ func NewBackup(params backup.NewBackupParams) middleware.Responder {
 
 	b := services.NewBackup()
 	if b != nil {
-		// Swagger definition dictates an API response as payload.
-		// To re-generate if required.
-		apires := models.APIResponse{
-			Code:    http.StatusOK,
-			Message: "OK",
-			Type:    models.APIResponseTypeInfo,
-		}
-		res = backup.NewNewBackupOK().WithPayload(&apires)
+		res = backup.NewNewBackupOK().WithPayload(b)
 	} else {
 		apires := models.APIResponse{
 			Code:    http.StatusInternalServerError,
