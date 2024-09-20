@@ -9,9 +9,8 @@ import (
 
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
-	"github.com/go-openapi/runtime/middleware"
 
-	"github.com/gyk4j/toc/toc/server/models"
+	"github.com/gyk4j/toc/toc/server/controllers"
 	"github.com/gyk4j/toc/toc/server/restapi/operations"
 	"github.com/gyk4j/toc/toc/server/restapi/operations/archive"
 	"github.com/gyk4j/toc/toc/server/restapi/operations/backup"
@@ -19,8 +18,6 @@ import (
 	"github.com/gyk4j/toc/toc/server/restapi/operations/quota"
 	"github.com/gyk4j/toc/toc/server/restapi/operations/restoration"
 	"github.com/gyk4j/toc/toc/server/restapi/operations/synchronization"
-
-	"github.com/gyk4j/toc/toc/server/services"
 )
 
 //go:generate swagger generate server --target ..\..\sw --name Toc --spec ..\swagger.yaml --principal interface{}
@@ -47,188 +44,18 @@ func configureAPI(api *operations.TocAPI) http.Handler {
 
 	api.JSONProducer = runtime.JSONProducer()
 
-	api.ArchiveArchiveDataHandler = archive.ArchiveDataHandlerFunc(func(params archive.ArchiveDataParams) middleware.Responder {
-		services.ArchiveData()
-		res := archive.NewArchiveDataOK()
-		return res
-	})
-
-	api.LogExportLogHandler = logops.ExportLogHandlerFunc(func(params logops.ExportLogParams) middleware.Responder {
-		var res middleware.Responder
-
-		l := services.NewLog()
-		if l != nil {
-			res = logops.NewExportLogOK().WithPayload(l)
-		} else {
-			res = logops.NewExportLogInternalServerError()
-		}
-
-		return res
-	})
-
-	api.ArchiveGetArchiveHandler = archive.GetArchiveHandlerFunc(func(params archive.GetArchiveParams) middleware.Responder {
-		var res middleware.Responder
-
-		a := services.GetArchives()
-		if a != nil {
-			res = archive.NewGetArchiveOK().WithPayload(a)
-		} else {
-			res = archive.NewGetArchiveNotFound()
-		}
-
-		return res
-	})
-
-	api.ArchiveGetArchiveByIDHandler = archive.GetArchiveByIDHandlerFunc(func(params archive.GetArchiveByIDParams) middleware.Responder {
-		var res middleware.Responder
-
-		a := services.GetArchiveByID(params.ArchiveID)
-		if a != nil {
-			res = archive.NewGetArchiveByIDOK()
-		} else {
-			res = archive.NewGetArchiveByIDNotFound()
-		}
-
-		return res
-	})
-
-	api.BackupGetBackupHandler = backup.GetBackupHandlerFunc(func(params backup.GetBackupParams) middleware.Responder {
-		var res middleware.Responder
-
-		b := services.GetBackups()
-		if b != nil {
-			res = backup.NewGetBackupOK().WithPayload(b)
-		} else {
-			res = backup.NewGetBackupServiceUnavailable()
-		}
-
-		return res
-	})
-
-	api.BackupGetBackupByIDHandler = backup.GetBackupByIDHandlerFunc(func(params backup.GetBackupByIDParams) middleware.Responder {
-		var res middleware.Responder
-
-		b := services.GetBackupByID(params.BackupID)
-		if b != nil {
-			res = backup.NewGetBackupByIDOK().WithPayload(b)
-		} else {
-			res = backup.NewGetBackupByIDNotFound()
-		}
-
-		return res
-	})
-
-	api.QuotaGetQuotaHandler = quota.GetQuotaHandlerFunc(func(params quota.GetQuotaParams) middleware.Responder {
-		var res middleware.Responder
-
-		qs := services.GetQuotas()
-		if qs != nil {
-			res = quota.NewGetQuotaOK().WithPayload(qs)
-		} else {
-			res = quota.NewGetQuotaServiceUnavailable()
-		}
-
-		return res
-	})
-
-	api.RestorationGetRestorationHandler = restoration.GetRestorationHandlerFunc(func(params restoration.GetRestorationParams) middleware.Responder {
-		var res middleware.Responder
-
-		r := services.GetRestorations()
-		if r != nil {
-			res = restoration.NewGetRestorationOK().WithPayload(r)
-		} else {
-			apires := models.APIResponse{
-				Code:    http.StatusServiceUnavailable,
-				Message: "Service unavailable",
-				Type:    models.APIResponseTypeError,
-			}
-			res = restoration.NewGetRestorationServiceUnavailable().WithPayload(&apires)
-		}
-
-		return res
-	})
-
-	api.RestorationGetRestorationByIDHandler = restoration.GetRestorationByIDHandlerFunc(func(params restoration.GetRestorationByIDParams) middleware.Responder {
-		var res middleware.Responder
-
-		r := services.GetRestorationByID(params.RestorationID)
-		if r != nil {
-			res = restoration.NewGetRestorationByIDOK().WithPayload(r)
-		} else {
-			apires := models.APIResponse{
-				Code:    http.StatusNotFound,
-				Message: "Not found",
-				Type:    models.APIResponseTypeError,
-			}
-			res = restoration.NewGetRestorationByIDNotFound().WithPayload(&apires)
-		}
-
-		return res
-	})
-
-	api.BackupNewBackupHandler = backup.NewBackupHandlerFunc(func(params backup.NewBackupParams) middleware.Responder {
-		var res middleware.Responder
-
-		b := services.NewBackup()
-		if b != nil {
-			// Swagger definition dictates an API response as payload.
-			// To re-generate if required.
-			apires := models.APIResponse{
-				Code:    http.StatusOK,
-				Message: "OK",
-				Type:    models.APIResponseTypeInfo,
-			}
-			res = backup.NewNewBackupOK().WithPayload(&apires)
-		} else {
-			apires := models.APIResponse{
-				Code:    http.StatusInternalServerError,
-				Message: "Internal server error",
-				Type:    models.APIResponseTypeError,
-			}
-			res = backup.NewNewBackupInternalServerError().WithPayload(&apires)
-		}
-
-		return res
-	})
-
-	api.RestorationNewRestorationHandler = restoration.NewRestorationHandlerFunc(func(params restoration.NewRestorationParams) middleware.Responder {
-		var res middleware.Responder
-
-		r := services.NewRestoration()
-		if r != nil {
-			// Swagger definition dictates an API response as payload.
-			// To re-generate if required.
-			apires := models.APIResponse{
-				Code:    http.StatusOK,
-				Message: "OK",
-				Type:    models.APIResponseTypeInfo,
-			}
-			res = restoration.NewNewRestorationOK().WithPayload(&apires)
-		} else {
-			apires := models.APIResponse{
-				Code:    http.StatusInternalServerError,
-				Message: "Internal server error",
-				Type:    models.APIResponseTypeError,
-			}
-			res = restoration.NewNewRestorationInternalServerError().WithPayload(&apires)
-		}
-
-		return res
-	})
-
-	api.SynchronizationNewSynchronizationHandler = synchronization.NewSynchronizationHandlerFunc(func(params synchronization.NewSynchronizationParams) middleware.Responder {
-		var res middleware.Responder
-
-		s := services.NewSynchronization()
-		if s != nil {
-			res = synchronization.NewNewSynchronizationOK().WithPayload(s)
-		} else {
-			res = synchronization.NewNewSynchronizationServiceUnavailable()
-		}
-
-		return res
-	})
+	api.ArchiveArchiveDataHandler = archive.ArchiveDataHandlerFunc(controllers.NewArchive)
+	api.LogExportLogHandler = logops.ExportLogHandlerFunc(controllers.ExportLog)
+	api.ArchiveGetArchiveHandler = archive.GetArchiveHandlerFunc(controllers.GetArchive)
+	api.ArchiveGetArchiveByIDHandler = archive.GetArchiveByIDHandlerFunc(controllers.GetArchiveByID)
+	api.BackupGetBackupHandler = backup.GetBackupHandlerFunc(controllers.GetBackups)
+	api.BackupGetBackupByIDHandler = backup.GetBackupByIDHandlerFunc(controllers.GetBackupByID)
+	api.QuotaGetQuotaHandler = quota.GetQuotaHandlerFunc(controllers.GetQuotas)
+	api.RestorationGetRestorationHandler = restoration.GetRestorationHandlerFunc(controllers.GetRestorations)
+	api.RestorationGetRestorationByIDHandler = restoration.GetRestorationByIDHandlerFunc(controllers.GetRestorationByID)
+	api.BackupNewBackupHandler = backup.NewBackupHandlerFunc(controllers.NewBackup)
+	api.RestorationNewRestorationHandler = restoration.NewRestorationHandlerFunc(controllers.NewRestoration)
+	api.SynchronizationNewSynchronizationHandler = synchronization.NewSynchronizationHandlerFunc(controllers.NewSynchronization)
 
 	api.PreServerShutdown = func() {}
 
