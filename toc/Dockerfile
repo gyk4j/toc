@@ -14,6 +14,12 @@ FROM alpine:latest AS run
 
 RUN apk update && apk upgrade && apk add iputils docker-cli docker-cli-compose
 
+ARG S6_OVERLAY_VERSION=3.2.0.0
+ADD https://github.com/just-containers/s6-overlay/releases/download/v${S6_OVERLAY_VERSION}/s6-overlay-noarch.tar.xz /tmp
+RUN tar -C / -Jxpf /tmp/s6-overlay-noarch.tar.xz
+ADD https://github.com/just-containers/s6-overlay/releases/download/v${S6_OVERLAY_VERSION}/s6-overlay-x86_64.tar.xz /tmp
+RUN tar -C / -Jxpf /tmp/s6-overlay-x86_64.tar.xz
+
 VOLUME /opt/toc/
 
 WORKDIR /opt/toc/
@@ -29,4 +35,7 @@ WORKDIR /opt/toc/
 #    sleep 120
 
 COPY --from=build /usr/local/bin/toc /usr/local/bin/toc
-ENTRYPOINT ["/usr/local/bin/toc"]
+# ENTRYPOINT ["/usr/local/bin/toc"]
+
+CMD ["/usr/local/bin/toc"]
+ENTRYPOINT ["/init"]
