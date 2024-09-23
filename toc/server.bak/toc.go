@@ -13,11 +13,14 @@ func main() {
   Exec("file")
   Exec("mail")
   Exec("web")
+  fmt.Printf("Started sleeping\n")
   time.Sleep(60 * time.Minute)
+  fmt.Printf("Stopped sleeping\n")
 }
 
 func Exec(service string) {
-  cmd := exec.Command("docker", "compose", "exec", service, "cat", "/etc/hostname")
+  cmd := exec.Command("/usr/bin/docker", "compose", "exec", service, "cat", "/etc/hostname")
+  cmd.Dir = "/opt/toc"
   var out strings.Builder
   cmd.Stdout = &out
   err := cmd.Run()
