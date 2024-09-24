@@ -30,3 +30,7 @@ mount/storage
 
 # Swagger/OpenAPI 2.0 generated skeleton stub
 template/
+
+# React app
+node_modules/
+build/
