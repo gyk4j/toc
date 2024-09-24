@@ -4,8 +4,10 @@ package restapi
 
 import (
 	"crypto/tls"
+	"fmt"
 	"log"
 	"net/http"
+	"strings"
 
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
@@ -85,5 +87,34 @@ func setupMiddlewares(handler http.Handler) http.Handler {
 // The middleware configuration happens before anything, this middleware also applies to serving the swagger.json document.
 // So this is a good place to plug in a panic handling middleware, logging and metrics.
 func setupGlobalMiddleware(handler http.Handler) http.Handler {
-	return handler
+	//return handler
+	// serve static files
+	next := FileServerMiddleware(handler)
+	return next
+}
+
+// References:
+// - https://notes.elmiko.dev/2016/07/11/go-swagger-logging.html
+// - https://baltig.infn.it/minio/console/-/blob/7fa3279a934f215983a660c9898cb38b66a4f025/restapi/configure_mcs.go
+// FileServerMiddleware serves files from the static folder
+func FileServerMiddleware(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		switch {
+		case strings.HasPrefix(r.URL.Path, "/web"):
+			serveWS(w, r)
+		case strings.HasPrefix(r.URL.Path, "/v1"):
+			next.ServeHTTP(w, r)
+		default:
+			log.Println("default!")
+		}
+	})
+}
+
+func serveWS(w http.ResponseWriter, r *http.Request) {
+	fmt.Println(r.RequestURI)
+	fmt.Println(r.URL)
+
+	w.Header().Set("Content-Type", "text/html")
+	w.WriteHeader(http.StatusNotFound)
+	w.Write([]byte("<html><head><title>Not found</title></head><body><h1>Not found</h1></body></html>"))
 }

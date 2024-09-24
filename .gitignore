@@ -34,3 +34,7 @@ template/
 # React app
 node_modules/
 build/
+
+# Go server
+toc/server/web/*
+!toc/server/web/README.md
