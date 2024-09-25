@@ -61,8 +61,8 @@ services:
       - "587:587"
       - "143:143"
       - "993:993"
-    volumes:
-      - "./mount/mail:/root/var"
+    # volumes:
+      # - "./mount/mail:/root/var"
     # networks:
       # static_net:
         # ipv4_address: 10.5.1.4
