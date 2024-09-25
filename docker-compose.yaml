@@ -40,14 +40,15 @@ services:
   file:
     build: ./file
     hostname: samba-server
-    restart: always
+    # restart: always
     environment:
       USER: user
       PASS: password
     ports:
+      - "139:139"
       - "445:445"
-    volumes:
-      - "./mount/storage:/storage"
+    # volumes:
+      # - "./mount/storage:/storage"
     # networks:
       # static_net:
         # ipv4_address: 10.5.1.3
