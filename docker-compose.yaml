@@ -21,12 +21,19 @@ services:
   db:
     build: ./db
     hostname: mysql-server
-    restart: always
+    # restart: always
     environment:
       MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: db
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
     ports:
       - "3306:3306"
       - "33060:33060"
+    # WARNING: mapping volume to /var/lib/mysql causes MySQL not to start
+    #          properly during new db creation.
+    # volumes:
+      # - "./mount/db:/var/lib/mysql"
     # networks:
       # static_net:
         # ipv4_address: 10.5.1.2
