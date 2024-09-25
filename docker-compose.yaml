@@ -4,14 +4,14 @@ services:
   web:
     build: ./web
     hostname: apache-server
-    depends_on:
-      - db
-      - file
+    # depends_on:
+      # - db
+      # - file
     ports:
       - "80:80"
       - "443:443"
-    volumes:
-      - "./mount/storage:/storage"
+    # volumes:
+      # - "./mount/storage:/storage"
       # - type: volume
         # source: cms-files
         # target: /storage
