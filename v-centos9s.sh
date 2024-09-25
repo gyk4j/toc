@@ -28,5 +28,5 @@ systemctl enable docker.service
 systemctl enable containerd.service
 
 # Disable systemd-resolved on boot and use dnsmasq container instead
-systemctl stop systemd-resolved
-systemctl disable systemd-resolved
+# systemctl stop systemd-resolved
+# systemctl disable systemd-resolved
