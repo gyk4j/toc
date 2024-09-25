@@ -1,6 +1,21 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
+### configuration parameters ###
+# Vagrant base box to use
+# BOX_BASE = "boxomatic/alpine-3.20"
+BOX_BASE = "ubuntu/jammy64"
+
+# Provisioning script
+# PROVISIONING_SCRIPT = "v-alpine320.sh"
+PROVISIONING_SCRIPT = "v-ubuntu22.sh"
+
+# amount of RAM for Vagrant box
+BOX_RAM_MB = 2048
+# number of CPUs for Vagrant box
+BOX_CPU_COUNT = 1
+### /configuration parameters ###
+
 # All Vagrant configuration is done below. The "2" in Vagrant.configure
 # configures the configuration version (we support older styles for
 # backwards compatibility). Please don't change it unless you know what
@@ -8,24 +23,24 @@
 Vagrant.configure("2") do |config|
   config.vm.define "main" do |main|
     main.vm.provider "virtualbox" do |v|
-      v.memory = 2048
-      v.cpus = 1
+      v.memory = BOX_RAM_MB
+      v.cpus = BOX_CPU_COUNT
     end
-    main.vm.box = "boxomatic/alpine-3.20"
+    main.vm.box = BOX_BASE
     main.vm.hostname = "main.toc.local"
     main.vm.network "private_network", ip: "192.168.56.10", hostname: true
-    main.vm.provision "shell", name: "main", path: "v-alpine320.sh"
+    main.vm.provision "shell", name: "main", path: PROVISIONING_SCRIPT
   end
   
   config.vm.define "stepup" do |stepup|
     stepup.vm.provider "virtualbox" do |v|
-      v.memory = 2048
-      v.cpus = 1
+      v.memory = BOX_RAM_MB
+      v.cpus = BOX_CPU_COUNT
     end
-    stepup.vm.box = "boxomatic/alpine-3.20"
+    stepup.vm.box = BOX_BASE
     stepup.vm.hostname = "stepup.toc.local"
     stepup.vm.network "private_network", ip: "192.168.56.20", hostname: true
-    stepup.vm.provision "shell", name: "stepup", path: "v-alpine320.sh"
+    stepup.vm.provision "shell", name: "stepup", path: PROVISIONING_SCRIPT
   end
 
   # The most common configuration options are documented and commented below.
