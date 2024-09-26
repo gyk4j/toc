@@ -1,7 +1,7 @@
 import React from 'react';
-import StatusBar from './StatusBar';
-import ToolBar from './ToolBar';
-import TabbedPane from './TabbedPane';
+import StatusBar from './components/StatusBar';
+import ToolBar from './components/ToolBar';
+import TabbedPane from './components/TabbedPane';
 import * as ApiService from './services/ApiService'
 
 import {
