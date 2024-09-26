@@ -165,6 +165,7 @@ export default class App extends React.Component {
           sendCompletedOnClick={this.sendCompletedOnClick}
           sendDeltaNowOnClick={this.sendDeltaNowOnClick}
           sendLastDeltaOnClick={this.sendLastDeltaOnClick}
+          syncStatusOnClick={this.syncStatusOnClick}
           checkQuotaOnClick={this.checkQuotaOnClick}
           exportLogsOnClick={this.exportLogsOnClick}
           archiveOnClick={this.archiveOnClick} 
@@ -317,6 +318,10 @@ export default class App extends React.Component {
     this.setState({statusbarEndTime: new Date() }, () => {
       this.toggleShowTocEnded()
     });
+  }
+
+  syncStatusOnClick = () => {
+    console.log("syncStatusOnClick" + " " + this.buildRestAPIEndPoint("/synchronizations"));
   }
 
   checkQuotaOnClick = () => {
