@@ -184,6 +184,31 @@ export default class App extends React.Component {
     );
   }
 
+  // Utility functions
+  buildRestAPIEndPoint = ( path ) => {
+    let host
+    const version = 1
+
+    if (process.env.REACT_APP_REST_API_HOST && process.env.REACT_APP_REST_API_HOST !== ""){
+      // If environment variable is set, override other assumed settings.
+      host = process.env.REACT_APP_REST_API_HOST
+    } else if(process.env.NODE_ENV === "production") {
+      // Assumes same host and server serving frontend app.
+      host = "" 
+    } else if(process.env.NODE_ENV === "development") {
+      // Assumes same host but different development servers serving frontend 
+      // app and REST API.
+      host = "localhost:8888"  
+    }
+
+    if (path.charAt(0) === '/'){
+      path = path.slice(1)
+    }
+
+    return `${host}/v${version}/${path}`
+  }
+
+  // Event handlers
   toggleShowTocEnded = ( e ) => {
     let show = this.state.showTocEndedModal
     this.setState({ showTocEndedModal: !show })
@@ -224,7 +249,7 @@ export default class App extends React.Component {
 
     this.onBackup = () => {
       let now = new Date()
-      console.log("Backup: " + now.toLocaleString())
+      console.log("Backup: " + now.toLocaleString() + " " + this.buildRestAPIEndPoint("/backups"))
       this.resetCountDown()
     }
     this.onBackup = this.onBackup.bind(this)
@@ -273,11 +298,11 @@ export default class App extends React.Component {
   }
 
   sendCompletedOnClick = () => {
-    console.log("sendCompletedOnClick");
+    console.log("sendCompletedOnClick" + " " + this.buildRestAPIEndPoint("/transfers"));
   }
 
   sendDeltaNowOnClick = () => {
-    console.log("sendDeltaNowOnClick");
+    console.log("sendDeltaNowOnClick" + " " + this.buildRestAPIEndPoint("/backups"));
   }
 
   sendLastDeltaOnClick = () => {
@@ -288,22 +313,22 @@ export default class App extends React.Component {
       console.log("Cleared refresh timer")
     }
     
-    console.log("sendLastDeltaOnClick");
+    console.log("sendLastDeltaOnClick" + " " + this.buildRestAPIEndPoint("/backups"));
     this.setState({statusbarEndTime: new Date() }, () => {
       this.toggleShowTocEnded()
     });
   }
 
   checkQuotaOnClick = () => {
-    console.log("checkQuotaOnClick");
+    console.log("checkQuotaOnClick" + " " + this.buildRestAPIEndPoint("/quotas"));
   }
 
   exportLogsOnClick = () => {
-    console.log("exportLogsOnClick");
+    console.log("exportLogsOnClick" + " " + this.buildRestAPIEndPoint("/logs"));
   }
 
   archiveOnClick = () => {
-    console.log("archiveOnClick");
+    console.log("archiveOnClick" + " " + this.buildRestAPIEndPoint("/archives"));
   }
 
   onTimer = () => {
