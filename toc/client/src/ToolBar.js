@@ -29,7 +29,7 @@ export default function ToolBar({
 
   let state = TRANSFER_STATES[transferState]
 
-  console.log(state)
+  //console.log(state)
 
   return (
     <div className="m-3">
