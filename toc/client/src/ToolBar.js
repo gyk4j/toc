@@ -14,6 +14,7 @@ export default function ToolBar({
   sendCompletedOnClick,
   sendDeltaNowOnClick,
   sendLastDeltaOnClick,
+  syncStatusOnClick,
   checkQuotaOnClick,
   exportLogsOnClick,
   archiveOnClick
@@ -86,9 +87,9 @@ export default function ToolBar({
             <MDBRow className='row-cols-4 gy-4'>
 
               <MDBCol className="d-grid gap-2 col-3 mx-auto">
-                <MDBBtn>
+                <MDBBtn onClick={syncStatusOnClick}>
                   <MDBIcon className='me-2' fas icon='sync' />
-                  Sync Progress Status
+                  Sync Status
                 </MDBBtn>
               </MDBCol>
 
