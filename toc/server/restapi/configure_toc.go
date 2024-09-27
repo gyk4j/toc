@@ -4,7 +4,6 @@ package restapi
 
 import (
 	"crypto/tls"
-	"fmt"
 	"log"
 	"net/http"
 	"strings"
@@ -87,8 +86,13 @@ func setupMiddlewares(handler http.Handler) http.Handler {
 // The middleware configuration happens before anything, this middleware also applies to serving the swagger.json document.
 // So this is a good place to plug in a panic handling middleware, logging and metrics.
 func setupGlobalMiddleware(handler http.Handler) http.Handler {
-	//return handler
-	// serve static files
+	// NOTE: Using http.FileServer does not allow chaining of the REST API HandlerFunc "handler" parameter.
+	//       If used, the UI static web files can be served, but the API endpoints would not work.
+	//       Thus, this method is commented out, but left for reference purpose.
+	// staticHandler := http.StripPrefix("/web/", http.FileServer(http.Dir("web")))
+	// http.Handle("/web/", staticHandler)
+	// return staticHandler
+
 	next := FileServerMiddleware(handler)
 	return next
 }
@@ -99,22 +103,10 @@ func setupGlobalMiddleware(handler http.Handler) http.Handler {
 // FileServerMiddleware serves files from the static folder
 func FileServerMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		switch {
-		case strings.HasPrefix(r.URL.Path, "/web"):
-			serveWS(w, r)
-		case strings.HasPrefix(r.URL.Path, "/v1"):
+		if strings.HasPrefix(r.URL.Path, "/v1/") || strings.HasPrefix(r.URL.Path, "/api/") {
 			next.ServeHTTP(w, r)
-		default:
-			log.Println("default!")
+		} else {
+			http.ServeFile(w, r, "web/"+r.URL.Path[1:])
 		}
 	})
-}
-
-func serveWS(w http.ResponseWriter, r *http.Request) {
-	fmt.Println(r.RequestURI)
-	fmt.Println(r.URL)
-
-	w.Header().Set("Content-Type", "text/html")
-	w.WriteHeader(http.StatusNotFound)
-	w.Write([]byte("<html><head><title>Not found</title></head><body><h1>Not found</h1></body></html>"))
 }
