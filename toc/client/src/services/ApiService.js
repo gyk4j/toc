@@ -1,3 +1,5 @@
+import axios from 'axios';
+
 // Utility functions
 function buildRestAPIEndPoint(path) {
   let host
@@ -22,45 +24,91 @@ function buildRestAPIEndPoint(path) {
   return `http://${host}/v${version}/${path}`
 }
 
+function curl(method, url, data) {
+  let request
+  
+  let m = String(method).toUpperCase()
+  let u = buildRestAPIEndPoint(url)
+
+  if(m === "GET"){
+    request = axios.get(u)
+  } else if(m === "POST"){
+    if(data != null){
+      request = axios.post(u, data)
+    } else {
+      request = axios.post(u)
+    }
+  } else {
+    console.error(`Unknown method: ${method}`)
+    return
+  }
+  
+  // Now execute the request
+  request
+    .then(res => {
+      console.log(res);
+      console.log(res.data);
+    })
+    .catch((error) => {
+      // Error
+      if (error.response) {
+          // The request was made and the server responded with a status code
+          // that falls out of the range of 2xx
+          console.error(error.response.data);
+          console.error(error.response.status);
+          console.error(error.response.headers);
+      } else if (error.request) {
+          // The request was made but no response was received
+          // `error.request` is an instance of XMLHttpRequest in the 
+          // browser and an instance of
+          // http.ClientRequest in node.js
+          console.error(error.request);
+      } else {
+          // Something happened in setting up the request that triggered an Error
+          console.error('Error', error.message);
+      }
+      console.error(error.config);
+    });
+}
+
 function newBackup() {
-  console.log("POST " + buildRestAPIEndPoint("/backups"))
+  curl("POST", "/backups", null)
 }
 
 function getBackups() {
-  console.log("GET " + buildRestAPIEndPoint("/backups"))
+  curl("GET", "/backups", null)
 }
 
 function getBackupByID(id) {
-  console.log("GET " + buildRestAPIEndPoint(`/backups/${id}`))
+  curl("GET", `/backups/${id}`, null)
 }
 
 function newRestoration(backup) {
-  console.log("POST " + buildRestAPIEndPoint("/restorations"))
-  console.log(JSON.stringify(backup))
+  curl("POST", "/restorations", backup)
 }
 
 function getRestorations() {
-  console.log("GET " + buildRestAPIEndPoint("/restorations"))
+  curl("GET", "/restorations", null)
 }
 
 function getRestorationByID(id) {
-  console.log("GET " + buildRestAPIEndPoint(`/restorations/${id}`))
+  curl("GET", `/restorations/${id}`, null)
 }
 
 function newSynchronization() {
-  console.log("POST " + buildRestAPIEndPoint("/synchronizations"))
+  curl("POST", "/synchronizations", null)
 }
 
 function getQuotas() {
-  console.log("GET " + buildRestAPIEndPoint("/quotas"))
+  curl("GET", "/quotas", null)
 }
 
 function newLogs() {
-  console.log("POST " + buildRestAPIEndPoint("/logs"))
+  curl("POST", "/logs", null)
 }
 
 function newArchive() {
-  console.log("POST " + buildRestAPIEndPoint("/archives"))
+  curl("POST", "/archives", null)
 }
 
 export {
