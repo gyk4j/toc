@@ -8,6 +8,8 @@ import (
 	"net/http"
 	"strings"
 
+	"github.com/rs/cors"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 
@@ -93,8 +95,9 @@ func setupGlobalMiddleware(handler http.Handler) http.Handler {
 	// http.Handle("/web/", staticHandler)
 	// return staticHandler
 
-	next := FileServerMiddleware(handler)
-	return next
+	handlerStatic := FileServerMiddleware(handler)
+	handlerCORS := cors.Default().Handler
+	return handlerCORS(handlerStatic)
 }
 
 // References:
