@@ -1,19 +1,23 @@
 package services
 
 import (
+	"log"
+
 	"github.com/gyk4j/toc/toc/server/models"
 )
 
 var restorations = make([]*models.Restoration, 0)
 
-func NewRestoration() *models.Restoration {
+func NewRestoration(backup *models.Backup) *models.Restoration {
 	id := int64(len(restorations))
 
-	b := GetBackupByID(id)
+	b := backup // Trust client data?
+	//b := GetBackupByID((*backup).ID) // More robust method
 
 	// Backup must exists before it can be restored.
 	// If an invalid ID is provided, then restoration is skipped.
 	if b != nil {
+		log.Printf("Backup found: %d = %s\n", (*b).ID, (*b).Time)
 		r := models.Restoration{
 			ID:     id,
 			Backup: b,
@@ -23,6 +27,7 @@ func NewRestoration() *models.Restoration {
 		restorations = append(restorations, &r)
 		return &r
 	} else {
+		log.Println("[Error] Backup not found")
 		return nil
 	}
 }

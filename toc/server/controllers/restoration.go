@@ -12,7 +12,7 @@ import (
 func NewRestoration(params restoration.NewRestorationParams) middleware.Responder {
 	var res middleware.Responder
 
-	r := services.NewRestoration()
+	r := services.NewRestoration(params.Body)
 	if r != nil {
 		res = restoration.NewNewRestorationOK().WithPayload(r)
 	} else {

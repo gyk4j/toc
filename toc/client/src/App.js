@@ -275,11 +275,12 @@ export default class App extends React.Component {
   }
 
   sendCompletedOnClick = () => {
-    console.log("sendCompletedOnClick")
-
     let backup = {
-      id: 1
+      id : 0,
+      snapshots : [],
+      time : "1999-09-19T19:19:19.999+08:00"
     }
+   
     ApiService.newRestoration(backup)
   }
 
