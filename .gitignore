@@ -32,8 +32,8 @@ mount/storage
 template/
 
 # React app
-node_modules/
-build/
+toc-frontend/node_modules/
+toc-frontend/build/
 
 # Go server
 toc-backend/web/*
