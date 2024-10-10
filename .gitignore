@@ -36,5 +36,5 @@ node_modules/
 build/
 
 # Go server
-toc/server/web/*
+toc-backend/web/*
 !toc/server/web/README.md
