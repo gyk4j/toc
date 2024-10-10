@@ -10,14 +10,6 @@ services:
     ports:
       - "80:80"
       - "443:443"
-    # volumes:
-      # - "./mount/storage:/storage"
-      # - type: volume
-        # source: cms-files
-        # target: /storage
-    # networks:
-      # static_net:
-        # ipv4_address: 10.5.1.1
   db:
     build: ./db
     hostname: mysql-server
@@ -30,13 +22,6 @@ services:
     ports:
       - "3306:3306"
       - "33060:33060"
-    # WARNING: mapping volume to /var/lib/mysql causes MySQL not to start
-    #          properly during new db creation.
-    # volumes:
-      # - "./mount/db:/var/lib/mysql"
-    # networks:
-      # static_net:
-        # ipv4_address: 10.5.1.2
   file:
     build: ./file
     hostname: samba-server
@@ -47,11 +32,6 @@ services:
     ports:
       - "139:139"
       - "445:445"
-    # volumes:
-      # - "./mount/storage:/storage"
-    # networks:
-      # static_net:
-        # ipv4_address: 10.5.1.3
   mail:
     build: ./mail
     hostname: apache-james-server
@@ -61,11 +41,6 @@ services:
       - "587:587"
       - "143:143"
       - "993:993"
-    # volumes:
-      # - "./mount/mail:/root/var"
-    # networks:
-      # static_net:
-        # ipv4_address: 10.5.1.4
   # dns:
     # build: ./dns
     # hostname: dnsmasq-server
@@ -96,25 +71,4 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
     extra_hosts:
       - "main:192.168.56.10"
-      - "stepup:192.168.56.20"
-    # networks:
-      # static_net:
-        # ipv4_address: 10.5.1.5
-      
-# volumes:
-  # cms-files:
-    # name: cms-files
-    # driver: local
-    # driver_opts:
-      # type: "cifs"
-      # device: "//10.5.1.3/Data"
-      # o: "addr=10.5.1.3,username=user,password=password,file_mode=0777,dir_mode=0777"
-      
-# networks:
-  # static_net:
-    # driver: bridge
-    # ipam:
-      # config:
-        # - subnet: 10.5.0.0/16
-          # gateway: 10.5.0.1
-      
+      - "stepup:192.168.56.20"      
