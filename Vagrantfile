@@ -3,12 +3,14 @@
 
 ### configuration parameters ###
 # Vagrant base box to use
+# BOX_BASE = "centos/stream9"
 # BOX_BASE = "boxomatic/alpine-3.20"
 BOX_BASE = "ubuntu/jammy64"
 
 # Provisioning script
-# PROVISIONING_SCRIPT = "v-alpine320.sh"
-PROVISIONING_SCRIPT = "v-ubuntu22.sh"
+# PROVISIONING_SCRIPT = "provision/centos9s.sh"
+# PROVISIONING_SCRIPT = "provision/alpine320.sh"
+PROVISIONING_SCRIPT = "provision/ubuntu22.sh"
 
 # amount of RAM for Vagrant box
 BOX_RAM_MB = 2048
