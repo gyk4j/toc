@@ -1,4 +1,4 @@
-module github.com/gyk4j/toc/toc/server
+module github.com/gyk4j/toc/toc-backend
 
 go 1.20
 
@@ -10,7 +10,9 @@ require (
 	github.com/go-openapi/strfmt v0.23.0
 	github.com/go-openapi/swag v0.23.0
 	github.com/go-openapi/validate v0.24.0
+	github.com/gyk4j/toc/toc/server v0.0.0-20241010035122-48cebe84a1e8
 	github.com/jessevdk/go-flags v1.6.1
+	github.com/rs/cors v1.11.1
 	golang.org/x/net v0.29.0
 )
 
@@ -25,7 +27,6 @@ require (
 	github.com/mailru/easyjson v0.7.7 // indirect
 	github.com/mitchellh/mapstructure v1.5.0 // indirect
 	github.com/oklog/ulid v1.3.1 // indirect
-	github.com/rs/cors v1.11.1 // indirect
 	go.mongodb.org/mongo-driver v1.14.0 // indirect
 	golang.org/x/sync v0.6.0 // indirect
 	golang.org/x/sys v0.25.0 // indirect
