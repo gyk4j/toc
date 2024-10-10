@@ -37,4 +37,4 @@ build/
 
 # Go server
 toc-backend/web/*
-!toc/server/web/README.md
+!toc-backend/web/README.md
