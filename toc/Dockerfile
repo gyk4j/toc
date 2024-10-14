@@ -1,5 +1,5 @@
-FROM toc-frontend AS frontend
-FROM toc-backend AS backend
+FROM toc-toc-frontend AS frontend
+FROM toc-toc-backend AS backend
 FROM alpine
 
 RUN apk update && apk upgrade

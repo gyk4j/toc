@@ -8,8 +8,8 @@ services:
       # - db
       # - file
     ports:
-      - "80:80"
-      - "443:443"
+      - "8080:80"
+      - "8443:443"
   db:
     build: ./db
     hostname: mysql-server
@@ -58,17 +58,25 @@ services:
       # - ./dns/dnsmasq.d/:/etc/dnsmasq.d/
       # - ./dns/dnsmasq.conf:/etc/dnsmasq.conf
       # - ./dns/banner_add_hosts:/etc/banner_add_hosts
+  toc-frontend:
+    build: ./toc-frontend
+  toc-backend:
+    build: ./toc-backend
   toc:
     build: ./toc
     hostname: toc-controller
+    environment:
+      HOST: 0.0.0.0
+      PORT: 80
+    ports:
+      - "80:80"
     depends_on:
+      - toc-frontend
+      - toc-backend
       - web
       - db
       - file
       - mail
-    volumes:
-      - .:/opt/toc/
-      - /var/run/docker.sock:/var/run/docker.sock
     extra_hosts:
       - "main:192.168.56.10"
       - "stepup:192.168.56.20"      
