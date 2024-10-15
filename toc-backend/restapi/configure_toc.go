@@ -13,14 +13,14 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 
-	"github.com/gyk4j/toc/toc/server/controllers"
-	"github.com/gyk4j/toc/toc/server/restapi/operations"
-	"github.com/gyk4j/toc/toc/server/restapi/operations/archive"
-	"github.com/gyk4j/toc/toc/server/restapi/operations/backup"
-	logops "github.com/gyk4j/toc/toc/server/restapi/operations/log"
-	"github.com/gyk4j/toc/toc/server/restapi/operations/quota"
-	"github.com/gyk4j/toc/toc/server/restapi/operations/restoration"
-	"github.com/gyk4j/toc/toc/server/restapi/operations/synchronization"
+	"github.com/gyk4j/toc/toc-backend/controllers"
+	"github.com/gyk4j/toc/toc-backend/restapi/operations"
+	"github.com/gyk4j/toc/toc-backend/restapi/operations/archive"
+	"github.com/gyk4j/toc/toc-backend/restapi/operations/backup"
+	logops "github.com/gyk4j/toc/toc-backend/restapi/operations/log"
+	"github.com/gyk4j/toc/toc-backend/restapi/operations/quota"
+	"github.com/gyk4j/toc/toc-backend/restapi/operations/restoration"
+	"github.com/gyk4j/toc/toc-backend/restapi/operations/synchronization"
 )
 
 //go:generate swagger generate server --target ..\..\sw --name Toc --spec ..\swagger.yaml --principal interface{}

@@ -4,9 +4,9 @@ import (
 	"net/http"
 
 	"github.com/go-openapi/runtime/middleware"
-	"github.com/gyk4j/toc/toc/server/models"
-	"github.com/gyk4j/toc/toc/server/restapi/operations/archive"
-	"github.com/gyk4j/toc/toc/server/services"
+	"github.com/gyk4j/toc/toc-backend/models"
+	"github.com/gyk4j/toc/toc-backend/restapi/operations/archive"
+	"github.com/gyk4j/toc/toc-backend/services"
 )
 
 func NewArchive(params archive.ArchiveDataParams) middleware.Responder {

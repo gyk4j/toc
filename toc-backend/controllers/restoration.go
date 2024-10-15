@@ -4,9 +4,9 @@ import (
 	"net/http"
 
 	"github.com/go-openapi/runtime/middleware"
-	"github.com/gyk4j/toc/toc/server/models"
-	"github.com/gyk4j/toc/toc/server/restapi/operations/restoration"
-	"github.com/gyk4j/toc/toc/server/services"
+	"github.com/gyk4j/toc/toc-backend/models"
+	"github.com/gyk4j/toc/toc-backend/restapi/operations/restoration"
+	"github.com/gyk4j/toc/toc-backend/services"
 )
 
 func NewRestoration(params restoration.NewRestorationParams) middleware.Responder {

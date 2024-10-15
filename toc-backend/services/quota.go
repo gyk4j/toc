@@ -3,7 +3,7 @@ package services
 import (
 	"math/rand"
 
-	"github.com/gyk4j/toc/toc/server/models"
+	"github.com/gyk4j/toc/toc-backend/models"
 )
 
 func GetQuotas() []*models.Quota {

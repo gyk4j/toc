@@ -10,7 +10,6 @@ require (
 	github.com/go-openapi/strfmt v0.23.0
 	github.com/go-openapi/swag v0.23.0
 	github.com/go-openapi/validate v0.24.0
-	github.com/gyk4j/toc/toc/server v0.0.0-20241010035122-48cebe84a1e8
 	github.com/jessevdk/go-flags v1.6.1
 	github.com/rs/cors v1.11.1
 	golang.org/x/net v0.29.0

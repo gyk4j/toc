@@ -2,8 +2,8 @@ package controllers
 
 import (
 	"github.com/go-openapi/runtime/middleware"
-	logops "github.com/gyk4j/toc/toc/server/restapi/operations/log"
-	"github.com/gyk4j/toc/toc/server/services"
+	logops "github.com/gyk4j/toc/toc-backend/restapi/operations/log"
+	"github.com/gyk4j/toc/toc-backend/services"
 )
 
 func ExportLog(params logops.ExportLogParams) middleware.Responder {

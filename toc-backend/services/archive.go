@@ -5,7 +5,7 @@ import (
 	"time"
 
 	"github.com/go-openapi/strfmt"
-	"github.com/gyk4j/toc/toc/server/models"
+	"github.com/gyk4j/toc/toc-backend/models"
 )
 
 var archives = make([]*models.Archive, 0)

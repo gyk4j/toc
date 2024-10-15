@@ -10,7 +10,7 @@ import (
 
 	"github.com/go-openapi/runtime"
 
-	"github.com/gyk4j/toc/toc/server/models"
+	"github.com/gyk4j/toc/toc-backend/models"
 )
 
 // ArchiveDataOKCode is the HTTP code returned for type ArchiveDataOK

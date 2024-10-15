@@ -19,12 +19,12 @@ import (
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 
-	"github.com/gyk4j/toc/toc/server/restapi/operations/archive"
-	"github.com/gyk4j/toc/toc/server/restapi/operations/backup"
-	logops "github.com/gyk4j/toc/toc/server/restapi/operations/log"
-	"github.com/gyk4j/toc/toc/server/restapi/operations/quota"
-	"github.com/gyk4j/toc/toc/server/restapi/operations/restoration"
-	"github.com/gyk4j/toc/toc/server/restapi/operations/synchronization"
+	"github.com/gyk4j/toc/toc-backend/restapi/operations/archive"
+	"github.com/gyk4j/toc/toc-backend/restapi/operations/backup"
+	logops "github.com/gyk4j/toc/toc-backend/restapi/operations/log"
+	"github.com/gyk4j/toc/toc-backend/restapi/operations/quota"
+	"github.com/gyk4j/toc/toc-backend/restapi/operations/restoration"
+	"github.com/gyk4j/toc/toc-backend/restapi/operations/synchronization"
 )
 
 // NewTocAPI creates a new Toc instance
