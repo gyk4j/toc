@@ -1,4 +1,5 @@
 import React from 'react';
+import PreTocCheckerDialog from './components/PreTocCheckerDialog';
 import StatusBar from './components/StatusBar';
 import ToolBar from './components/ToolBar';
 import TabbedPane from './components/TabbedPane';
@@ -21,6 +22,8 @@ export default class App extends React.Component {
     super(props);
     this.state = {
       name: "TOC",
+      showPreTocCheckerDialog: true,
+      preTocCheckerActionText: "Start initial restoration",
       showTocEndedModal: false,
       statusbarIsMain: Math.random() > 0.5,
       statusbarIsOnline: Math.random() > 0.5,
@@ -109,6 +112,7 @@ export default class App extends React.Component {
       ]
     };
 
+    this.closePreTocChecker = this.closePreTocChecker.bind(this);
     this.toggleShowTocEnded = this.toggleShowTocEnded.bind(this);
     this.changeIntervalOnChange = this.changeIntervalOnChange.bind(this);
     this.startOnClick = this.startOnClick.bind(this);
@@ -131,7 +135,14 @@ export default class App extends React.Component {
     // const toggleShowTocEnded = () => setBasicModal(!basicModal);
 
     return (
-      <div> {/* setShow={this.toggleShowTocEnded} */}
+      <div>
+        <PreTocCheckerDialog
+          showPreTocCheckerDialog={this.state.showPreTocCheckerDialog}
+          closePreTocChecker={this.closePreTocChecker}
+          actionText={this.state.preTocCheckerActionText}
+        /> 
+        
+        {/* setShow={this.toggleShowTocEnded} */}
         <MDBModal show={this.state.showTocEndedModal} tabIndex='-1'>
           <MDBModalDialog>
             <MDBModalContent>
@@ -187,6 +198,11 @@ export default class App extends React.Component {
   }
 
   // Event handlers
+  closePreTocChecker = ( e ) => {
+    //let show = this.state.showPreTocCheckerModal
+    this.setState({ showPreTocCheckerDialog: false })
+  }
+
   toggleShowTocEnded = ( e ) => {
     let show = this.state.showTocEndedModal
     this.setState({ showTocEndedModal: !show })
