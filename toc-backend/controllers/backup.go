@@ -4,9 +4,9 @@ import (
 	"net/http"
 
 	"github.com/go-openapi/runtime/middleware"
-	"github.com/gyk4j/toc/toc/server/models"
-	"github.com/gyk4j/toc/toc/server/restapi/operations/backup"
-	"github.com/gyk4j/toc/toc/server/services"
+	"github.com/gyk4j/toc/toc-backend/models"
+	"github.com/gyk4j/toc/toc-backend/restapi/operations/backup"
+	"github.com/gyk4j/toc/toc-backend/services"
 )
 
 func NewBackup(params backup.NewBackupParams) middleware.Responder {

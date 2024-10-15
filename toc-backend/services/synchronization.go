@@ -4,7 +4,7 @@ import (
 	"time"
 
 	"github.com/go-openapi/strfmt"
-	"github.com/gyk4j/toc/toc/server/models"
+	"github.com/gyk4j/toc/toc-backend/models"
 )
 
 var synchronizations = make([]*models.Synchronization, 0)
