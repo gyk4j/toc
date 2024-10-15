@@ -45,30 +45,34 @@ function curl(method, url, data) {
   
   // Now execute the request
   request
-    .then(res => {
-      console.log(res);
-      console.log(res.data);
-    })
-    .catch((error) => {
-      // Error
-      if (error.response) {
-          // The request was made and the server responded with a status code
-          // that falls out of the range of 2xx
-          console.error(error.response.data);
-          console.error(error.response.status);
-          console.error(error.response.headers);
-      } else if (error.request) {
-          // The request was made but no response was received
-          // `error.request` is an instance of XMLHttpRequest in the 
-          // browser and an instance of
-          // http.ClientRequest in node.js
-          console.error(error.request);
-      } else {
-          // Something happened in setting up the request that triggered an Error
-          console.error('Error', error.message);
-      }
-      console.error(error.config);
-    });
+    .then(onResponse)
+    .catch(onError);
+}
+
+function onResponse(res){
+  console.log(res);
+  console.log(res.data);
+}
+
+function onError(error){
+  // Error
+  if (error.response) {
+    // The request was made and the server responded with a status code
+    // that falls out of the range of 2xx
+    console.error(error.response.data);
+    console.error(error.response.status);
+    console.error(error.response.headers);
+  } else if (error.request) {
+      // The request was made but no response was received
+      // `error.request` is an instance of XMLHttpRequest in the 
+      // browser and an instance of
+      // http.ClientRequest in node.js
+      console.error(error.request);
+  } else {
+      // Something happened in setting up the request that triggered an Error
+      console.error('Error', error.message);
+  }
+  console.error(error.config);
 }
 
 function newBackup() {
