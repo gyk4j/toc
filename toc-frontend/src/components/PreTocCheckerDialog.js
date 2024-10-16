@@ -12,11 +12,19 @@ import {
 export default function PreTocCheckerDialog({ 
     showPreTocCheckerDialog,
     closePreTocChecker,
+    fileStatus,
+    webStatus,
+    mailStatus,
+    databaseStatus,
     actionText
     }) {
 
-    //const [basicModal, setBasicModal] = useState(false);
-    //const toggleOpen = () => setBasicModal(!basicModal);
+    const COLOR = {
+        "Pending":      { fg: "text-black", bg: "bg-light" },
+        "Running":      { fg: "text-white", bg: "bg-info" },
+        "Completed":    { fg: "text-white", bg: "bg-success" },
+        "Failed":       { fg: "text-white", bg: "bg-danger" },
+    }
 
     return (
         <MDBModal staticBackdrop show={showPreTocCheckerDialog} tabIndex='-1'>
@@ -29,20 +37,28 @@ export default function PreTocCheckerDialog({
                     <MDBModalBody>
                         <div className='container-fluid'>
                             <div className='row'>
-                                <div className='col-md-8'>File</div>
-                                <div className='col-md-4'>...</div>
+                                <div className='col-md-10'>File</div>
+                                <div className={`col-md-2 ${ COLOR[fileStatus].fg } bg-opacity-75 ${ COLOR[fileStatus].bg }`}>
+                                    {fileStatus}
+                                </div>
                             </div>
                             <div className='row'>
-                                <div className='col-md-8'>Web</div>
-                                <div className='col-md-4'>...</div>
+                                <div className='col-md-10'>Web</div>
+                                <div className={`col-md-2 ${ COLOR[webStatus].fg } bg-opacity-75 ${ COLOR[webStatus].bg }`}>
+                                    {webStatus}
+                                </div>
                             </div>
                             <div className='row'>
-                                <div className='col-md-8'>Mail</div>
-                                <div className='col-md-4'>...</div>
+                                <div className='col-md-10'>Mail</div>
+                                <div className={`col-md-2 ${ COLOR[mailStatus].fg } bg-opacity-75 ${ COLOR[mailStatus].bg }`}>
+                                    {mailStatus}
+                                </div>
                             </div>
                             <div className='row'>
-                                <div className='col-md-8'>Database</div>
-                                <div className='col-md-4'>...</div>
+                                <div className='col-md-10'>Database</div>
+                                <div className={`col-md-2 ${ COLOR[databaseStatus].fg } bg-opacity-75 ${ COLOR[databaseStatus].bg }`}>
+                                    {databaseStatus}
+                                </div>
                             </div>
                         </div>
                     </MDBModalBody>
