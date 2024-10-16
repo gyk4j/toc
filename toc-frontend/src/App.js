@@ -13,7 +13,11 @@ export default class App extends React.Component {
     this.state = {
       name: "TOC",
       showPreTocCheckerDialog: true,
-      preTocCheckerActionText: "Start initial restoration",
+      preTocCheckerFileStatus: 'Completed',
+      preTocCheckerWebStatus: 'Failed',
+      preTocCheckerMailStatus: 'Running',
+      preTocCheckerDatabaseStatus: 'Pending',
+      preTocCheckerActionText: "Start full backup",
       showTocEndedDialog: false,
       statusbarIsMain: Math.random() > 0.5,
       statusbarIsOnline: Math.random() > 0.5,
@@ -126,6 +130,10 @@ export default class App extends React.Component {
         <PreTocCheckerDialog
           showPreTocCheckerDialog={this.state.showPreTocCheckerDialog}
           closePreTocChecker={this.closePreTocChecker}
+          fileStatus={this.state.preTocCheckerFileStatus}
+          webStatus={this.state.preTocCheckerWebStatus}
+          mailStatus={this.state.preTocCheckerMailStatus}
+          databaseStatus={this.state.preTocCheckerDatabaseStatus}
           actionText={this.state.preTocCheckerActionText}
         /> 
         
