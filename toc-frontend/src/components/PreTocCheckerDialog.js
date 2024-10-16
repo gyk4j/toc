@@ -12,6 +12,7 @@ import {
 export default function PreTocCheckerDialog({ 
     showPreTocCheckerDialog,
     closePreTocChecker,
+    startPreTocChecker,
     fileStatus,
     webStatus,
     mailStatus,
@@ -64,7 +65,7 @@ export default function PreTocCheckerDialog({
                     </MDBModalBody>
                     <MDBModalFooter>
                         <MDBBtn onClick={closePreTocChecker} color="secondary">Exit</MDBBtn>
-                        <MDBBtn onClick={closePreTocChecker}>{actionText}</MDBBtn>
+                        <MDBBtn onClick={startPreTocChecker}>{actionText}</MDBBtn>
                     </MDBModalFooter>
                 </MDBModalContent>
             </MDBModalDialog>
