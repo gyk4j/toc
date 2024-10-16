@@ -107,6 +107,7 @@ export default class App extends React.Component {
     };
 
     this.closePreTocChecker = this.closePreTocChecker.bind(this);
+    this.startPreTocChecker = this.startPreTocChecker.bind(this);
     this.toggleShowTocEnded = this.toggleShowTocEnded.bind(this);
     this.changeIntervalOnChange = this.changeIntervalOnChange.bind(this);
     this.startOnClick = this.startOnClick.bind(this);
@@ -130,6 +131,7 @@ export default class App extends React.Component {
         <PreTocCheckerDialog
           showPreTocCheckerDialog={this.state.showPreTocCheckerDialog}
           closePreTocChecker={this.closePreTocChecker}
+          startPreTocChecker={this.startPreTocChecker}
           fileStatus={this.state.preTocCheckerFileStatus}
           webStatus={this.state.preTocCheckerWebStatus}
           mailStatus={this.state.preTocCheckerMailStatus}
@@ -183,6 +185,62 @@ export default class App extends React.Component {
   closePreTocChecker = ( e ) => {
     //let show = this.state.showPreTocCheckerModal
     this.setState({ showPreTocCheckerDialog: false })
+  }
+
+  startPreTocChecker = ( e ) => {
+    // Simulate long-running full backup/initial restoration process.
+    const WAIT_TIME_MS = 3000
+
+    let that = this
+    new Promise((resolve, reject) => {
+      // Initialize all to "Pending"
+      that.setState({ preTocCheckerFileStatus: "Pending" })
+      that.setState({ preTocCheckerWebStatus: "Pending" })
+      that.setState({ preTocCheckerMailStatus: "Pending" })
+      that.setState({ preTocCheckerDatabaseStatus: "Pending" })
+      setTimeout(() => resolve("start"), WAIT_TIME_MS)
+    })
+    .then(function(result){
+      return new Promise((resolve, reject) => {
+        that.setState({ preTocCheckerFileStatus: "Running" })
+        setTimeout(() => {
+          that.setState({ preTocCheckerFileStatus: "Completed" })
+          resolve("file")
+        }, WAIT_TIME_MS)
+      })
+    })
+    .then(function(result){
+      return new Promise((resolve, reject) => {
+        that.setState({ preTocCheckerWebStatus: "Running" })
+        setTimeout(() => {
+          that.setState({ preTocCheckerWebStatus: "Completed" })
+          resolve("web")
+        }, WAIT_TIME_MS)
+      })
+    })
+    .then(function(result){      
+      return new Promise((resolve, reject) => {
+        that.setState({ preTocCheckerMailStatus: "Running" })
+        setTimeout(() => {
+          that.setState({ preTocCheckerMailStatus: "Completed" })
+          resolve("mail")
+        }, WAIT_TIME_MS)
+      })
+    })
+    .then(function(result){
+      return new Promise((resolve, reject) => {
+        that.setState({ preTocCheckerDatabaseStatus: "Running" })
+        setTimeout(() => {
+          that.setState({ preTocCheckerDatabaseStatus: "Completed" })
+          resolve("database")
+        }, WAIT_TIME_MS)
+      })
+    })
+    .then(function(result){
+      console.log("Done")
+    })
+    .catch(err => console.error(err))
+    .finally(() => console.log("finally"))
   }
 
   toggleShowTocEnded = ( e ) => {
