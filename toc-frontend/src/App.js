@@ -1,20 +1,10 @@
 import React from 'react';
 import PreTocCheckerDialog from './components/PreTocCheckerDialog';
+import TocEndedDialog from './components/TocEndedDialog';
 import StatusBar from './components/StatusBar';
 import ToolBar from './components/ToolBar';
 import TabbedPane from './components/TabbedPane';
 import * as ApiService from './services/ApiService'
-
-import {
-  MDBModal,
-  MDBModalDialog,
-  MDBModalContent,
-  MDBModalHeader,
-  MDBModalTitle,
-  MDBModalBody,
-  MDBModalFooter,
-  MDBBtn
-} from 'mdb-react-ui-kit';
 
 export default class App extends React.Component {
 
@@ -24,7 +14,7 @@ export default class App extends React.Component {
       name: "TOC",
       showPreTocCheckerDialog: true,
       preTocCheckerActionText: "Start initial restoration",
-      showTocEndedModal: false,
+      showTocEndedDialog: false,
       statusbarIsMain: Math.random() > 0.5,
       statusbarIsOnline: Math.random() > 0.5,
       statusbarInterval: '1 minute',
@@ -130,10 +120,7 @@ export default class App extends React.Component {
   }
 
   render() {
-    // const [basicModal, setBasicModal] = useState(false);
-
-    // const toggleShowTocEnded = () => setBasicModal(!basicModal);
-
+    
     return (
       <div>
         <PreTocCheckerDialog
@@ -142,25 +129,12 @@ export default class App extends React.Component {
           actionText={this.state.preTocCheckerActionText}
         /> 
         
-        {/* setShow={this.toggleShowTocEnded} */}
-        <MDBModal show={this.state.showTocEndedModal} tabIndex='-1'>
-          <MDBModalDialog>
-            <MDBModalContent>
-              <MDBModalHeader>
-                <MDBModalTitle>TOC Ended</MDBModalTitle>
-                <MDBBtn className='btn-close' color='none' onClick={this.toggleShowTocEnded}></MDBBtn>
-              </MDBModalHeader>
-              <MDBModalBody>TOC ended at 
-                <strong className="text-danger"> { this.state.statusbarEndTime != null ? this.state.statusbarEndTime.toLocaleString() : "" }</strong>
-              </MDBModalBody>
-              <MDBModalFooter>
-                <MDBBtn onClick={this.toggleShowTocEnded}>
-                  OK
-                </MDBBtn>
-              </MDBModalFooter>
-            </MDBModalContent>
-          </MDBModalDialog>
-        </MDBModal>
+        <TocEndedDialog
+           showTocEndedDialog={this.state.showTocEndedDialog}
+           toggleShowTocEnded={this.toggleShowTocEnded}
+           statusbarEndTime={this.state.statusbarEndTime}
+           actionText='Close'
+        />
 
         <StatusBar
           isMain={this.state.statusbarIsMain} 
@@ -204,8 +178,8 @@ export default class App extends React.Component {
   }
 
   toggleShowTocEnded = ( e ) => {
-    let show = this.state.showTocEndedModal
-    this.setState({ showTocEndedModal: !show })
+    let show = this.state.showTocEndedDialog
+    this.setState({ showTocEndedDialog: !show })
   }
 
   changeIntervalOnChange = ( event ) => {
