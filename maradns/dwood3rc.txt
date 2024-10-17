@@ -27,4 +27,17 @@ filter_rfc1918 = 0
 # Enable MX record queries explicitly. Disabled by default due to spam zombies. 
 reject_mx = 0
 
+# We can have given names resolve to bogus IPv4 addresses, 
+# regardless of what real values these DNS
+# records may have.  Note that a given name can only resolve to a
+# single IP, and that the records have a fixed TTL of 30 seconds.
+ip4 = {}
+ip4["mail."] = "192.168.111.1"
+ip4["file."] = "192.168.111.1"
+ip4["web."]  = "192.168.111.1"
+ip4["db."]   = "192.168.111.1"
+ip4["toc."]  = "192.168.111.1"
+# Blacklist a bad site; this blocks resolution for both IPv4 and IPv6
+ip4["phish.example.com."] = "X"
+
 # end of file
