@@ -1,0 +1,9 @@
+toc.local.      NS    ns1.toc.local. ~
+ns1.toc.local.        192.168.111.1 ~
+toc.local.            192.168.111.1 ~
+www.toc.local.        192.168.111.1 ~
+toc.local.      MX 10 mail.toc.local. ~
+mail.toc.local.       192.168.111.1 ~
+file.toc.local.       192.168.111.1 ~
+db.toc.local.         192.168.111.1 ~
+*.toc.local.    A		  192.168.111.1 ~
