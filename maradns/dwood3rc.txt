@@ -22,4 +22,7 @@ num_retries = 1
 # on an internal network, uncomment the following line:
 filter_rfc1918 = 0
 
+# Enable MX record queries explicitly. Disabled by default due to spam zombies. 
+reject_mx = 0
+
 # end of file
