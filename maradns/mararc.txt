@@ -1,0 +1,5 @@
+hide_disclaimer = "YES"
+ipv4_bind_addresses = "127.0.0.1"
+timestamp_type = 2
+csv2 = {}
+csv2["toc.local."] = "db.toc.local"
