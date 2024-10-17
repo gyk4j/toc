@@ -1,17 +1,19 @@
 # From https://raw.githubusercontent.com/gonespy/bstormps3/master/guide/dwood3rc.txt
-upstream_servers = {}
-upstream_servers["."]="8.8.8.8, 8.8.4.4, 1.1.1.1, 1.0.0.1"
-
 bind_address = "192.168.111.1"
-recursive_acl = "192.168.111.1/24"
+recursive_acl = "127.0.0.1/16, 192.168.111.1/24"
 root_servers = {}
 root_servers["toc.local."]="127.0.0.1"
+
+upstream_servers = {}
+upstream_servers["."]="8.8.8.8, 8.8.4.4, 1.1.1.1, 1.0.0.1"
 
 # The file containing a hard-to-guess secret
 random_seed_file = "secret.txt"
 
-timeout_seconds = 2
-num_retries = 1
+timeout_seconds_tcp = 1
+timeout_seconds = 1
+num_retries = 0
+ttl_age = 0
 
 # This is the file Deadwood uses to read the cache to and from disk
 #cache_file = "dw_cache_bin"
