@@ -1,9 +1,14 @@
-toc.local.      NS    ns1.toc.local. ~
-ns1.toc.local.        192.168.111.1 ~
-toc.local.            192.168.111.1 ~
-www.toc.local.        192.168.111.1 ~
-toc.local.      MX 10 mail.toc.local. ~
-mail.toc.local.       192.168.111.1 ~
-file.toc.local.       192.168.111.1 ~
-db.toc.local.         192.168.111.1 ~
-*.toc.local.    A		  192.168.111.1 ~
+toc.local.                  NS    ns1.toc.local.  ~
+ns1.toc.local.              A     192.168.111.1   ~
+www.toc.local.              A     192.168.111.1   ~
+toc.local.                  MX 10 mail.toc.local. ~
+mail.toc.local.             A     192.168.111.1   ~
+file.toc.local.             A     192.168.111.1   ~
+db.toc.local.               A     192.168.111.1   ~
+toc.toc.local.              A     192.168.111.1   ~
+1.111.168.192.in-addr.arpa. PTR   ns1.toc.local.  ~
+1.111.168.192.in-addr.arpa. PTR   www.toc.local.  ~
+1.111.168.192.in-addr.arpa. PTR   mail.toc.local. ~
+1.111.168.192.in-addr.arpa. PTR   file.toc.local. ~
+1.111.168.192.in-addr.arpa. PTR   db.toc.local.   ~
+1.111.168.192.in-addr.arpa. PTR   toc.toc.local.  ~
