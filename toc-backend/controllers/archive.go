@@ -14,14 +14,14 @@ func NewArchive(params archive.NewArchiveParams) middleware.Responder {
 
 	a := services.ArchiveData()
 	if a != nil {
-		res = archive.NewArchiveDataOK().WithPayload(a)
+		res = archive.NewNewArchiveOK().WithPayload(a)
 	} else {
 		apires := models.APIResponse{
 			Code:    http.StatusInternalServerError,
 			Message: "Internal server error",
 			Type:    models.APIResponseTypeError,
 		}
-		res = archive.NewArchiveDataInternalServerError().WithPayload(&apires)
+		res = archive.NewNewArchiveInternalServerError().WithPayload(&apires)
 	}
 
 	return res
