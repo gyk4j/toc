@@ -27,6 +27,10 @@ func NewArchive(params archive.NewArchiveParams) middleware.Responder {
 	return res
 }
 
+func UpdateArchive(params archive.UpdateArchiveParams) middleware.Responder {
+	return middleware.NotImplemented("operation UpdateArchive has not yet been implemented")
+}
+
 func GetArchives(params archive.GetArchivesParams) middleware.Responder {
 	var res middleware.Responder
 

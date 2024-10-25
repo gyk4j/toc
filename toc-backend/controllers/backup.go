@@ -27,6 +27,10 @@ func NewBackup(params backup.NewBackupParams) middleware.Responder {
 	return res
 }
 
+func UpdateBackup(params backup.UpdateBackupParams) middleware.Responder {
+	return middleware.NotImplemented("operation UpdateBackup has not yet been implemented")
+}
+
 func GetBackups(params backup.GetBackupsParams) middleware.Responder {
 	var res middleware.Responder
 

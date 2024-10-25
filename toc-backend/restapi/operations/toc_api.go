@@ -95,6 +95,24 @@ func NewTocAPI(spec *loads.Document) *TocAPI {
 		TransferNewTransferHandler: transfer.NewTransferHandlerFunc(func(params transfer.NewTransferParams) middleware.Responder {
 			return middleware.NotImplemented("operation transfer.NewTransfer has not yet been implemented")
 		}),
+		ArchiveUpdateArchiveHandler: archive.UpdateArchiveHandlerFunc(func(params archive.UpdateArchiveParams) middleware.Responder {
+			return middleware.NotImplemented("operation archive.UpdateArchive has not yet been implemented")
+		}),
+		BackupUpdateBackupHandler: backup.UpdateBackupHandlerFunc(func(params backup.UpdateBackupParams) middleware.Responder {
+			return middleware.NotImplemented("operation backup.UpdateBackup has not yet been implemented")
+		}),
+		LogUpdateLogHandler: logops.UpdateLogHandlerFunc(func(params logops.UpdateLogParams) middleware.Responder {
+			return middleware.NotImplemented("operation log.UpdateLog has not yet been implemented")
+		}),
+		RestorationUpdateRestorationHandler: restoration.UpdateRestorationHandlerFunc(func(params restoration.UpdateRestorationParams) middleware.Responder {
+			return middleware.NotImplemented("operation restoration.UpdateRestoration has not yet been implemented")
+		}),
+		SynchronizationUpdateSynchronizationHandler: synchronization.UpdateSynchronizationHandlerFunc(func(params synchronization.UpdateSynchronizationParams) middleware.Responder {
+			return middleware.NotImplemented("operation synchronization.UpdateSynchronization has not yet been implemented")
+		}),
+		TransferUpdateTransferHandler: transfer.UpdateTransferHandlerFunc(func(params transfer.UpdateTransferParams) middleware.Responder {
+			return middleware.NotImplemented("operation transfer.UpdateTransfer has not yet been implemented")
+		}),
 	}
 }
 
@@ -161,6 +179,18 @@ type TocAPI struct {
 	SynchronizationNewSynchronizationHandler synchronization.NewSynchronizationHandler
 	// TransferNewTransferHandler sets the operation handler for the new transfer operation
 	TransferNewTransferHandler transfer.NewTransferHandler
+	// ArchiveUpdateArchiveHandler sets the operation handler for the update archive operation
+	ArchiveUpdateArchiveHandler archive.UpdateArchiveHandler
+	// BackupUpdateBackupHandler sets the operation handler for the update backup operation
+	BackupUpdateBackupHandler backup.UpdateBackupHandler
+	// LogUpdateLogHandler sets the operation handler for the update log operation
+	LogUpdateLogHandler logops.UpdateLogHandler
+	// RestorationUpdateRestorationHandler sets the operation handler for the update restoration operation
+	RestorationUpdateRestorationHandler restoration.UpdateRestorationHandler
+	// SynchronizationUpdateSynchronizationHandler sets the operation handler for the update synchronization operation
+	SynchronizationUpdateSynchronizationHandler synchronization.UpdateSynchronizationHandler
+	// TransferUpdateTransferHandler sets the operation handler for the update transfer operation
+	TransferUpdateTransferHandler transfer.UpdateTransferHandler
 
 	// ServeError is called when an error is received, there is a default handler
 	// but you can set your own with this
@@ -282,6 +312,24 @@ func (o *TocAPI) Validate() error {
 	}
 	if o.TransferNewTransferHandler == nil {
 		unregistered = append(unregistered, "transfer.NewTransferHandler")
+	}
+	if o.ArchiveUpdateArchiveHandler == nil {
+		unregistered = append(unregistered, "archive.UpdateArchiveHandler")
+	}
+	if o.BackupUpdateBackupHandler == nil {
+		unregistered = append(unregistered, "backup.UpdateBackupHandler")
+	}
+	if o.LogUpdateLogHandler == nil {
+		unregistered = append(unregistered, "log.UpdateLogHandler")
+	}
+	if o.RestorationUpdateRestorationHandler == nil {
+		unregistered = append(unregistered, "restoration.UpdateRestorationHandler")
+	}
+	if o.SynchronizationUpdateSynchronizationHandler == nil {
+		unregistered = append(unregistered, "synchronization.UpdateSynchronizationHandler")
+	}
+	if o.TransferUpdateTransferHandler == nil {
+		unregistered = append(unregistered, "transfer.UpdateTransferHandler")
 	}
 
 	if len(unregistered) > 0 {
@@ -431,6 +479,30 @@ func (o *TocAPI) initHandlerCache() {
 		o.handlers["POST"] = make(map[string]http.Handler)
 	}
 	o.handlers["POST"]["/transfers"] = transfer.NewNewTransfer(o.context, o.TransferNewTransferHandler)
+	if o.handlers["PUT"] == nil {
+		o.handlers["PUT"] = make(map[string]http.Handler)
+	}
+	o.handlers["PUT"]["/archives"] = archive.NewUpdateArchive(o.context, o.ArchiveUpdateArchiveHandler)
+	if o.handlers["PUT"] == nil {
+		o.handlers["PUT"] = make(map[string]http.Handler)
+	}
+	o.handlers["PUT"]["/backups"] = backup.NewUpdateBackup(o.context, o.BackupUpdateBackupHandler)
+	if o.handlers["PUT"] == nil {
+		o.handlers["PUT"] = make(map[string]http.Handler)
+	}
+	o.handlers["PUT"]["/logs"] = logops.NewUpdateLog(o.context, o.LogUpdateLogHandler)
+	if o.handlers["PUT"] == nil {
+		o.handlers["PUT"] = make(map[string]http.Handler)
+	}
+	o.handlers["PUT"]["/restorations"] = restoration.NewUpdateRestoration(o.context, o.RestorationUpdateRestorationHandler)
+	if o.handlers["PUT"] == nil {
+		o.handlers["PUT"] = make(map[string]http.Handler)
+	}
+	o.handlers["PUT"]["/synchronizations"] = synchronization.NewUpdateSynchronization(o.context, o.SynchronizationUpdateSynchronizationHandler)
+	if o.handlers["PUT"] == nil {
+		o.handlers["PUT"] = make(map[string]http.Handler)
+	}
+	o.handlers["PUT"]["/transfers"] = transfer.NewUpdateTransfer(o.context, o.TransferUpdateTransferHandler)
 }
 
 // Serve creates a http handler to serve the API over HTTP

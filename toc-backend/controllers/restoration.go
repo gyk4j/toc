@@ -27,6 +27,10 @@ func NewRestoration(params restoration.NewRestorationParams) middleware.Responde
 	return res
 }
 
+func UpdateRestoration(params restoration.UpdateRestorationParams) middleware.Responder {
+	return middleware.NotImplemented("operation UpdateRestoration has not yet been implemented")
+}
+
 func GetRestorations(params restoration.GetRestorationsParams) middleware.Responder {
 	var res middleware.Responder
 

@@ -52,30 +52,36 @@ func configureAPI(api *operations.TocAPI) http.Handler {
 	
 	// Backups
 	api.BackupNewBackupHandler = backup.NewBackupHandlerFunc(controllers.NewBackup)
+	api.BackupUpdateBackupHandler = backup.UpdateBackupHandlerFunc(controllers.UpdateBackup)
 	api.BackupGetBackupsHandler = backup.GetBackupsHandlerFunc(controllers.GetBackups)
 	api.BackupGetBackupByIDHandler = backup.GetBackupByIDHandlerFunc(controllers.GetBackupByID)
 	
 	// Restorations
 	api.RestorationNewRestorationHandler = restoration.NewRestorationHandlerFunc(controllers.NewRestoration)
+	api.RestorationUpdateRestorationHandler = restoration.UpdateRestorationHandlerFunc(controllers.UpdateRestoration)
 	api.RestorationGetRestorationsHandler = restoration.GetRestorationsHandlerFunc(controllers.GetRestorations)
 	api.RestorationGetRestorationByIDHandler = restoration.GetRestorationByIDHandlerFunc(controllers.GetRestorationByID)
 	
 	// Transfers
 	api.TransferNewTransferHandler = transfer.NewTransferHandlerFunc(controllers.NewTransfer)
+	api.TransferUpdateTransferHandler = transfer.UpdateTransferHandlerFunc(controllers.UpdateTransfer)
 	api.TransferGetTransfersHandler = transfer.GetTransfersHandlerFunc(controllers.GetTransfers)
 	api.TransferGetTransferByIDHandler = transfer.GetTransferByIDHandlerFunc(controllers.GetTransferByID)
 	
 	// Synchronizations
 	api.SynchronizationNewSynchronizationHandler = synchronization.NewSynchronizationHandlerFunc(controllers.NewSynchronization)
+	api.SynchronizationUpdateSynchronizationHandler = synchronization.UpdateSynchronizationHandlerFunc(controllers.UpdateSynchronization)
 	
 	// Quotas
 	api.QuotaGetQuotasHandler = quota.GetQuotasHandlerFunc(controllers.GetQuotas)
 	
 	// Logs
 	api.LogExportLogHandler = logops.ExportLogHandlerFunc(controllers.ExportLog)
+	api.LogUpdateLogHandler = logops.UpdateLogHandlerFunc(controllers.UpdateLog)
 	
 	// Archives
 	api.ArchiveNewArchiveHandler = archive.NewArchiveHandlerFunc(controllers.NewArchive)
+	api.ArchiveUpdateArchiveHandler = archive.UpdateArchiveHandlerFunc(controllers.UpdateArchive)
 	api.ArchiveGetArchivesHandler = archive.GetArchivesHandlerFunc(controllers.GetArchives)
 	api.ArchiveGetArchiveByIDHandler = archive.GetArchiveByIDHandlerFunc(controllers.GetArchiveByID)
 	
