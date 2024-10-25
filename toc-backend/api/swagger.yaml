@@ -9,7 +9,7 @@ info:
   license:
     name: "Eclipse Public License 2.0 (EPL)"
     url: "https://www.eclipse.org/legal/epl-2.0/"
-host: 127.0.0.1:8080
+host: 0.0.0.0:80
 basePath: /v1
 tags:
   - name: "backup"
@@ -161,26 +161,26 @@ definitions:
       name: "Restoration"
     example:
       id: 1
-  # Transfer:
-    # type: "object"
-    # properties:
-      # id:
-        # type: "integer"
-        # format: "int64"
-        # x-omitempty: false
-      # backup:
-        # $ref: "#/definitions/Backup"
-        # x-omitempty: false
-      # status:
-        # type: "string"
-        # x-omitempty: false
-        # description: "Transfer Status"
-        # enum: [ queued, in-progress, completed, failed ]
-    # xml:
-      # name: "Transfer"
-    # example:
-      # id: 1
-      # status: "failed"
+  Transfer:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+        x-omitempty: false
+      backup:
+        $ref: "#/definitions/Backup"
+        x-omitempty: false
+      status:
+        type: "string"
+        x-omitempty: false
+        description: "Transfer Status"
+        enum: [ queued, in-progress, completed, failed ]
+    xml:
+      name: "Transfer"
+    example:
+      id: 1
+      status: "failed"
   Synchronization:
     type: "object"
     properties:
@@ -328,7 +328,7 @@ paths:
         - "backup"
       summary: "Query backup info"
       description: "Retrieve information and state of all backups and their snapshots"
-      operationId: "getBackup"
+      operationId: "getBackups"
       produces:
         - "application/json"
       responses:
@@ -445,7 +445,7 @@ paths:
         - "restoration"
       summary: "Query restoration info"
       description: "Retrieve information and state of all restorations, their backup and snapshots"
-      operationId: "getRestoration"
+      operationId: "getRestorations"
       produces:
         - "application/json"
       responses:
@@ -505,6 +505,123 @@ paths:
           description: "Restoration not found"
           schema:
             $ref: "#/definitions/ApiResponse"
+  /transfers:
+    post:
+      tags:
+        - "transfer"
+      summary: "Start a backup transfer attempt"
+      description: "Run transfer and return immediately without waiting"
+      operationId: "newTransfer"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "Backup and associated snapshots for restoration"
+          required: true
+          schema:
+            $ref: "#/definitions/Backup"
+          x-exportParamName: "Body"
+      responses:
+        "200":
+          description: "Transfer started"
+          schema:
+            $ref: "#/definitions/Transfer"
+        "403":
+          description: "Forbidden from creating duplicate/repeat transfer"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        "404":
+          description: "Stepup backup server not found"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        "405":
+          description: "Bad request"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        "500":
+          description: "Stepup TOC controller error"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        "502":
+          description: "Bad gateway. Stepup backup server error"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        "503":
+          description: "Service unavailable on stepup TOC controller"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        "504":
+          description: "Gateway timeout. Stepup backup server did not reply."
+          schema:
+            $ref: "#/definitions/ApiResponse"
+    get:
+      tags:
+        - "transfer"
+      summary: "Query transfer status"
+      description: "Retrieve status of all transfers"
+      operationId: "getTransfers"
+      produces:
+        - "application/json"
+      responses:
+        "200":
+          description: "Transfer info retrieved"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Transfer"
+        "403":
+          description: "Forbidden from querying transfer status"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        "404":
+          description: "Transfer not found"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        "405":
+          description: "Bad request"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        "500":
+          description: "TOC controller error"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        "503":
+          description: "Service unavailable"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+  /transfers/{transferId}:
+    get:
+      tags:
+        - "transfer"
+      summary: "Find transfer by ID"
+      description: "Query a single transfer"
+      operationId: "getTransferById"
+      produces:
+        - "application/json"
+      parameters:
+        - name: "transferId"
+          in: "path"
+          description: "ID of transfer to return"
+          required: true
+          type: "integer"
+          format: "int64"
+          x-exportParamName: "TransferId"
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/Transfer"
+        "400":
+          description: "Invalid ID supplied"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        "404":
+          description: "Transfer not found"
+          schema:
+            $ref: "#/definitions/ApiResponse"
   /synchronizations:
     post:
       tags:
@@ -553,7 +670,7 @@ paths:
         - "quota"
       summary: "Refresh quota info"
       description: "Retrieve all quotas set"
-      operationId: "getQuota"
+      operationId: "getQuotas"
       produces:
         - "application/json"
       responses:
@@ -623,7 +740,7 @@ paths:
         - "archive"
       summary: "Archive data"
       description: "Create a ZIP archive of backup snapshot data"
-      operationId: "archiveData"
+      operationId: "newArchive"
       produces:
         - "application/json"
       responses:
@@ -656,7 +773,7 @@ paths:
         - "archive"
       summary: "Query archive info"
       description: "Retrieve progress, information and state of all archives"
-      operationId: "getArchive"
+      operationId: "getArchives"
       produces:
         - "application/json"
       responses:

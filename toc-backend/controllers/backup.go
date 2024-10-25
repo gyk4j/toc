@@ -27,19 +27,19 @@ func NewBackup(params backup.NewBackupParams) middleware.Responder {
 	return res
 }
 
-func GetBackups(params backup.GetBackupParams) middleware.Responder {
+func GetBackups(params backup.GetBackupsParams) middleware.Responder {
 	var res middleware.Responder
 
 	b := services.GetBackups()
 	if b != nil {
-		res = backup.NewGetBackupOK().WithPayload(b)
+		res = backup.NewGetBackupsOK().WithPayload(b)
 	} else {
 		apires := models.APIResponse{
 			Code:    http.StatusServiceUnavailable,
 			Message: "Service unavailable",
 			Type:    models.APIResponseTypeError,
 		}
-		res = backup.NewGetBackupServiceUnavailable().WithPayload(&apires)
+		res = backup.NewGetBackupsServiceUnavailable().WithPayload(&apires)
 	}
 
 	return res
