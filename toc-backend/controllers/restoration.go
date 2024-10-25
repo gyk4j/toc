@@ -27,19 +27,19 @@ func NewRestoration(params restoration.NewRestorationParams) middleware.Responde
 	return res
 }
 
-func GetRestorations(params restoration.GetRestorationParams) middleware.Responder {
+func GetRestorations(params restoration.GetRestorationsParams) middleware.Responder {
 	var res middleware.Responder
 
 	r := services.GetRestorations()
 	if r != nil {
-		res = restoration.NewGetRestorationOK().WithPayload(r)
+		res = restoration.NewGetRestorationsOK().WithPayload(r)
 	} else {
 		apires := models.APIResponse{
 			Code:    http.StatusServiceUnavailable,
 			Message: "Service unavailable",
 			Type:    models.APIResponseTypeError,
 		}
-		res = restoration.NewGetRestorationServiceUnavailable().WithPayload(&apires)
+		res = restoration.NewGetRestorationsServiceUnavailable().WithPayload(&apires)
 	}
 
 	return res

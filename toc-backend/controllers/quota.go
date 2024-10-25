@@ -6,14 +6,14 @@ import (
 	"github.com/gyk4j/toc/toc-backend/services"
 )
 
-func GetQuotas(params quota.GetQuotaParams) middleware.Responder {
+func GetQuotas(params quota.GetQuotasParams) middleware.Responder {
 	var res middleware.Responder
 
 	qs := services.GetQuotas()
 	if qs != nil {
-		res = quota.NewGetQuotaOK().WithPayload(qs)
+		res = quota.NewGetQuotasOK().WithPayload(qs)
 	} else {
-		res = quota.NewGetQuotaServiceUnavailable()
+		res = quota.NewGetQuotasServiceUnavailable()
 	}
 
 	return res

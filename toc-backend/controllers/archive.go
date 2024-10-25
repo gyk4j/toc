@@ -9,7 +9,7 @@ import (
 	"github.com/gyk4j/toc/toc-backend/services"
 )
 
-func NewArchive(params archive.ArchiveDataParams) middleware.Responder {
+func NewArchive(params archive.NewArchiveParams) middleware.Responder {
 	var res middleware.Responder
 
 	a := services.ArchiveData()
@@ -27,19 +27,19 @@ func NewArchive(params archive.ArchiveDataParams) middleware.Responder {
 	return res
 }
 
-func GetArchive(params archive.GetArchiveParams) middleware.Responder {
+func GetArchives(params archive.GetArchivesParams) middleware.Responder {
 	var res middleware.Responder
 
 	a := services.GetArchives()
 	if a != nil {
-		res = archive.NewGetArchiveOK().WithPayload(a)
+		res = archive.NewGetArchivesOK().WithPayload(a)
 	} else {
 		apires := models.APIResponse{
 			Code:    http.StatusNotFound,
 			Message: "Not found",
 			Type:    models.APIResponseTypeError,
 		}
-		res = archive.NewGetArchiveNotFound().WithPayload(&apires)
+		res = archive.NewGetArchivesNotFound().WithPayload(&apires)
 	}
 
 	return res

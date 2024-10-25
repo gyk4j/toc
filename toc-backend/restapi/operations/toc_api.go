@@ -25,6 +25,7 @@ import (
 	"github.com/gyk4j/toc/toc-backend/restapi/operations/quota"
 	"github.com/gyk4j/toc/toc-backend/restapi/operations/restoration"
 	"github.com/gyk4j/toc/toc-backend/restapi/operations/synchronization"
+	"github.com/gyk4j/toc/toc-backend/restapi/operations/transfer"
 )
 
 // NewTocAPI creates a new Toc instance
@@ -49,32 +50,38 @@ func NewTocAPI(spec *loads.Document) *TocAPI {
 
 		JSONProducer: runtime.JSONProducer(),
 
-		ArchiveArchiveDataHandler: archive.ArchiveDataHandlerFunc(func(params archive.ArchiveDataParams) middleware.Responder {
-			return middleware.NotImplemented("operation archive.ArchiveData has not yet been implemented")
-		}),
 		LogExportLogHandler: logops.ExportLogHandlerFunc(func(params logops.ExportLogParams) middleware.Responder {
 			return middleware.NotImplemented("operation log.ExportLog has not yet been implemented")
-		}),
-		ArchiveGetArchiveHandler: archive.GetArchiveHandlerFunc(func(params archive.GetArchiveParams) middleware.Responder {
-			return middleware.NotImplemented("operation archive.GetArchive has not yet been implemented")
 		}),
 		ArchiveGetArchiveByIDHandler: archive.GetArchiveByIDHandlerFunc(func(params archive.GetArchiveByIDParams) middleware.Responder {
 			return middleware.NotImplemented("operation archive.GetArchiveByID has not yet been implemented")
 		}),
-		BackupGetBackupHandler: backup.GetBackupHandlerFunc(func(params backup.GetBackupParams) middleware.Responder {
-			return middleware.NotImplemented("operation backup.GetBackup has not yet been implemented")
+		ArchiveGetArchivesHandler: archive.GetArchivesHandlerFunc(func(params archive.GetArchivesParams) middleware.Responder {
+			return middleware.NotImplemented("operation archive.GetArchives has not yet been implemented")
 		}),
 		BackupGetBackupByIDHandler: backup.GetBackupByIDHandlerFunc(func(params backup.GetBackupByIDParams) middleware.Responder {
 			return middleware.NotImplemented("operation backup.GetBackupByID has not yet been implemented")
 		}),
-		QuotaGetQuotaHandler: quota.GetQuotaHandlerFunc(func(params quota.GetQuotaParams) middleware.Responder {
-			return middleware.NotImplemented("operation quota.GetQuota has not yet been implemented")
+		BackupGetBackupsHandler: backup.GetBackupsHandlerFunc(func(params backup.GetBackupsParams) middleware.Responder {
+			return middleware.NotImplemented("operation backup.GetBackups has not yet been implemented")
 		}),
-		RestorationGetRestorationHandler: restoration.GetRestorationHandlerFunc(func(params restoration.GetRestorationParams) middleware.Responder {
-			return middleware.NotImplemented("operation restoration.GetRestoration has not yet been implemented")
+		QuotaGetQuotasHandler: quota.GetQuotasHandlerFunc(func(params quota.GetQuotasParams) middleware.Responder {
+			return middleware.NotImplemented("operation quota.GetQuotas has not yet been implemented")
 		}),
 		RestorationGetRestorationByIDHandler: restoration.GetRestorationByIDHandlerFunc(func(params restoration.GetRestorationByIDParams) middleware.Responder {
 			return middleware.NotImplemented("operation restoration.GetRestorationByID has not yet been implemented")
+		}),
+		RestorationGetRestorationsHandler: restoration.GetRestorationsHandlerFunc(func(params restoration.GetRestorationsParams) middleware.Responder {
+			return middleware.NotImplemented("operation restoration.GetRestorations has not yet been implemented")
+		}),
+		TransferGetTransferByIDHandler: transfer.GetTransferByIDHandlerFunc(func(params transfer.GetTransferByIDParams) middleware.Responder {
+			return middleware.NotImplemented("operation transfer.GetTransferByID has not yet been implemented")
+		}),
+		TransferGetTransfersHandler: transfer.GetTransfersHandlerFunc(func(params transfer.GetTransfersParams) middleware.Responder {
+			return middleware.NotImplemented("operation transfer.GetTransfers has not yet been implemented")
+		}),
+		ArchiveNewArchiveHandler: archive.NewArchiveHandlerFunc(func(params archive.NewArchiveParams) middleware.Responder {
+			return middleware.NotImplemented("operation archive.NewArchive has not yet been implemented")
 		}),
 		BackupNewBackupHandler: backup.NewBackupHandlerFunc(func(params backup.NewBackupParams) middleware.Responder {
 			return middleware.NotImplemented("operation backup.NewBackup has not yet been implemented")
@@ -84,6 +91,9 @@ func NewTocAPI(spec *loads.Document) *TocAPI {
 		}),
 		SynchronizationNewSynchronizationHandler: synchronization.NewSynchronizationHandlerFunc(func(params synchronization.NewSynchronizationParams) middleware.Responder {
 			return middleware.NotImplemented("operation synchronization.NewSynchronization has not yet been implemented")
+		}),
+		TransferNewTransferHandler: transfer.NewTransferHandlerFunc(func(params transfer.NewTransferParams) middleware.Responder {
+			return middleware.NotImplemented("operation transfer.NewTransfer has not yet been implemented")
 		}),
 	}
 }
@@ -121,30 +131,36 @@ type TocAPI struct {
 	//   - application/json
 	JSONProducer runtime.Producer
 
-	// ArchiveArchiveDataHandler sets the operation handler for the archive data operation
-	ArchiveArchiveDataHandler archive.ArchiveDataHandler
 	// LogExportLogHandler sets the operation handler for the export log operation
 	LogExportLogHandler logops.ExportLogHandler
-	// ArchiveGetArchiveHandler sets the operation handler for the get archive operation
-	ArchiveGetArchiveHandler archive.GetArchiveHandler
 	// ArchiveGetArchiveByIDHandler sets the operation handler for the get archive by Id operation
 	ArchiveGetArchiveByIDHandler archive.GetArchiveByIDHandler
-	// BackupGetBackupHandler sets the operation handler for the get backup operation
-	BackupGetBackupHandler backup.GetBackupHandler
+	// ArchiveGetArchivesHandler sets the operation handler for the get archives operation
+	ArchiveGetArchivesHandler archive.GetArchivesHandler
 	// BackupGetBackupByIDHandler sets the operation handler for the get backup by Id operation
 	BackupGetBackupByIDHandler backup.GetBackupByIDHandler
-	// QuotaGetQuotaHandler sets the operation handler for the get quota operation
-	QuotaGetQuotaHandler quota.GetQuotaHandler
-	// RestorationGetRestorationHandler sets the operation handler for the get restoration operation
-	RestorationGetRestorationHandler restoration.GetRestorationHandler
+	// BackupGetBackupsHandler sets the operation handler for the get backups operation
+	BackupGetBackupsHandler backup.GetBackupsHandler
+	// QuotaGetQuotasHandler sets the operation handler for the get quotas operation
+	QuotaGetQuotasHandler quota.GetQuotasHandler
 	// RestorationGetRestorationByIDHandler sets the operation handler for the get restoration by Id operation
 	RestorationGetRestorationByIDHandler restoration.GetRestorationByIDHandler
+	// RestorationGetRestorationsHandler sets the operation handler for the get restorations operation
+	RestorationGetRestorationsHandler restoration.GetRestorationsHandler
+	// TransferGetTransferByIDHandler sets the operation handler for the get transfer by Id operation
+	TransferGetTransferByIDHandler transfer.GetTransferByIDHandler
+	// TransferGetTransfersHandler sets the operation handler for the get transfers operation
+	TransferGetTransfersHandler transfer.GetTransfersHandler
+	// ArchiveNewArchiveHandler sets the operation handler for the new archive operation
+	ArchiveNewArchiveHandler archive.NewArchiveHandler
 	// BackupNewBackupHandler sets the operation handler for the new backup operation
 	BackupNewBackupHandler backup.NewBackupHandler
 	// RestorationNewRestorationHandler sets the operation handler for the new restoration operation
 	RestorationNewRestorationHandler restoration.NewRestorationHandler
 	// SynchronizationNewSynchronizationHandler sets the operation handler for the new synchronization operation
 	SynchronizationNewSynchronizationHandler synchronization.NewSynchronizationHandler
+	// TransferNewTransferHandler sets the operation handler for the new transfer operation
+	TransferNewTransferHandler transfer.NewTransferHandler
 
 	// ServeError is called when an error is received, there is a default handler
 	// but you can set your own with this
@@ -222,32 +238,38 @@ func (o *TocAPI) Validate() error {
 		unregistered = append(unregistered, "JSONProducer")
 	}
 
-	if o.ArchiveArchiveDataHandler == nil {
-		unregistered = append(unregistered, "archive.ArchiveDataHandler")
-	}
 	if o.LogExportLogHandler == nil {
 		unregistered = append(unregistered, "log.ExportLogHandler")
-	}
-	if o.ArchiveGetArchiveHandler == nil {
-		unregistered = append(unregistered, "archive.GetArchiveHandler")
 	}
 	if o.ArchiveGetArchiveByIDHandler == nil {
 		unregistered = append(unregistered, "archive.GetArchiveByIDHandler")
 	}
-	if o.BackupGetBackupHandler == nil {
-		unregistered = append(unregistered, "backup.GetBackupHandler")
+	if o.ArchiveGetArchivesHandler == nil {
+		unregistered = append(unregistered, "archive.GetArchivesHandler")
 	}
 	if o.BackupGetBackupByIDHandler == nil {
 		unregistered = append(unregistered, "backup.GetBackupByIDHandler")
 	}
-	if o.QuotaGetQuotaHandler == nil {
-		unregistered = append(unregistered, "quota.GetQuotaHandler")
+	if o.BackupGetBackupsHandler == nil {
+		unregistered = append(unregistered, "backup.GetBackupsHandler")
 	}
-	if o.RestorationGetRestorationHandler == nil {
-		unregistered = append(unregistered, "restoration.GetRestorationHandler")
+	if o.QuotaGetQuotasHandler == nil {
+		unregistered = append(unregistered, "quota.GetQuotasHandler")
 	}
 	if o.RestorationGetRestorationByIDHandler == nil {
 		unregistered = append(unregistered, "restoration.GetRestorationByIDHandler")
+	}
+	if o.RestorationGetRestorationsHandler == nil {
+		unregistered = append(unregistered, "restoration.GetRestorationsHandler")
+	}
+	if o.TransferGetTransferByIDHandler == nil {
+		unregistered = append(unregistered, "transfer.GetTransferByIDHandler")
+	}
+	if o.TransferGetTransfersHandler == nil {
+		unregistered = append(unregistered, "transfer.GetTransfersHandler")
+	}
+	if o.ArchiveNewArchiveHandler == nil {
+		unregistered = append(unregistered, "archive.NewArchiveHandler")
 	}
 	if o.BackupNewBackupHandler == nil {
 		unregistered = append(unregistered, "backup.NewBackupHandler")
@@ -257,6 +279,9 @@ func (o *TocAPI) Validate() error {
 	}
 	if o.SynchronizationNewSynchronizationHandler == nil {
 		unregistered = append(unregistered, "synchronization.NewSynchronizationHandler")
+	}
+	if o.TransferNewTransferHandler == nil {
+		unregistered = append(unregistered, "transfer.NewTransferHandler")
 	}
 
 	if len(unregistered) > 0 {
@@ -349,15 +374,7 @@ func (o *TocAPI) initHandlerCache() {
 	if o.handlers["POST"] == nil {
 		o.handlers["POST"] = make(map[string]http.Handler)
 	}
-	o.handlers["POST"]["/archives"] = archive.NewArchiveData(o.context, o.ArchiveArchiveDataHandler)
-	if o.handlers["POST"] == nil {
-		o.handlers["POST"] = make(map[string]http.Handler)
-	}
 	o.handlers["POST"]["/logs"] = logops.NewExportLog(o.context, o.LogExportLogHandler)
-	if o.handlers["GET"] == nil {
-		o.handlers["GET"] = make(map[string]http.Handler)
-	}
-	o.handlers["GET"]["/archives"] = archive.NewGetArchive(o.context, o.ArchiveGetArchiveHandler)
 	if o.handlers["GET"] == nil {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}
@@ -365,7 +382,7 @@ func (o *TocAPI) initHandlerCache() {
 	if o.handlers["GET"] == nil {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}
-	o.handlers["GET"]["/backups"] = backup.NewGetBackup(o.context, o.BackupGetBackupHandler)
+	o.handlers["GET"]["/archives"] = archive.NewGetArchives(o.context, o.ArchiveGetArchivesHandler)
 	if o.handlers["GET"] == nil {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}
@@ -373,15 +390,31 @@ func (o *TocAPI) initHandlerCache() {
 	if o.handlers["GET"] == nil {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}
-	o.handlers["GET"]["/quotas"] = quota.NewGetQuota(o.context, o.QuotaGetQuotaHandler)
+	o.handlers["GET"]["/backups"] = backup.NewGetBackups(o.context, o.BackupGetBackupsHandler)
 	if o.handlers["GET"] == nil {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}
-	o.handlers["GET"]["/restorations"] = restoration.NewGetRestoration(o.context, o.RestorationGetRestorationHandler)
+	o.handlers["GET"]["/quotas"] = quota.NewGetQuotas(o.context, o.QuotaGetQuotasHandler)
 	if o.handlers["GET"] == nil {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}
 	o.handlers["GET"]["/restorations/{restorationId}"] = restoration.NewGetRestorationByID(o.context, o.RestorationGetRestorationByIDHandler)
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
+	o.handlers["GET"]["/restorations"] = restoration.NewGetRestorations(o.context, o.RestorationGetRestorationsHandler)
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
+	o.handlers["GET"]["/transfers/{transferId}"] = transfer.NewGetTransferByID(o.context, o.TransferGetTransferByIDHandler)
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
+	o.handlers["GET"]["/transfers"] = transfer.NewGetTransfers(o.context, o.TransferGetTransfersHandler)
+	if o.handlers["POST"] == nil {
+		o.handlers["POST"] = make(map[string]http.Handler)
+	}
+	o.handlers["POST"]["/archives"] = archive.NewNewArchive(o.context, o.ArchiveNewArchiveHandler)
 	if o.handlers["POST"] == nil {
 		o.handlers["POST"] = make(map[string]http.Handler)
 	}
@@ -394,6 +427,10 @@ func (o *TocAPI) initHandlerCache() {
 		o.handlers["POST"] = make(map[string]http.Handler)
 	}
 	o.handlers["POST"]["/synchronizations"] = synchronization.NewNewSynchronization(o.context, o.SynchronizationNewSynchronizationHandler)
+	if o.handlers["POST"] == nil {
+		o.handlers["POST"] = make(map[string]http.Handler)
+	}
+	o.handlers["POST"]["/transfers"] = transfer.NewNewTransfer(o.context, o.TransferNewTransferHandler)
 }
 
 // Serve creates a http handler to serve the API over HTTP

@@ -21,6 +21,7 @@ import (
 	"github.com/gyk4j/toc/toc-backend/restapi/operations/quota"
 	"github.com/gyk4j/toc/toc-backend/restapi/operations/restoration"
 	"github.com/gyk4j/toc/toc-backend/restapi/operations/synchronization"
+	"github.com/gyk4j/toc/toc-backend/restapi/operations/transfer"
 )
 
 //go:generate swagger generate server --target ..\..\sw --name Toc --spec ..\swagger.yaml --principal interface{}
@@ -47,18 +48,38 @@ func configureAPI(api *operations.TocAPI) http.Handler {
 
 	api.JSONProducer = runtime.JSONProducer()
 
-	api.ArchiveArchiveDataHandler = archive.ArchiveDataHandlerFunc(controllers.NewArchive)
-	api.LogExportLogHandler = logops.ExportLogHandlerFunc(controllers.ExportLog)
-	api.ArchiveGetArchiveHandler = archive.GetArchiveHandlerFunc(controllers.GetArchive)
-	api.ArchiveGetArchiveByIDHandler = archive.GetArchiveByIDHandlerFunc(controllers.GetArchiveByID)
-	api.BackupGetBackupHandler = backup.GetBackupHandlerFunc(controllers.GetBackups)
-	api.BackupGetBackupByIDHandler = backup.GetBackupByIDHandlerFunc(controllers.GetBackupByID)
-	api.QuotaGetQuotaHandler = quota.GetQuotaHandlerFunc(controllers.GetQuotas)
-	api.RestorationGetRestorationHandler = restoration.GetRestorationHandlerFunc(controllers.GetRestorations)
-	api.RestorationGetRestorationByIDHandler = restoration.GetRestorationByIDHandlerFunc(controllers.GetRestorationByID)
+	// ### BEGIN PATHS
+	
+	// Backups
 	api.BackupNewBackupHandler = backup.NewBackupHandlerFunc(controllers.NewBackup)
+	api.BackupGetBackupsHandler = backup.GetBackupsHandlerFunc(controllers.GetBackups)
+	api.BackupGetBackupByIDHandler = backup.GetBackupByIDHandlerFunc(controllers.GetBackupByID)
+	
+	// Restorations
 	api.RestorationNewRestorationHandler = restoration.NewRestorationHandlerFunc(controllers.NewRestoration)
+	api.RestorationGetRestorationsHandler = restoration.GetRestorationsHandlerFunc(controllers.GetRestorations)
+	api.RestorationGetRestorationByIDHandler = restoration.GetRestorationByIDHandlerFunc(controllers.GetRestorationByID)
+	
+	// Transfers
+	api.TransferNewTransferHandler = transfer.NewTransferHandlerFunc(controllers.NewTransfer)
+	api.TransferGetTransfersHandler = transfer.GetTransfersHandlerFunc(controllers.GetTransfers)
+	api.TransferGetTransferByIDHandler = transfer.GetTransferByIDHandlerFunc(controllers.GetTransferByID)
+	
+	// Synchronizations
 	api.SynchronizationNewSynchronizationHandler = synchronization.NewSynchronizationHandlerFunc(controllers.NewSynchronization)
+	
+	// Quotas
+	api.QuotaGetQuotasHandler = quota.GetQuotasHandlerFunc(controllers.GetQuotas)
+	
+	// Logs
+	api.LogExportLogHandler = logops.ExportLogHandlerFunc(controllers.ExportLog)
+	
+	// Archives
+	api.ArchiveNewArchiveHandler = archive.NewArchiveHandlerFunc(controllers.NewArchive)
+	api.ArchiveGetArchivesHandler = archive.GetArchivesHandlerFunc(controllers.GetArchives)
+	api.ArchiveGetArchiveByIDHandler = archive.GetArchiveByIDHandlerFunc(controllers.GetArchiveByID)
+	
+	// ### END PATHS
 
 	api.PreServerShutdown = func() {}
 
