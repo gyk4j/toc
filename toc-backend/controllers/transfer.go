@@ -27,6 +27,10 @@ func NewTransfer(params transfer.NewTransferParams) middleware.Responder {
 	return res
 }
 
+func UpdateTransfer(params transfer.UpdateTransferParams) middleware.Responder {
+	return middleware.NotImplemented("operation UpdateTransfer has not yet been implemented")
+}
+
 func GetTransfers(params transfer.GetTransfersParams) middleware.Responder {
 	var res middleware.Responder
 

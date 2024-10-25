@@ -18,3 +18,7 @@ func NewSynchronization(params synchronization.NewSynchronizationParams) middlew
 
 	return res
 }
+
+func UpdateSynchronization(params synchronization.UpdateSynchronizationParams) middleware.Responder {
+	return middleware.NotImplemented("operation UpdateSynchronization has not yet been implemented")
+}

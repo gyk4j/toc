@@ -18,3 +18,7 @@ func ExportLog(params logops.ExportLogParams) middleware.Responder {
 
 	return res
 }
+
+func UpdateLog(params logops.UpdateLogParams) middleware.Responder {
+	return middleware.NotImplemented("operation UpdateLog has not yet been implemented")
+}

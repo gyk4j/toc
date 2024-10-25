@@ -323,6 +323,57 @@ paths:
           description: "Gateway timeout. Main backup server did not reply."
           schema:
             $ref: "#/definitions/ApiResponse"
+    put:
+      tags:
+        - "backup"
+      summary: "Update backup status/info"
+      description: "Update backup status/info"
+      operationId: "updateBackup"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "Backup and associated snapshots to update"
+          required: true
+          schema:
+            $ref: "#/definitions/Backup"
+          x-exportParamName: "Body"
+      responses:
+        "200":
+          description: "Backup updated"
+          schema:
+            $ref: "#/definitions/Backup"
+        "403":
+          description: "Forbidden from updating backup"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        "404":
+          description: "TOC controller not found"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        "405":
+          description: "Bad request"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        "500":
+          description: "TOC controller error"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        "502":
+          description: "Bad gateway. TOC controller error"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        "503":
+          description: "Service unavailable on TOC controller"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        "504":
+          description: "Gateway timeout. TOC controller did not reply."
+          schema:
+            $ref: "#/definitions/ApiResponse"
     get:
       tags:
         - "backup"
@@ -438,6 +489,57 @@ paths:
             $ref: "#/definitions/ApiResponse"
         "504":
           description: "Gateway timeout. Stepup backup server did not reply."
+          schema:
+            $ref: "#/definitions/ApiResponse"
+    put:
+      tags:
+        - "restoration"
+      summary: "Update restoration status/info"
+      description: "Update restoration status/info"
+      operationId: "updateRestoration"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "Restoration request to update"
+          required: true
+          schema:
+            $ref: "#/definitions/Restoration"
+          x-exportParamName: "Body"
+      responses:
+        "200":
+          description: "Restoration updated"
+          schema:
+            $ref: "#/definitions/Restoration"
+        "403":
+          description: "Forbidden from updating restoration"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        "404":
+          description: "TOC controller not found"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        "405":
+          description: "Bad request"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        "500":
+          description: "TOC controller error"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        "502":
+          description: "Bad gateway. TOC controller error"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        "503":
+          description: "Service unavailable on TOC controller"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        "504":
+          description: "Gateway timeout. TOC controller did not reply."
           schema:
             $ref: "#/definitions/ApiResponse"
     get:
@@ -557,6 +659,57 @@ paths:
           description: "Gateway timeout. Stepup backup server did not reply."
           schema:
             $ref: "#/definitions/ApiResponse"
+    put:
+      tags:
+        - "transfer"
+      summary: "Update transfer status/info"
+      description: "Update transfer status/info"
+      operationId: "updateTransfer"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "Transfer request to update"
+          required: true
+          schema:
+            $ref: "#/definitions/Transfer"
+          x-exportParamName: "Body"
+      responses:
+        "200":
+          description: "Transfer updated"
+          schema:
+            $ref: "#/definitions/Transfer"
+        "403":
+          description: "Forbidden from updating transfer"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        "404":
+          description: "TOC controller not found"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        "405":
+          description: "Bad request"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        "500":
+          description: "TOC controller error"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        "502":
+          description: "Bad gateway. TOC controller error"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        "503":
+          description: "Service unavailable on TOC controller"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        "504":
+          description: "Gateway timeout. TOC controller did not reply."
+          schema:
+            $ref: "#/definitions/ApiResponse"
     get:
       tags:
         - "transfer"
@@ -664,6 +817,57 @@ paths:
           description: "Gateway timeout. One or more servers did not reply."
           schema:
             $ref: "#/definitions/ApiResponse"
+    put:
+      tags:
+        - "synchronization"
+      summary: "Update synchronization status/info"
+      description: "Update synchronization status/info"
+      operationId: "updateSynchronization"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "Synchronization request to update"
+          required: true
+          schema:
+            $ref: "#/definitions/Synchronization"
+          x-exportParamName: "Body"
+      responses:
+        "200":
+          description: "Synchronization updated"
+          schema:
+            $ref: "#/definitions/Synchronization"
+        "403":
+          description: "Forbidden from updating synchronization"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        "404":
+          description: "TOC controller not found"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        "405":
+          description: "Bad request"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        "500":
+          description: "TOC controller error"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        "502":
+          description: "Bad gateway. TOC controller error"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        "503":
+          description: "Service unavailable on TOC controller"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        "504":
+          description: "Gateway timeout. TOC controller did not reply."
+          schema:
+            $ref: "#/definitions/ApiResponse"
   /quotas:
     get:
       tags:
@@ -734,6 +938,57 @@ paths:
           description: "Service unavailable"
           schema:
             $ref: "#/definitions/ApiResponse"
+    put:
+      tags:
+        - "log"
+      summary: "Update log status/info"
+      description: "Update log status/info"
+      operationId: "updateLog"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "Log request to update"
+          required: true
+          schema:
+            $ref: "#/definitions/Log"
+          x-exportParamName: "Body"
+      responses:
+        "200":
+          description: "Log updated"
+          schema:
+            $ref: "#/definitions/Log"
+        "403":
+          description: "Forbidden from updating log request"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        "404":
+          description: "TOC controller not found"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        "405":
+          description: "Bad request"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        "500":
+          description: "TOC controller error"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        "502":
+          description: "Bad gateway. TOC controller error"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        "503":
+          description: "Service unavailable on TOC controller"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        "504":
+          description: "Gateway timeout. TOC controller did not reply."
+          schema:
+            $ref: "#/definitions/ApiResponse"
   /archives:
     post:
       tags:
@@ -766,6 +1021,57 @@ paths:
             $ref: "#/definitions/ApiResponse"
         "503":
           description: "Service unavailable"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+    put:
+      tags:
+        - "archive"
+      summary: "Update archive status/info"
+      description: "Update archive status/info"
+      operationId: "updateArchive"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "Archive request to update"
+          required: true
+          schema:
+            $ref: "#/definitions/Archive"
+          x-exportParamName: "Body"
+      responses:
+        "200":
+          description: "Archive updated"
+          schema:
+            $ref: "#/definitions/Archive"
+        "403":
+          description: "Forbidden from updating archive"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        "404":
+          description: "TOC controller not found"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        "405":
+          description: "Bad request"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        "500":
+          description: "TOC controller error"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        "502":
+          description: "Bad gateway. TOC controller error"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        "503":
+          description: "Service unavailable on TOC controller"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        "504":
+          description: "Gateway timeout. TOC controller did not reply."
           schema:
             $ref: "#/definitions/ApiResponse"
     get:

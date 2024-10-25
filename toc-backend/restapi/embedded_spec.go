@@ -91,6 +91,82 @@ func init() {
           }
         }
       },
+      "put": {
+        "description": "Update archive status/info",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "archive"
+        ],
+        "summary": "Update archive status/info",
+        "operationId": "updateArchive",
+        "parameters": [
+          {
+            "x-exportParamName": "Body",
+            "description": "Archive request to update",
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Archive"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Archive updated",
+            "schema": {
+              "$ref": "#/definitions/Archive"
+            }
+          },
+          "403": {
+            "description": "Forbidden from updating archive",
+            "schema": {
+              "$ref": "#/definitions/ApiResponse"
+            }
+          },
+          "404": {
+            "description": "TOC controller not found",
+            "schema": {
+              "$ref": "#/definitions/ApiResponse"
+            }
+          },
+          "405": {
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#/definitions/ApiResponse"
+            }
+          },
+          "500": {
+            "description": "TOC controller error",
+            "schema": {
+              "$ref": "#/definitions/ApiResponse"
+            }
+          },
+          "502": {
+            "description": "Bad gateway. TOC controller error",
+            "schema": {
+              "$ref": "#/definitions/ApiResponse"
+            }
+          },
+          "503": {
+            "description": "Service unavailable on TOC controller",
+            "schema": {
+              "$ref": "#/definitions/ApiResponse"
+            }
+          },
+          "504": {
+            "description": "Gateway timeout. TOC controller did not reply.",
+            "schema": {
+              "$ref": "#/definitions/ApiResponse"
+            }
+          }
+        }
+      },
       "post": {
         "description": "Create a ZIP archive of backup snapshot data",
         "produces": [
@@ -238,6 +314,82 @@ func init() {
           }
         }
       },
+      "put": {
+        "description": "Update backup status/info",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "backup"
+        ],
+        "summary": "Update backup status/info",
+        "operationId": "updateBackup",
+        "parameters": [
+          {
+            "x-exportParamName": "Body",
+            "description": "Backup and associated snapshots to update",
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Backup"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Backup updated",
+            "schema": {
+              "$ref": "#/definitions/Backup"
+            }
+          },
+          "403": {
+            "description": "Forbidden from updating backup",
+            "schema": {
+              "$ref": "#/definitions/ApiResponse"
+            }
+          },
+          "404": {
+            "description": "TOC controller not found",
+            "schema": {
+              "$ref": "#/definitions/ApiResponse"
+            }
+          },
+          "405": {
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#/definitions/ApiResponse"
+            }
+          },
+          "500": {
+            "description": "TOC controller error",
+            "schema": {
+              "$ref": "#/definitions/ApiResponse"
+            }
+          },
+          "502": {
+            "description": "Bad gateway. TOC controller error",
+            "schema": {
+              "$ref": "#/definitions/ApiResponse"
+            }
+          },
+          "503": {
+            "description": "Service unavailable on TOC controller",
+            "schema": {
+              "$ref": "#/definitions/ApiResponse"
+            }
+          },
+          "504": {
+            "description": "Gateway timeout. TOC controller did not reply.",
+            "schema": {
+              "$ref": "#/definitions/ApiResponse"
+            }
+          }
+        }
+      },
       "post": {
         "description": "Create a new backup snapshot",
         "produces": [
@@ -345,6 +497,82 @@ func init() {
       }
     },
     "/logs": {
+      "put": {
+        "description": "Update log status/info",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "log"
+        ],
+        "summary": "Update log status/info",
+        "operationId": "updateLog",
+        "parameters": [
+          {
+            "x-exportParamName": "Body",
+            "description": "Log request to update",
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Log"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Log updated",
+            "schema": {
+              "$ref": "#/definitions/Log"
+            }
+          },
+          "403": {
+            "description": "Forbidden from updating log request",
+            "schema": {
+              "$ref": "#/definitions/ApiResponse"
+            }
+          },
+          "404": {
+            "description": "TOC controller not found",
+            "schema": {
+              "$ref": "#/definitions/ApiResponse"
+            }
+          },
+          "405": {
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#/definitions/ApiResponse"
+            }
+          },
+          "500": {
+            "description": "TOC controller error",
+            "schema": {
+              "$ref": "#/definitions/ApiResponse"
+            }
+          },
+          "502": {
+            "description": "Bad gateway. TOC controller error",
+            "schema": {
+              "$ref": "#/definitions/ApiResponse"
+            }
+          },
+          "503": {
+            "description": "Service unavailable on TOC controller",
+            "schema": {
+              "$ref": "#/definitions/ApiResponse"
+            }
+          },
+          "504": {
+            "description": "Gateway timeout. TOC controller did not reply.",
+            "schema": {
+              "$ref": "#/definitions/ApiResponse"
+            }
+          }
+        }
+      },
       "post": {
         "description": "Export logs for all servers",
         "produces": [
@@ -502,6 +730,82 @@ func init() {
           }
         }
       },
+      "put": {
+        "description": "Update restoration status/info",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "restoration"
+        ],
+        "summary": "Update restoration status/info",
+        "operationId": "updateRestoration",
+        "parameters": [
+          {
+            "x-exportParamName": "Body",
+            "description": "Restoration request to update",
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Restoration"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Restoration updated",
+            "schema": {
+              "$ref": "#/definitions/Restoration"
+            }
+          },
+          "403": {
+            "description": "Forbidden from updating restoration",
+            "schema": {
+              "$ref": "#/definitions/ApiResponse"
+            }
+          },
+          "404": {
+            "description": "TOC controller not found",
+            "schema": {
+              "$ref": "#/definitions/ApiResponse"
+            }
+          },
+          "405": {
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#/definitions/ApiResponse"
+            }
+          },
+          "500": {
+            "description": "TOC controller error",
+            "schema": {
+              "$ref": "#/definitions/ApiResponse"
+            }
+          },
+          "502": {
+            "description": "Bad gateway. TOC controller error",
+            "schema": {
+              "$ref": "#/definitions/ApiResponse"
+            }
+          },
+          "503": {
+            "description": "Service unavailable on TOC controller",
+            "schema": {
+              "$ref": "#/definitions/ApiResponse"
+            }
+          },
+          "504": {
+            "description": "Gateway timeout. TOC controller did not reply.",
+            "schema": {
+              "$ref": "#/definitions/ApiResponse"
+            }
+          }
+        }
+      },
       "post": {
         "description": "Run backup restoration and return immediately without waiting",
         "consumes": [
@@ -624,6 +928,82 @@ func init() {
       }
     },
     "/synchronizations": {
+      "put": {
+        "description": "Update synchronization status/info",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "synchronization"
+        ],
+        "summary": "Update synchronization status/info",
+        "operationId": "updateSynchronization",
+        "parameters": [
+          {
+            "x-exportParamName": "Body",
+            "description": "Synchronization request to update",
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Synchronization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Synchronization updated",
+            "schema": {
+              "$ref": "#/definitions/Synchronization"
+            }
+          },
+          "403": {
+            "description": "Forbidden from updating synchronization",
+            "schema": {
+              "$ref": "#/definitions/ApiResponse"
+            }
+          },
+          "404": {
+            "description": "TOC controller not found",
+            "schema": {
+              "$ref": "#/definitions/ApiResponse"
+            }
+          },
+          "405": {
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#/definitions/ApiResponse"
+            }
+          },
+          "500": {
+            "description": "TOC controller error",
+            "schema": {
+              "$ref": "#/definitions/ApiResponse"
+            }
+          },
+          "502": {
+            "description": "Bad gateway. TOC controller error",
+            "schema": {
+              "$ref": "#/definitions/ApiResponse"
+            }
+          },
+          "503": {
+            "description": "Service unavailable on TOC controller",
+            "schema": {
+              "$ref": "#/definitions/ApiResponse"
+            }
+          },
+          "504": {
+            "description": "Gateway timeout. TOC controller did not reply.",
+            "schema": {
+              "$ref": "#/definitions/ApiResponse"
+            }
+          }
+        }
+      },
       "post": {
         "description": "Initiates backup snapshot state synchronization due to network disconnection",
         "produces": [
@@ -733,6 +1113,82 @@ func init() {
           },
           "503": {
             "description": "Service unavailable",
+            "schema": {
+              "$ref": "#/definitions/ApiResponse"
+            }
+          }
+        }
+      },
+      "put": {
+        "description": "Update transfer status/info",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "transfer"
+        ],
+        "summary": "Update transfer status/info",
+        "operationId": "updateTransfer",
+        "parameters": [
+          {
+            "x-exportParamName": "Body",
+            "description": "Transfer request to update",
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Transfer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Transfer updated",
+            "schema": {
+              "$ref": "#/definitions/Transfer"
+            }
+          },
+          "403": {
+            "description": "Forbidden from updating transfer",
+            "schema": {
+              "$ref": "#/definitions/ApiResponse"
+            }
+          },
+          "404": {
+            "description": "TOC controller not found",
+            "schema": {
+              "$ref": "#/definitions/ApiResponse"
+            }
+          },
+          "405": {
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#/definitions/ApiResponse"
+            }
+          },
+          "500": {
+            "description": "TOC controller error",
+            "schema": {
+              "$ref": "#/definitions/ApiResponse"
+            }
+          },
+          "502": {
+            "description": "Bad gateway. TOC controller error",
+            "schema": {
+              "$ref": "#/definitions/ApiResponse"
+            }
+          },
+          "503": {
+            "description": "Service unavailable on TOC controller",
+            "schema": {
+              "$ref": "#/definitions/ApiResponse"
+            }
+          },
+          "504": {
+            "description": "Gateway timeout. TOC controller did not reply.",
             "schema": {
               "$ref": "#/definitions/ApiResponse"
             }
@@ -1306,6 +1762,82 @@ func init() {
           }
         }
       },
+      "put": {
+        "description": "Update archive status/info",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "archive"
+        ],
+        "summary": "Update archive status/info",
+        "operationId": "updateArchive",
+        "parameters": [
+          {
+            "x-exportParamName": "Body",
+            "description": "Archive request to update",
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Archive"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Archive updated",
+            "schema": {
+              "$ref": "#/definitions/Archive"
+            }
+          },
+          "403": {
+            "description": "Forbidden from updating archive",
+            "schema": {
+              "$ref": "#/definitions/ApiResponse"
+            }
+          },
+          "404": {
+            "description": "TOC controller not found",
+            "schema": {
+              "$ref": "#/definitions/ApiResponse"
+            }
+          },
+          "405": {
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#/definitions/ApiResponse"
+            }
+          },
+          "500": {
+            "description": "TOC controller error",
+            "schema": {
+              "$ref": "#/definitions/ApiResponse"
+            }
+          },
+          "502": {
+            "description": "Bad gateway. TOC controller error",
+            "schema": {
+              "$ref": "#/definitions/ApiResponse"
+            }
+          },
+          "503": {
+            "description": "Service unavailable on TOC controller",
+            "schema": {
+              "$ref": "#/definitions/ApiResponse"
+            }
+          },
+          "504": {
+            "description": "Gateway timeout. TOC controller did not reply.",
+            "schema": {
+              "$ref": "#/definitions/ApiResponse"
+            }
+          }
+        }
+      },
       "post": {
         "description": "Create a ZIP archive of backup snapshot data",
         "produces": [
@@ -1453,6 +1985,82 @@ func init() {
           }
         }
       },
+      "put": {
+        "description": "Update backup status/info",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "backup"
+        ],
+        "summary": "Update backup status/info",
+        "operationId": "updateBackup",
+        "parameters": [
+          {
+            "x-exportParamName": "Body",
+            "description": "Backup and associated snapshots to update",
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Backup"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Backup updated",
+            "schema": {
+              "$ref": "#/definitions/Backup"
+            }
+          },
+          "403": {
+            "description": "Forbidden from updating backup",
+            "schema": {
+              "$ref": "#/definitions/ApiResponse"
+            }
+          },
+          "404": {
+            "description": "TOC controller not found",
+            "schema": {
+              "$ref": "#/definitions/ApiResponse"
+            }
+          },
+          "405": {
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#/definitions/ApiResponse"
+            }
+          },
+          "500": {
+            "description": "TOC controller error",
+            "schema": {
+              "$ref": "#/definitions/ApiResponse"
+            }
+          },
+          "502": {
+            "description": "Bad gateway. TOC controller error",
+            "schema": {
+              "$ref": "#/definitions/ApiResponse"
+            }
+          },
+          "503": {
+            "description": "Service unavailable on TOC controller",
+            "schema": {
+              "$ref": "#/definitions/ApiResponse"
+            }
+          },
+          "504": {
+            "description": "Gateway timeout. TOC controller did not reply.",
+            "schema": {
+              "$ref": "#/definitions/ApiResponse"
+            }
+          }
+        }
+      },
       "post": {
         "description": "Create a new backup snapshot",
         "produces": [
@@ -1560,6 +2168,82 @@ func init() {
       }
     },
     "/logs": {
+      "put": {
+        "description": "Update log status/info",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "log"
+        ],
+        "summary": "Update log status/info",
+        "operationId": "updateLog",
+        "parameters": [
+          {
+            "x-exportParamName": "Body",
+            "description": "Log request to update",
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Log"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Log updated",
+            "schema": {
+              "$ref": "#/definitions/Log"
+            }
+          },
+          "403": {
+            "description": "Forbidden from updating log request",
+            "schema": {
+              "$ref": "#/definitions/ApiResponse"
+            }
+          },
+          "404": {
+            "description": "TOC controller not found",
+            "schema": {
+              "$ref": "#/definitions/ApiResponse"
+            }
+          },
+          "405": {
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#/definitions/ApiResponse"
+            }
+          },
+          "500": {
+            "description": "TOC controller error",
+            "schema": {
+              "$ref": "#/definitions/ApiResponse"
+            }
+          },
+          "502": {
+            "description": "Bad gateway. TOC controller error",
+            "schema": {
+              "$ref": "#/definitions/ApiResponse"
+            }
+          },
+          "503": {
+            "description": "Service unavailable on TOC controller",
+            "schema": {
+              "$ref": "#/definitions/ApiResponse"
+            }
+          },
+          "504": {
+            "description": "Gateway timeout. TOC controller did not reply.",
+            "schema": {
+              "$ref": "#/definitions/ApiResponse"
+            }
+          }
+        }
+      },
       "post": {
         "description": "Export logs for all servers",
         "produces": [
@@ -1717,6 +2401,82 @@ func init() {
           }
         }
       },
+      "put": {
+        "description": "Update restoration status/info",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "restoration"
+        ],
+        "summary": "Update restoration status/info",
+        "operationId": "updateRestoration",
+        "parameters": [
+          {
+            "x-exportParamName": "Body",
+            "description": "Restoration request to update",
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Restoration"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Restoration updated",
+            "schema": {
+              "$ref": "#/definitions/Restoration"
+            }
+          },
+          "403": {
+            "description": "Forbidden from updating restoration",
+            "schema": {
+              "$ref": "#/definitions/ApiResponse"
+            }
+          },
+          "404": {
+            "description": "TOC controller not found",
+            "schema": {
+              "$ref": "#/definitions/ApiResponse"
+            }
+          },
+          "405": {
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#/definitions/ApiResponse"
+            }
+          },
+          "500": {
+            "description": "TOC controller error",
+            "schema": {
+              "$ref": "#/definitions/ApiResponse"
+            }
+          },
+          "502": {
+            "description": "Bad gateway. TOC controller error",
+            "schema": {
+              "$ref": "#/definitions/ApiResponse"
+            }
+          },
+          "503": {
+            "description": "Service unavailable on TOC controller",
+            "schema": {
+              "$ref": "#/definitions/ApiResponse"
+            }
+          },
+          "504": {
+            "description": "Gateway timeout. TOC controller did not reply.",
+            "schema": {
+              "$ref": "#/definitions/ApiResponse"
+            }
+          }
+        }
+      },
       "post": {
         "description": "Run backup restoration and return immediately without waiting",
         "consumes": [
@@ -1839,6 +2599,82 @@ func init() {
       }
     },
     "/synchronizations": {
+      "put": {
+        "description": "Update synchronization status/info",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "synchronization"
+        ],
+        "summary": "Update synchronization status/info",
+        "operationId": "updateSynchronization",
+        "parameters": [
+          {
+            "x-exportParamName": "Body",
+            "description": "Synchronization request to update",
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Synchronization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Synchronization updated",
+            "schema": {
+              "$ref": "#/definitions/Synchronization"
+            }
+          },
+          "403": {
+            "description": "Forbidden from updating synchronization",
+            "schema": {
+              "$ref": "#/definitions/ApiResponse"
+            }
+          },
+          "404": {
+            "description": "TOC controller not found",
+            "schema": {
+              "$ref": "#/definitions/ApiResponse"
+            }
+          },
+          "405": {
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#/definitions/ApiResponse"
+            }
+          },
+          "500": {
+            "description": "TOC controller error",
+            "schema": {
+              "$ref": "#/definitions/ApiResponse"
+            }
+          },
+          "502": {
+            "description": "Bad gateway. TOC controller error",
+            "schema": {
+              "$ref": "#/definitions/ApiResponse"
+            }
+          },
+          "503": {
+            "description": "Service unavailable on TOC controller",
+            "schema": {
+              "$ref": "#/definitions/ApiResponse"
+            }
+          },
+          "504": {
+            "description": "Gateway timeout. TOC controller did not reply.",
+            "schema": {
+              "$ref": "#/definitions/ApiResponse"
+            }
+          }
+        }
+      },
       "post": {
         "description": "Initiates backup snapshot state synchronization due to network disconnection",
         "produces": [
@@ -1948,6 +2784,82 @@ func init() {
           },
           "503": {
             "description": "Service unavailable",
+            "schema": {
+              "$ref": "#/definitions/ApiResponse"
+            }
+          }
+        }
+      },
+      "put": {
+        "description": "Update transfer status/info",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "transfer"
+        ],
+        "summary": "Update transfer status/info",
+        "operationId": "updateTransfer",
+        "parameters": [
+          {
+            "x-exportParamName": "Body",
+            "description": "Transfer request to update",
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Transfer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Transfer updated",
+            "schema": {
+              "$ref": "#/definitions/Transfer"
+            }
+          },
+          "403": {
+            "description": "Forbidden from updating transfer",
+            "schema": {
+              "$ref": "#/definitions/ApiResponse"
+            }
+          },
+          "404": {
+            "description": "TOC controller not found",
+            "schema": {
+              "$ref": "#/definitions/ApiResponse"
+            }
+          },
+          "405": {
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#/definitions/ApiResponse"
+            }
+          },
+          "500": {
+            "description": "TOC controller error",
+            "schema": {
+              "$ref": "#/definitions/ApiResponse"
+            }
+          },
+          "502": {
+            "description": "Bad gateway. TOC controller error",
+            "schema": {
+              "$ref": "#/definitions/ApiResponse"
+            }
+          },
+          "503": {
+            "description": "Service unavailable on TOC controller",
+            "schema": {
+              "$ref": "#/definitions/ApiResponse"
+            }
+          },
+          "504": {
+            "description": "Gateway timeout. TOC controller did not reply.",
             "schema": {
               "$ref": "#/definitions/ApiResponse"
             }
