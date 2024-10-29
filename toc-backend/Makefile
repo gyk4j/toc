@@ -19,5 +19,6 @@ clean:
 	rm -f toc-server*
 	rm -rf cmd
 	rm -rf models
-	find restapi/* -not -name "configure_toc.*" -exec /usr/bin/rm -rf {} \;
+	mv restapi/configure_toc.go configure_toc.$(shell date +"%Y%m%d_%H%M%S").bak
+	rm -rf restapi
 	
