@@ -24,7 +24,7 @@ import (
 	"github.com/gyk4j/toc/toc-backend/restapi/operations/transfer"
 )
 
-//go:generate swagger generate server --target ..\..\sw --name Toc --spec ..\swagger.yaml --principal interface{}
+//go:generate swagger generate server --target ..\..\toc-backend --name Toc --spec ..\api\swagger.yaml --principal interface{}
 
 func configureFlags(api *operations.TocAPI) {
 	// api.CommandLineOptionsGroups = []swag.CommandLineOptionsGroup{ ... }
