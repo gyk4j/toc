@@ -6,12 +6,12 @@ import (
 	"os"
 
 	"github.com/gyk4j/toc/toc-backend/services"
-	"github.com/gyk4j/toc/toc-backend/services/ctrl"
-	"github.com/gyk4j/toc/toc-backend/services/srvr"
+	"github.com/gyk4j/toc/toc-backend/services/controller"
+	"github.com/gyk4j/toc/toc-backend/services/server"
 )
 
-var c ctrl.Controller = ctrl.Controller{}
-var s srvr.Server = srvr.Server{}
+var c controller.Controller = controller.Controller{}
+var s server.Server = server.Server{}
 
 var m = map[string]services.Server{
 	"toc":  &c,

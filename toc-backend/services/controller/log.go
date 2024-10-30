@@ -1,4 +1,4 @@
-package srvr
+package controller
 
 import (
 	"strconv"
@@ -10,7 +10,7 @@ import (
 
 var logs = make([]*models.Log, 0)
 
-func (s *Server) NewLog() *models.Log {
+func (c *Controller) NewLog() *models.Log {
 	id := int64(len(logs))
 	l := models.Log{
 		ID:     id,
@@ -22,11 +22,11 @@ func (s *Server) NewLog() *models.Log {
 	return &l
 }
 
-func (s *Server) UpdateLog(log *models.Log) *models.Log {
+func (c *Controller) UpdateLog(log *models.Log) *models.Log {
 	return log
 }
 
-func (s *Server) GetLogByID(id int64) *models.Log {
+func (c *Controller) GetLogByID(id int64) *models.Log {
 	if id >= 0 && id < int64(len(logs)) {
 		return logs[id]
 	} else {

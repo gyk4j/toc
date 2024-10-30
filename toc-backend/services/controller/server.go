@@ -1,4 +1,4 @@
-package ctrl
+package controller
 
 type Controller struct {
 }
