@@ -3,13 +3,14 @@ package controllers
 import (
 	"github.com/go-openapi/runtime/middleware"
 	logops "github.com/gyk4j/toc/toc-backend/restapi/operations/log"
-	"github.com/gyk4j/toc/toc-backend/services"
 )
 
 func ExportLog(params logops.ExportLogParams) middleware.Responder {
 	var res middleware.Responder
 
-	l := services.NewLog()
+	s := dispatch(params.HTTPRequest)
+
+	l := s.NewLog()
 	if l != nil {
 		res = logops.NewExportLogOK().WithPayload(l)
 	} else {

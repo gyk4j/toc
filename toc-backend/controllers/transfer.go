@@ -6,13 +6,14 @@ import (
 	"github.com/go-openapi/runtime/middleware"
 	"github.com/gyk4j/toc/toc-backend/models"
 	"github.com/gyk4j/toc/toc-backend/restapi/operations/transfer"
-	"github.com/gyk4j/toc/toc-backend/services"
 )
 
 func NewTransfer(params transfer.NewTransferParams) middleware.Responder {
 	var res middleware.Responder
 
-	t := services.NewTransfer(params.Body)
+	s := dispatch(params.HTTPRequest)
+
+	t := s.NewTransfer(params.Body)
 	if t != nil {
 		res = transfer.NewNewTransferOK().WithPayload(t)
 	} else {
@@ -34,7 +35,9 @@ func UpdateTransfer(params transfer.UpdateTransferParams) middleware.Responder {
 func GetTransfers(params transfer.GetTransfersParams) middleware.Responder {
 	var res middleware.Responder
 
-	t := services.GetTransfers()
+	s := dispatch(params.HTTPRequest)
+
+	t := s.GetTransfers()
 	if t != nil {
 		res = transfer.NewGetTransfersOK().WithPayload(t)
 	} else {
@@ -52,7 +55,9 @@ func GetTransfers(params transfer.GetTransfersParams) middleware.Responder {
 func GetTransferByID(params transfer.GetTransferByIDParams) middleware.Responder {
 	var res middleware.Responder
 
-	t := services.GetTransferByID(params.TransferID)
+	s := dispatch(params.HTTPRequest)
+
+	t := s.GetTransferByID(params.TransferID)
 	if t != nil {
 		res = transfer.NewGetTransferByIDOK().WithPayload(t)
 	} else {

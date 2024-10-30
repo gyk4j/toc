@@ -1,4 +1,4 @@
-package services
+package ctrl
 
 import (
 	"log"
@@ -8,7 +8,7 @@ import (
 
 var transfers = make([]*models.Transfer, 0)
 
-func NewTransfer(backup *models.Backup) *models.Transfer {
+func (c *Controller) NewTransfer(backup *models.Backup) *models.Transfer {
 	id := int64(len(transfers))
 
 	b := backup // Trust client data?
@@ -32,11 +32,15 @@ func NewTransfer(backup *models.Backup) *models.Transfer {
 	}
 }
 
-func GetTransfers() []*models.Transfer {
+func (c *Controller) UpdateTransfer(transfer *models.Transfer) *models.Transfer {
+	return transfer
+}
+
+func (c *Controller) GetTransfers() []*models.Transfer {
 	return transfers
 }
 
-func GetTransferByID(id int64) *models.Transfer {
+func (c *Controller) GetTransferByID(id int64) *models.Transfer {
 	if id >= 0 && id < int64(len(transfers)) {
 		return transfers[id]
 	} else {

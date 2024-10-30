@@ -1,4 +1,4 @@
-package services
+package ctrl
 
 import (
 	"math/rand"
@@ -6,7 +6,7 @@ import (
 	"github.com/gyk4j/toc/toc-backend/models"
 )
 
-func GetQuotas() []*models.Quota {
+func (c *Controller) GetQuotas() []*models.Quota {
 	qs := make([]*models.Quota, 0)
 
 	var id int64
