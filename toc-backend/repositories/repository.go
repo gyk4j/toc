@@ -34,9 +34,3 @@ type Repository interface {
 	GetArchives() []*models.Archive
 	GetArchiveByID(id int64) *models.Archive
 }
-
-// Commented out to suppress warning
-// var i = inmemory.InMemory{}
-// var repositories []Repository = []Repository{
-// 	&i,
-// }
