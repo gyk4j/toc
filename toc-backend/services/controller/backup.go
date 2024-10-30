@@ -1,4 +1,4 @@
-package srvr
+package controller
 
 import (
 	"fmt"
@@ -10,7 +10,7 @@ import (
 
 var backups = make([]*models.Backup, 0)
 
-func (s *Server) NewBackup() *models.Backup {
+func (c *Controller) NewBackup() *models.Backup {
 	id := int64(len(backups))
 	b := models.Backup{
 		ID:        id,
@@ -55,15 +55,15 @@ func (s *Server) NewBackup() *models.Backup {
 	return &b
 }
 
-func (s *Server) UpdateBackup(backup *models.Backup) *models.Backup {
+func (c *Controller) UpdateBackup(backup *models.Backup) *models.Backup {
 	return backup
 }
 
-func (s *Server) GetBackups() []*models.Backup {
+func (c *Controller) GetBackups() []*models.Backup {
 	return backups
 }
 
-func (s *Server) GetBackupByID(id int64) *models.Backup {
+func (c *Controller) GetBackupByID(id int64) *models.Backup {
 	if id >= 0 && id < int64(len(backups)) {
 		return backups[id]
 	} else {

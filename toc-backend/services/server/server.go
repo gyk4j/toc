@@ -1,4 +1,4 @@
-package srvr
+package server
 
 type Server struct {
 }

@@ -1,4 +1,4 @@
-package srvr
+package controller
 
 import (
 	"strconv"
@@ -10,7 +10,7 @@ import (
 
 var archives = make([]*models.Archive, 0)
 
-func (s *Server) NewArchive() *models.Archive {
+func (c *Controller) NewArchive() *models.Archive {
 	id := int64(len(archives))
 	a := models.Archive{
 		ID:     id,
@@ -22,15 +22,15 @@ func (s *Server) NewArchive() *models.Archive {
 	return &a
 }
 
-func (s *Server) UpdateArchive(archive *models.Archive) *models.Archive {
+func (c *Controller) UpdateArchive(archive *models.Archive) *models.Archive {
 	return archive
 }
 
-func (s *Server) GetArchives() []*models.Archive {
+func (c *Controller) GetArchives() []*models.Archive {
 	return archives
 }
 
-func (s *Server) GetArchiveByID(id int64) *models.Archive {
+func (c *Controller) GetArchiveByID(id int64) *models.Archive {
 	if id >= 0 && id < int64(len(archives)) {
 		return archives[id]
 	} else {
