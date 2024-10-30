@@ -1,4 +1,4 @@
-package services
+package ctrl
 
 import (
 	"time"
@@ -9,7 +9,7 @@ import (
 
 var synchronizations = make([]*models.Synchronization, 0)
 
-func NewSynchronization() *models.Synchronization {
+func (c *Controller) NewSynchronization() *models.Synchronization {
 	id := int64(len(synchronizations))
 	s := models.Synchronization{
 		ID:     id,
@@ -18,4 +18,8 @@ func NewSynchronization() *models.Synchronization {
 	}
 	synchronizations = append(synchronizations, &s)
 	return &s
+}
+
+func (c *Controller) UpdateSynchronization(synchronization *models.Synchronization) *models.Synchronization {
+	return synchronization
 }

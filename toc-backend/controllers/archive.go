@@ -6,13 +6,14 @@ import (
 	"github.com/go-openapi/runtime/middleware"
 	"github.com/gyk4j/toc/toc-backend/models"
 	"github.com/gyk4j/toc/toc-backend/restapi/operations/archive"
-	"github.com/gyk4j/toc/toc-backend/services"
 )
 
 func NewArchive(params archive.NewArchiveParams) middleware.Responder {
 	var res middleware.Responder
 
-	a := services.ArchiveData()
+	s := dispatch(params.HTTPRequest)
+
+	a := s.NewArchive()
 	if a != nil {
 		res = archive.NewNewArchiveOK().WithPayload(a)
 	} else {
@@ -34,7 +35,9 @@ func UpdateArchive(params archive.UpdateArchiveParams) middleware.Responder {
 func GetArchives(params archive.GetArchivesParams) middleware.Responder {
 	var res middleware.Responder
 
-	a := services.GetArchives()
+	s := dispatch(params.HTTPRequest)
+
+	a := s.GetArchives()
 	if a != nil {
 		res = archive.NewGetArchivesOK().WithPayload(a)
 	} else {
@@ -52,7 +55,9 @@ func GetArchives(params archive.GetArchivesParams) middleware.Responder {
 func GetArchiveByID(params archive.GetArchiveByIDParams) middleware.Responder {
 	var res middleware.Responder
 
-	a := services.GetArchiveByID(params.ArchiveID)
+	s := dispatch(params.HTTPRequest)
+
+	a := s.GetArchiveByID(params.ArchiveID)
 	if a != nil {
 		res = archive.NewGetArchiveByIDOK().WithPayload(a)
 	} else {

@@ -6,13 +6,14 @@ import (
 	"github.com/go-openapi/runtime/middleware"
 	"github.com/gyk4j/toc/toc-backend/models"
 	"github.com/gyk4j/toc/toc-backend/restapi/operations/restoration"
-	"github.com/gyk4j/toc/toc-backend/services"
 )
 
 func NewRestoration(params restoration.NewRestorationParams) middleware.Responder {
 	var res middleware.Responder
 
-	r := services.NewRestoration(params.Body)
+	s := dispatch(params.HTTPRequest)
+
+	r := s.NewRestoration(params.Body)
 	if r != nil {
 		res = restoration.NewNewRestorationOK().WithPayload(r)
 	} else {
@@ -34,7 +35,9 @@ func UpdateRestoration(params restoration.UpdateRestorationParams) middleware.Re
 func GetRestorations(params restoration.GetRestorationsParams) middleware.Responder {
 	var res middleware.Responder
 
-	r := services.GetRestorations()
+	s := dispatch(params.HTTPRequest)
+
+	r := s.GetRestorations()
 	if r != nil {
 		res = restoration.NewGetRestorationsOK().WithPayload(r)
 	} else {
@@ -52,7 +55,9 @@ func GetRestorations(params restoration.GetRestorationsParams) middleware.Respon
 func GetRestorationByID(params restoration.GetRestorationByIDParams) middleware.Responder {
 	var res middleware.Responder
 
-	r := services.GetRestorationByID(params.RestorationID)
+	s := dispatch(params.HTTPRequest)
+
+	r := s.GetRestorationByID(params.RestorationID)
 	if r != nil {
 		res = restoration.NewGetRestorationByIDOK().WithPayload(r)
 	} else {

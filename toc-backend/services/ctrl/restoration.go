@@ -1,4 +1,4 @@
-package services
+package ctrl
 
 import (
 	"log"
@@ -8,7 +8,7 @@ import (
 
 var restorations = make([]*models.Restoration, 0)
 
-func NewRestoration(backup *models.Backup) *models.Restoration {
+func (c *Controller) NewRestoration(backup *models.Backup) *models.Restoration {
 	id := int64(len(restorations))
 
 	b := backup // Trust client data?
@@ -32,11 +32,15 @@ func NewRestoration(backup *models.Backup) *models.Restoration {
 	}
 }
 
-func GetRestorations() []*models.Restoration {
+func (c *Controller) UpdateRestoration(restoration *models.Restoration) *models.Restoration {
+	return restoration
+}
+
+func (c *Controller) GetRestorations() []*models.Restoration {
 	return restorations
 }
 
-func GetRestorationByID(id int64) *models.Restoration {
+func (c *Controller) GetRestorationByID(id int64) *models.Restoration {
 	if id >= 0 && id < int64(len(restorations)) {
 		return restorations[id]
 	} else {

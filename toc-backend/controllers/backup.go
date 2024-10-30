@@ -6,13 +6,14 @@ import (
 	"github.com/go-openapi/runtime/middleware"
 	"github.com/gyk4j/toc/toc-backend/models"
 	"github.com/gyk4j/toc/toc-backend/restapi/operations/backup"
-	"github.com/gyk4j/toc/toc-backend/services"
 )
 
 func NewBackup(params backup.NewBackupParams) middleware.Responder {
 	var res middleware.Responder
 
-	b := services.NewBackup()
+	s := dispatch(params.HTTPRequest)
+
+	b := s.NewBackup()
 	if b != nil {
 		res = backup.NewNewBackupOK().WithPayload(b)
 	} else {
@@ -34,7 +35,9 @@ func UpdateBackup(params backup.UpdateBackupParams) middleware.Responder {
 func GetBackups(params backup.GetBackupsParams) middleware.Responder {
 	var res middleware.Responder
 
-	b := services.GetBackups()
+	s := dispatch(params.HTTPRequest)
+
+	b := s.GetBackups()
 	if b != nil {
 		res = backup.NewGetBackupsOK().WithPayload(b)
 	} else {
@@ -52,7 +55,9 @@ func GetBackups(params backup.GetBackupsParams) middleware.Responder {
 func GetBackupByID(params backup.GetBackupByIDParams) middleware.Responder {
 	var res middleware.Responder
 
-	b := services.GetBackupByID(params.BackupID)
+	s := dispatch(params.HTTPRequest)
+
+	b := s.GetBackupByID(params.BackupID)
 	if b != nil {
 		res = backup.NewGetBackupByIDOK().WithPayload(b)
 	} else {
