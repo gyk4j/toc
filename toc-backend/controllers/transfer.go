@@ -11,7 +11,7 @@ import (
 func NewTransfer(params transfer.NewTransferParams) middleware.Responder {
 	var res middleware.Responder
 
-	s := dispatch(params.HTTPRequest)
+	s := Route(params.HTTPRequest)
 
 	t := s.NewTransfer(params.Body)
 	if t != nil {
@@ -35,7 +35,7 @@ func UpdateTransfer(params transfer.UpdateTransferParams) middleware.Responder {
 func GetTransfers(params transfer.GetTransfersParams) middleware.Responder {
 	var res middleware.Responder
 
-	s := dispatch(params.HTTPRequest)
+	s := Route(params.HTTPRequest)
 
 	t := s.GetTransfers()
 	if t != nil {
@@ -55,7 +55,7 @@ func GetTransfers(params transfer.GetTransfersParams) middleware.Responder {
 func GetTransferByID(params transfer.GetTransferByIDParams) middleware.Responder {
 	var res middleware.Responder
 
-	s := dispatch(params.HTTPRequest)
+	s := Route(params.HTTPRequest)
 
 	t := s.GetTransferByID(params.TransferID)
 	if t != nil {

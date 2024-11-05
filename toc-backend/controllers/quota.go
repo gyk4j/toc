@@ -8,7 +8,7 @@ import (
 func GetQuotas(params quota.GetQuotasParams) middleware.Responder {
 	var res middleware.Responder
 
-	s := dispatch(params.HTTPRequest)
+	s := Route(params.HTTPRequest)
 
 	qs := s.GetQuotas()
 	if qs != nil {

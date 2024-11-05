@@ -8,7 +8,7 @@ import (
 func NewSynchronization(params synchronization.NewSynchronizationParams) middleware.Responder {
 	var res middleware.Responder
 
-	s := dispatch(params.HTTPRequest)
+	s := Route(params.HTTPRequest)
 
 	sync := s.NewSynchronization()
 	if s != nil {

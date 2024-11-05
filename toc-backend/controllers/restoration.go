@@ -11,7 +11,7 @@ import (
 func NewRestoration(params restoration.NewRestorationParams) middleware.Responder {
 	var res middleware.Responder
 
-	s := dispatch(params.HTTPRequest)
+	s := Route(params.HTTPRequest)
 
 	r := s.NewRestoration(params.Body)
 	if r != nil {
@@ -35,7 +35,7 @@ func UpdateRestoration(params restoration.UpdateRestorationParams) middleware.Re
 func GetRestorations(params restoration.GetRestorationsParams) middleware.Responder {
 	var res middleware.Responder
 
-	s := dispatch(params.HTTPRequest)
+	s := Route(params.HTTPRequest)
 
 	r := s.GetRestorations()
 	if r != nil {
@@ -55,7 +55,7 @@ func GetRestorations(params restoration.GetRestorationsParams) middleware.Respon
 func GetRestorationByID(params restoration.GetRestorationByIDParams) middleware.Responder {
 	var res middleware.Responder
 
-	s := dispatch(params.HTTPRequest)
+	s := Route(params.HTTPRequest)
 
 	r := s.GetRestorationByID(params.RestorationID)
 	if r != nil {
