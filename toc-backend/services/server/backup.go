@@ -7,21 +7,21 @@ import (
 )
 
 func (s *Server) NewBackup() *models.Backup {
-	log.Printf("Not implemented: %s", "NewBackup")
+	log.Printf("Server: %s", "NewBackup")
 	return nil
 }
 
 func (s *Server) UpdateBackup(backup *models.Backup) *models.Backup {
-	log.Printf("Not implemented: %s", "UpdateBackup")
+	log.Printf("Server: %s", "UpdateBackup")
 	return nil
 }
 
 func (s *Server) GetBackups() []*models.Backup {
-	log.Printf("Not implemented: %s", "GetBackups")
+	log.Printf("Server: %s", "GetBackups")
 	return nil
 }
 
 func (s *Server) GetBackupByID(id int64) *models.Backup {
-	log.Printf("Not implemented: %s", "GetBackupByID")
+	log.Printf("Server: %s", "GetBackupByID")
 	return nil
 }

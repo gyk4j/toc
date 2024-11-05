@@ -21,7 +21,7 @@ var m = map[string]services.Server{
 	"web":  &s,
 }
 
-func dispatch(HTTPRequest *http.Request) services.Server {
+func Route(HTTPRequest *http.Request) services.Server {
 	s := m[HTTPRequest.Host]
 
 	if s == nil {

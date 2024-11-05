@@ -11,7 +11,7 @@ import (
 func NewArchive(params archive.NewArchiveParams) middleware.Responder {
 	var res middleware.Responder
 
-	s := dispatch(params.HTTPRequest)
+	s := Route(params.HTTPRequest)
 
 	a := s.NewArchive()
 	if a != nil {
@@ -35,7 +35,7 @@ func UpdateArchive(params archive.UpdateArchiveParams) middleware.Responder {
 func GetArchives(params archive.GetArchivesParams) middleware.Responder {
 	var res middleware.Responder
 
-	s := dispatch(params.HTTPRequest)
+	s := Route(params.HTTPRequest)
 
 	a := s.GetArchives()
 	if a != nil {
@@ -55,7 +55,7 @@ func GetArchives(params archive.GetArchivesParams) middleware.Responder {
 func GetArchiveByID(params archive.GetArchiveByIDParams) middleware.Responder {
 	var res middleware.Responder
 
-	s := dispatch(params.HTTPRequest)
+	s := Route(params.HTTPRequest)
 
 	a := s.GetArchiveByID(params.ArchiveID)
 	if a != nil {

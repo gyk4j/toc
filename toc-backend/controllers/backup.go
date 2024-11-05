@@ -11,7 +11,7 @@ import (
 func NewBackup(params backup.NewBackupParams) middleware.Responder {
 	var res middleware.Responder
 
-	s := dispatch(params.HTTPRequest)
+	s := Route(params.HTTPRequest)
 
 	b := s.NewBackup()
 	if b != nil {
@@ -29,13 +29,30 @@ func NewBackup(params backup.NewBackupParams) middleware.Responder {
 }
 
 func UpdateBackup(params backup.UpdateBackupParams) middleware.Responder {
-	return middleware.NotImplemented("operation UpdateBackup has not yet been implemented")
+	var res middleware.Responder
+
+	s := Route(params.HTTPRequest)
+
+	b := s.UpdateBackup(params.Body)
+
+	if b != nil {
+		res = backup.NewUpdateBackupOK().WithPayload(b)
+	} else {
+		apires := models.APIResponse{
+			Code:    http.StatusInternalServerError,
+			Message: "Internal server error",
+			Type:    models.APIResponseTypeError,
+		}
+		res = backup.NewUpdateBackupInternalServerError().WithPayload(&apires)
+	}
+
+	return res
 }
 
 func GetBackups(params backup.GetBackupsParams) middleware.Responder {
 	var res middleware.Responder
 
-	s := dispatch(params.HTTPRequest)
+	s := Route(params.HTTPRequest)
 
 	b := s.GetBackups()
 	if b != nil {
@@ -55,7 +72,7 @@ func GetBackups(params backup.GetBackupsParams) middleware.Responder {
 func GetBackupByID(params backup.GetBackupByIDParams) middleware.Responder {
 	var res middleware.Responder
 
-	s := dispatch(params.HTTPRequest)
+	s := Route(params.HTTPRequest)
 
 	b := s.GetBackupByID(params.BackupID)
 	if b != nil {

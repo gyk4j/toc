@@ -6,67 +6,49 @@ import (
 
 	"github.com/go-openapi/strfmt"
 	"github.com/gyk4j/toc/toc-backend/models"
+	"github.com/gyk4j/toc/toc-backend/repositories"
 )
 
-var backups = make([]*models.Backup, 0)
-
 func (c *Controller) NewBackup() *models.Backup {
-	id := int64(len(backups))
+	id := time.Now()
+
 	b := models.Backup{
-		ID:        id,
-		Time:      strfmt.DateTime(time.Now()),
+		ID:        id.Unix(),
+		Time:      strfmt.DateTime(id),
 		Snapshots: make([]*models.Snapshot, 0),
 	}
 
-	web := models.Snapshot{
-		ID:       id,
-		File:     fmt.Sprintf("/toc/archives/web-%d.tar.gz", id),
-		Status:   models.SnapshotStatusQueued,
-		Complete: false,
+	servers := []string{"web", "file", "db", "mail"}
+
+	for _, s := range servers {
+		ss := models.Snapshot{
+			ID:       id.Unix(),
+			File:     fmt.Sprintf("/toc/archives/%s-%d.tar.gz", s, id.Unix()),
+			Status:   models.SnapshotStatusQueued,
+			Complete: false,
+		}
+		b.Snapshots = append(b.Snapshots, &ss)
 	}
 
-	file := models.Snapshot{
-		ID:       id,
-		File:     fmt.Sprintf("/toc/archives/file-%d.tar.gz", id),
-		Status:   models.SnapshotStatusQueued,
-		Complete: false,
-	}
-
-	db := models.Snapshot{
-		ID:       id,
-		File:     fmt.Sprintf("/toc/archives/db-%d.tar.gz", id),
-		Status:   models.SnapshotStatusQueued,
-		Complete: false,
-	}
-
-	mail := models.Snapshot{
-		ID:       id,
-		File:     fmt.Sprintf("/toc/archives/mail-%d.tar.gz", id),
-		Status:   models.SnapshotStatusQueued,
-		Complete: false,
-	}
-
-	b.Snapshots = append(b.Snapshots, &web)
-	b.Snapshots = append(b.Snapshots, &file)
-	b.Snapshots = append(b.Snapshots, &db)
-	b.Snapshots = append(b.Snapshots, &mail)
-
-	backups = append(backups, &b)
-	return &b
-}
-
-func (c *Controller) UpdateBackup(backup *models.Backup) *models.Backup {
-	return backup
-}
-
-func (c *Controller) GetBackups() []*models.Backup {
-	return backups
-}
-
-func (c *Controller) GetBackupByID(id int64) *models.Backup {
-	if id >= 0 && id < int64(len(backups)) {
-		return backups[id]
+	if repositories.Repositories.NewBackup(&b) {
+		return &b
 	} else {
 		return nil
 	}
+}
+
+func (c *Controller) UpdateBackup(backup *models.Backup) *models.Backup {
+	if repositories.Repositories.UpdateBackup(backup) {
+		return backup
+	} else {
+		return nil
+	}
+}
+
+func (c *Controller) GetBackups() []*models.Backup {
+	return repositories.Repositories.GetBackups()
+}
+
+func (c *Controller) GetBackupByID(id int64) *models.Backup {
+	return repositories.Repositories.GetBackupByID(id)
 }
