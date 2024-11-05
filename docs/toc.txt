@@ -1,23 +1,39 @@
+#!>>
+#!TOC frontend, backend API call diagram
+#!<<
+
 client:UI
 toc:Controller
+/backups:FIFO
 db:Server[p]
 file:Server[p]
 mail:Server[p]
 web:Server[p]
 
 client:toc.NewBackup()
-toc:db.NewBackup()
-toc:file.NewBackup()
-toc:mail.NewBackup()
-toc:web.NewBackup()
+toc:backups.new
 
-db:toc.UpdateBackup(backup)
-file:toc.UpdateBackup(backup)
-mail:toc.UpdateBackup(backup)
-web:toc.UpdateBackup(backup)
+[c:loop while TOC has started]
+	
+	toc:backups.Add(backup)
+	toc:db.NewBackup()
+	toc:file.NewBackup()
+	toc:mail.NewBackup()
+	toc:web.NewBackup()
 
-client:toc.GetBackups()
+	db:toc.UpdateBackup(backup)
+	toc:backups.Update(backup)
+	file:toc.UpdateBackup(backup)
+	toc:backups.Update(backup)
+	mail:toc.UpdateBackup(backup)
+	toc:backups.Update(backup)
+	web:toc.UpdateBackup(backup)
+	toc:backups.Update(backup)
+[/c]
 
-client:toc.GetBackupByID(backup.id)
+client:backups=toc.GetBackups()
+toc:backups.GetAll()
+client:backup=toc.GetBackupByID(backup.id)
+toc:backups.GetByID(id)
 
-
+# toc:backups.destroy()
