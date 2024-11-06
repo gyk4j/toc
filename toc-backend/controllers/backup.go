@@ -11,7 +11,7 @@ import (
 func NewBackup(params backup.NewBackupParams) middleware.Responder {
 	var res middleware.Responder
 
-	s := Route(params.HTTPRequest)
+	s := router.Route(params.HTTPRequest)
 
 	b := s.NewBackup()
 	if b != nil {
@@ -31,7 +31,7 @@ func NewBackup(params backup.NewBackupParams) middleware.Responder {
 func UpdateBackup(params backup.UpdateBackupParams) middleware.Responder {
 	var res middleware.Responder
 
-	s := Route(params.HTTPRequest)
+	s := router.Route(params.HTTPRequest)
 
 	b := s.UpdateBackup(params.Body)
 
@@ -52,7 +52,7 @@ func UpdateBackup(params backup.UpdateBackupParams) middleware.Responder {
 func GetBackups(params backup.GetBackupsParams) middleware.Responder {
 	var res middleware.Responder
 
-	s := Route(params.HTTPRequest)
+	s := router.Route(params.HTTPRequest)
 
 	b := s.GetBackups()
 	if b != nil {
@@ -72,7 +72,7 @@ func GetBackups(params backup.GetBackupsParams) middleware.Responder {
 func GetBackupByID(params backup.GetBackupByIDParams) middleware.Responder {
 	var res middleware.Responder
 
-	s := Route(params.HTTPRequest)
+	s := router.Route(params.HTTPRequest)
 
 	b := s.GetBackupByID(params.BackupID)
 	if b != nil {
