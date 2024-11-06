@@ -6,23 +6,26 @@ import (
 	"os"
 
 	"github.com/gyk4j/toc/toc-backend/services"
-	"github.com/gyk4j/toc/toc-backend/services/controller"
-	"github.com/gyk4j/toc/toc-backend/services/server"
 )
 
-var c controller.Controller = controller.Controller{}
-var s server.Server = server.Server{}
-
-var m = map[string]services.Server{
-	"toc":  &c,
-	"db":   &s,
-	"file": &s,
-	"mail": &s,
-	"web":  &s,
+type Router struct {
+	m map[string]services.IServer
 }
 
-func Route(HTTPRequest *http.Request) services.Server {
-	s := m[HTTPRequest.Host]
+var ctrl services.Controller = services.Controller{}
+var srvr services.Server = services.Server{}
+var router = Router{
+	m: map[string]services.IServer{
+		"toc":  &ctrl,
+		"db":   &srvr,
+		"file": &srvr,
+		"mail": &srvr,
+		"web":  &srvr,
+	},
+}
+
+func (r *Router) Route(HTTPRequest *http.Request) services.IServer {
+	s := r.m[HTTPRequest.Host]
 
 	if s == nil {
 		log.Printf("Unknown request host: %s", HTTPRequest.Host)
@@ -31,7 +34,7 @@ func Route(HTTPRequest *http.Request) services.Server {
 		if err != nil {
 			log.Printf("Failed to get host name")
 		} else {
-			s = m[name]
+			s = r.m[name]
 
 			if s != nil {
 				log.Printf("Using host name: %s", name)
@@ -43,7 +46,7 @@ func Route(HTTPRequest *http.Request) services.Server {
 
 	if s == nil {
 		log.Printf("Fallback to last resort default server")
-		s = &c
+		s = &ctrl
 	}
 
 	return s

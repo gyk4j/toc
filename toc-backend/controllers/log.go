@@ -8,7 +8,7 @@ import (
 func ExportLog(params logops.ExportLogParams) middleware.Responder {
 	var res middleware.Responder
 
-	s := Route(params.HTTPRequest)
+	s := router.Route(params.HTTPRequest)
 
 	l := s.NewLog()
 	if l != nil {
