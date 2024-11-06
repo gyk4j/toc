@@ -9,7 +9,6 @@ import (
 
 	"github.com/go-openapi/strfmt"
 	"github.com/gyk4j/toc/toc-backend/models"
-	"github.com/gyk4j/toc/toc-backend/repositories"
 )
 
 type Controller struct {
@@ -21,9 +20,9 @@ type Controller struct {
 	archives         []*models.Archive
 }
 
-/*
- * Backup
- */
+//
+// Backup
+//
 
 func (c *Controller) NewBackup() *models.Backup {
 	id := time.Now()
@@ -46,33 +45,25 @@ func (c *Controller) NewBackup() *models.Backup {
 		b.Snapshots = append(b.Snapshots, &ss)
 	}
 
-	if repositories.Repositories.NewBackup(&b) {
-		c.backups = append(c.backups, &b)
-		return &b
-	} else {
-		return nil
-	}
+	c.backups = append(c.backups, &b)
+	return &b
 }
 
 func (c *Controller) UpdateBackup(backup *models.Backup) *models.Backup {
-	if repositories.Repositories.UpdateBackup(backup) {
-		return backup
-	} else {
-		return nil
-	}
+	return backup
 }
 
 func (c *Controller) GetBackups() []*models.Backup {
-	return repositories.Repositories.GetBackups()
+	return c.backups
 }
 
 func (c *Controller) GetBackupByID(id int64) *models.Backup {
-	return repositories.Repositories.GetBackupByID(id)
+	return c.backups[id]
 }
 
-/*
- * Restoration
- */
+//
+// Restoration
+//
 
 func (c *Controller) NewRestoration(backup *models.Backup) *models.Restoration {
 	id := int64(len(c.restorations))
@@ -114,9 +105,9 @@ func (c *Controller) GetRestorationByID(id int64) *models.Restoration {
 	}
 }
 
-/*
- * Transfer
- */
+//
+// Transfer
+//
 
 func (c *Controller) NewTransfer(backup *models.Backup) *models.Transfer {
 	id := int64(len(c.transfers))
@@ -158,9 +149,9 @@ func (c *Controller) GetTransferByID(id int64) *models.Transfer {
 	}
 }
 
-/*
- * Synchronization
- */
+//
+// Synchronization
+//
 
 func (c *Controller) NewSynchronization() *models.Synchronization {
 	id := int64(len(c.synchronizations))
@@ -177,9 +168,9 @@ func (c *Controller) UpdateSynchronization(synchronization *models.Synchronizati
 	return synchronization
 }
 
-/*
- * Quota
- */
+//
+// Quota
+//
 
 func (c *Controller) GetQuotas() []*models.Quota {
 	qs := make([]*models.Quota, 0)
@@ -209,9 +200,9 @@ func (c *Controller) GetQuotas() []*models.Quota {
 	return qs
 }
 
-/*
- * Log
- */
+//
+// Log
+//
 
 func (c *Controller) NewLog() *models.Log {
 	id := int64(len(c.logs))
@@ -237,9 +228,9 @@ func (c *Controller) GetLogByID(id int64) *models.Log {
 	}
 }
 
-/*
- * Archive
- */
+//
+// Archive
+//
 
 func (c *Controller) NewArchive() *models.Archive {
 	id := int64(len(c.archives))

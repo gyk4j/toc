@@ -4,7 +4,7 @@ import (
 	"github.com/gyk4j/toc/toc-backend/models"
 )
 
-type Repository interface {
+type IRepository interface {
 	NewBackup(backup *models.Backup) bool
 	UpdateBackup(backup *models.Backup) bool
 	GetBackups() []*models.Backup
