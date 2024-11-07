@@ -14,8 +14,6 @@ import (
 	"github.com/gyk4j/toc/toc-backend/restapi/operations/transfer"
 )
 
-type Controller struct{}
-
 //
 // Backup
 //
@@ -25,7 +23,7 @@ func NewBackup(params backup.NewBackupParams) middleware.Responder {
 
 	s := router.Route(params.HTTPRequest)
 
-	b := s.NewBackup()
+	b := s.Backup.NewBackup()
 	if b != nil {
 		res = backup.NewNewBackupOK().WithPayload(b)
 	} else {
@@ -45,7 +43,7 @@ func UpdateBackup(params backup.UpdateBackupParams) middleware.Responder {
 
 	s := router.Route(params.HTTPRequest)
 
-	b := s.UpdateBackup(params.Body)
+	b := s.Backup.UpdateBackup(params.Body)
 
 	if b != nil {
 		res = backup.NewUpdateBackupOK().WithPayload(b)
@@ -66,7 +64,7 @@ func GetBackups(params backup.GetBackupsParams) middleware.Responder {
 
 	s := router.Route(params.HTTPRequest)
 
-	b := s.GetBackups()
+	b := s.Backup.GetBackups()
 	if b != nil {
 		res = backup.NewGetBackupsOK().WithPayload(b)
 	} else {
@@ -86,7 +84,7 @@ func GetBackupByID(params backup.GetBackupByIDParams) middleware.Responder {
 
 	s := router.Route(params.HTTPRequest)
 
-	b := s.GetBackupByID(params.BackupID)
+	b := s.Backup.GetBackupById(params.BackupID)
 	if b != nil {
 		res = backup.NewGetBackupByIDOK().WithPayload(b)
 	} else {
@@ -110,7 +108,7 @@ func NewRestoration(params restoration.NewRestorationParams) middleware.Responde
 
 	s := router.Route(params.HTTPRequest)
 
-	r := s.NewRestoration(params.Body)
+	r := s.Restoration.NewRestoration(params.Body)
 	if r != nil {
 		res = restoration.NewNewRestorationOK().WithPayload(r)
 	} else {
@@ -134,7 +132,7 @@ func GetRestorations(params restoration.GetRestorationsParams) middleware.Respon
 
 	s := router.Route(params.HTTPRequest)
 
-	r := s.GetRestorations()
+	r := s.Restoration.GetRestorations()
 	if r != nil {
 		res = restoration.NewGetRestorationsOK().WithPayload(r)
 	} else {
@@ -154,7 +152,7 @@ func GetRestorationByID(params restoration.GetRestorationByIDParams) middleware.
 
 	s := router.Route(params.HTTPRequest)
 
-	r := s.GetRestorationByID(params.RestorationID)
+	r := s.Restoration.GetRestorationById(params.RestorationID)
 	if r != nil {
 		res = restoration.NewGetRestorationByIDOK().WithPayload(r)
 	} else {
@@ -178,7 +176,7 @@ func NewTransfer(params transfer.NewTransferParams) middleware.Responder {
 
 	s := router.Route(params.HTTPRequest)
 
-	t := s.NewTransfer(params.Body)
+	t := s.Transfer.NewTransfer(params.Body)
 	if t != nil {
 		res = transfer.NewNewTransferOK().WithPayload(t)
 	} else {
@@ -202,7 +200,7 @@ func GetTransfers(params transfer.GetTransfersParams) middleware.Responder {
 
 	s := router.Route(params.HTTPRequest)
 
-	t := s.GetTransfers()
+	t := s.Transfer.GetTransfers()
 	if t != nil {
 		res = transfer.NewGetTransfersOK().WithPayload(t)
 	} else {
@@ -222,7 +220,7 @@ func GetTransferByID(params transfer.GetTransferByIDParams) middleware.Responder
 
 	s := router.Route(params.HTTPRequest)
 
-	t := s.GetTransferByID(params.TransferID)
+	t := s.Transfer.GetTransferById(params.TransferID)
 	if t != nil {
 		res = transfer.NewGetTransferByIDOK().WithPayload(t)
 	} else {
@@ -246,8 +244,8 @@ func NewSynchronization(params synchronization.NewSynchronizationParams) middlew
 
 	s := router.Route(params.HTTPRequest)
 
-	sync := s.NewSynchronization()
-	if s != nil {
+	sync := s.Synchronization.NewSynchronization()
+	if sync != nil {
 		res = synchronization.NewNewSynchronizationOK().WithPayload(sync)
 	} else {
 		res = synchronization.NewNewSynchronizationServiceUnavailable()
@@ -269,7 +267,7 @@ func GetQuotas(params quota.GetQuotasParams) middleware.Responder {
 
 	s := router.Route(params.HTTPRequest)
 
-	qs := s.GetQuotas()
+	qs := s.Quota.GetQuotas()
 	if qs != nil {
 		res = quota.NewGetQuotasOK().WithPayload(qs)
 	} else {
@@ -288,7 +286,7 @@ func ExportLog(params log.ExportLogParams) middleware.Responder {
 
 	s := router.Route(params.HTTPRequest)
 
-	l := s.NewLog()
+	l := s.Log.NewLog()
 	if l != nil {
 		res = log.NewExportLogOK().WithPayload(l)
 	} else {
@@ -311,7 +309,7 @@ func NewArchive(params archive.NewArchiveParams) middleware.Responder {
 
 	s := router.Route(params.HTTPRequest)
 
-	a := s.NewArchive()
+	a := s.Archive.NewArchive()
 	if a != nil {
 		res = archive.NewNewArchiveOK().WithPayload(a)
 	} else {
@@ -335,7 +333,7 @@ func GetArchives(params archive.GetArchivesParams) middleware.Responder {
 
 	s := router.Route(params.HTTPRequest)
 
-	a := s.GetArchives()
+	a := s.Archive.GetArchives()
 	if a != nil {
 		res = archive.NewGetArchivesOK().WithPayload(a)
 	} else {
@@ -355,7 +353,7 @@ func GetArchiveByID(params archive.GetArchiveByIDParams) middleware.Responder {
 
 	s := router.Route(params.HTTPRequest)
 
-	a := s.GetArchiveByID(params.ArchiveID)
+	a := s.Archive.GetArchiveById(params.ArchiveID)
 	if a != nil {
 		res = archive.NewGetArchiveByIDOK().WithPayload(a)
 	} else {
