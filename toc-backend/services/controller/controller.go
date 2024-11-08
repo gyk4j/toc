@@ -9,6 +9,7 @@ import (
 	"github.com/go-openapi/strfmt"
 	"github.com/gyk4j/toc/toc-backend/models"
 	"github.com/gyk4j/toc/toc-backend/repositories"
+	"github.com/gyk4j/toc/toc-backend/services"
 )
 
 //
@@ -19,7 +20,7 @@ type BackupService struct {
 	r repositories.IBackupRepository
 }
 
-func (s *BackupService) NewBackup() *models.Backup {
+func (s *BackupService) NewBackup() (*models.Backup, *services.AppError) {
 	b := models.Backup{
 		ID:        -1,
 		Time:      strfmt.DateTime(time.Now()),
@@ -38,23 +39,27 @@ func (s *BackupService) NewBackup() *models.Backup {
 		b.Snapshots = append(b.Snapshots, &ss)
 	}
 
-	return s.r.Save(&b)
+	return s.r.Save(&b), nil
 }
 
-func (s *BackupService) UpdateBackup(backup *models.Backup) *models.Backup {
+func (s *BackupService) UpdateBackup(backup *models.Backup) (*models.Backup, *services.AppError) {
 	if s.r.FindById(backup.ID) != nil {
-		return s.r.Save(backup)
+		return s.r.Save(backup), nil
 	} else {
-		return nil
+		return nil, &services.AppError{
+			Error:   fmt.Errorf("not found: %s", "NewBackup"),
+			Message: "not found",
+			Code:    int(services.NewBackupNotFound),
+		}
 	}
 }
 
-func (s *BackupService) GetBackups() []*models.Backup {
-	return s.r.FindAll()
+func (s *BackupService) GetBackups() ([]*models.Backup, *services.AppError) {
+	return s.r.FindAll(), nil
 }
 
-func (s *BackupService) GetBackupById(id int64) *models.Backup {
-	return s.r.FindById(id)
+func (s *BackupService) GetBackupById(id int64) (*models.Backup, *services.AppError) {
+	return s.r.FindById(id), nil
 }
 
 //
@@ -65,7 +70,7 @@ type RestorationService struct {
 	r repositories.IRestorationRepository
 }
 
-func (s *RestorationService) NewRestoration(backup *models.Backup) *models.Restoration {
+func (s *RestorationService) NewRestoration(backup *models.Backup) (*models.Restoration, *services.AppError) {
 	b := backup // Trust client data?
 	//b := GetBackupByID((*backup).ID) // More robust method
 
@@ -79,27 +84,35 @@ func (s *RestorationService) NewRestoration(backup *models.Backup) *models.Resto
 			Status: models.RestorationStatusQueued,
 		}
 
-		return s.r.Save(&r)
+		return s.r.Save(&r), nil
 	} else {
 		log.Println("[Error] Backup not found")
-		return nil
+		return nil, &services.AppError{
+			Error:   fmt.Errorf("not found: %s", "NewRestoration"),
+			Message: "not found",
+			Code:    int(services.NewRestorationNotFound),
+		}
 	}
 }
 
-func (s *RestorationService) UpdateRestoration(restoration *models.Restoration) *models.Restoration {
+func (s *RestorationService) UpdateRestoration(restoration *models.Restoration) (*models.Restoration, *services.AppError) {
 	if s.r.FindById(restoration.ID) != nil {
-		return s.r.Save(restoration)
+		return s.r.Save(restoration), nil
 	} else {
-		return nil
+		return nil, &services.AppError{
+			Error:   fmt.Errorf("not found: %s", "UpdateRestoration"),
+			Message: "not found",
+			Code:    int(services.UpdateRestorationNotFound),
+		}
 	}
 }
 
-func (s *RestorationService) GetRestorations() []*models.Restoration {
-	return s.r.FindAll()
+func (s *RestorationService) GetRestorations() ([]*models.Restoration, *services.AppError) {
+	return s.r.FindAll(), nil
 }
 
-func (s *RestorationService) GetRestorationById(id int64) *models.Restoration {
-	return s.r.FindById(id)
+func (s *RestorationService) GetRestorationById(id int64) (*models.Restoration, *services.AppError) {
+	return s.r.FindById(id), nil
 }
 
 //
@@ -110,7 +123,7 @@ type TransferService struct {
 	r repositories.ITransferRepository
 }
 
-func (s *TransferService) NewTransfer(backup *models.Backup) *models.Transfer {
+func (s *TransferService) NewTransfer(backup *models.Backup) (*models.Transfer, *services.AppError) {
 	b := backup // Trust client data?
 	//b := GetBackupByID((*backup).ID) // More robust method
 
@@ -124,27 +137,35 @@ func (s *TransferService) NewTransfer(backup *models.Backup) *models.Transfer {
 			Status: models.RestorationStatusQueued,
 		}
 
-		return s.r.Save(&t)
+		return s.r.Save(&t), nil
 	} else {
 		log.Println("[Error] Backup not found")
-		return nil
+		return nil, &services.AppError{
+			Error:   fmt.Errorf("not found: %s", "NewTransfer"),
+			Message: "not found",
+			Code:    int(services.NewTransferNotFound),
+		}
 	}
 }
 
-func (s *TransferService) UpdateTransfer(transfer *models.Transfer) *models.Transfer {
+func (s *TransferService) UpdateTransfer(transfer *models.Transfer) (*models.Transfer, *services.AppError) {
 	if s.r.FindById(transfer.ID) != nil {
-		return s.r.Save(transfer)
+		return s.r.Save(transfer), nil
 	} else {
-		return nil
+		return nil, &services.AppError{
+			Error:   fmt.Errorf("not found: %s", "UpdateTransfer"),
+			Message: "not found",
+			Code:    int(services.UpdateTransferNotFound),
+		}
 	}
 }
 
-func (s *TransferService) GetTransfers() []*models.Transfer {
-	return s.r.FindAll()
+func (s *TransferService) GetTransfers() ([]*models.Transfer, *services.AppError) {
+	return s.r.FindAll(), nil
 }
 
-func (s *TransferService) GetTransferById(id int64) *models.Transfer {
-	return s.r.FindById(id)
+func (s *TransferService) GetTransferById(id int64) (*models.Transfer, *services.AppError) {
+	return s.r.FindById(id), nil
 }
 
 //
@@ -155,21 +176,25 @@ type SynchronizationService struct {
 	r repositories.ISynchronizationRepository
 }
 
-func (s *SynchronizationService) NewSynchronization() *models.Synchronization {
+func (s *SynchronizationService) NewSynchronization() (*models.Synchronization, *services.AppError) {
 	sync := models.Synchronization{
 		ID:     -1,
 		Status: models.LogStatusQueued,
 		Time:   strfmt.DateTime(time.Now()),
 	}
 
-	return s.r.Save(&sync)
+	return s.r.Save(&sync), nil
 }
 
-func (s *SynchronizationService) UpdateSynchronization(synchronization *models.Synchronization) *models.Synchronization {
+func (s *SynchronizationService) UpdateSynchronization(synchronization *models.Synchronization) (*models.Synchronization, *services.AppError) {
 	if s.r.FindById(synchronization.ID) != nil {
-		return s.r.Save(synchronization)
+		return s.r.Save(synchronization), nil
 	} else {
-		return nil
+		return nil, &services.AppError{
+			Error:   fmt.Errorf("not found: %s", "UpdateSynchronization"),
+			Message: "not found",
+			Code:    int(services.UpdateSynchronizationNotFound),
+		}
 	}
 }
 
@@ -181,7 +206,7 @@ type QuotaService struct {
 	r repositories.IQuotaRepository
 }
 
-func (s *QuotaService) GetQuotas() []*models.Quota {
+func (s *QuotaService) GetQuotas() ([]*models.Quota, *services.AppError) {
 	/*
 		q1 := models.Quota{
 			ID:   -1,
@@ -198,7 +223,7 @@ func (s *QuotaService) GetQuotas() []*models.Quota {
 		}
 	*/
 
-	return s.r.FindAll()
+	return s.r.FindAll(), nil
 }
 
 //
@@ -209,7 +234,7 @@ type LogService struct {
 	r repositories.ILogRepository
 }
 
-func (s *LogService) NewLog() *models.Log {
+func (s *LogService) NewLog() (*models.Log, *services.AppError) {
 	l := models.Log{
 		ID:     -1,
 		Status: models.LogStatusQueued,
@@ -217,19 +242,23 @@ func (s *LogService) NewLog() *models.Log {
 		URL:    "/v1/logs/" + strconv.FormatInt(0, 10),
 	}
 
-	return s.r.Save(&l)
+	return s.r.Save(&l), nil
 }
 
-func (s *LogService) UpdateLog(log *models.Log) *models.Log {
+func (s *LogService) UpdateLog(log *models.Log) (*models.Log, *services.AppError) {
 	if s.r.FindById(log.ID) != nil {
-		return s.r.Save(log)
+		return s.r.Save(log), nil
 	} else {
-		return nil
+		return nil, &services.AppError{
+			Error:   fmt.Errorf("not found: %s", "UpdateLog"),
+			Message: "not found",
+			Code:    int(services.UpdateLogNotFound),
+		}
 	}
 }
 
-func (s *LogService) GetLogById(id int64) *models.Log {
-	return s.r.FindById(id)
+func (s *LogService) GetLogById(id int64) (*models.Log, *services.AppError) {
+	return s.r.FindById(id), nil
 }
 
 //
@@ -240,7 +269,7 @@ type ArchiveService struct {
 	r repositories.IArchiveRepository
 }
 
-func (s *ArchiveService) NewArchive() *models.Archive {
+func (s *ArchiveService) NewArchive() (*models.Archive, *services.AppError) {
 	a := models.Archive{
 		ID:     -1,
 		Status: models.ArchiveStatusQueued,
@@ -248,21 +277,25 @@ func (s *ArchiveService) NewArchive() *models.Archive {
 		URL:    "/v1/archives/" + strconv.FormatInt(0, 10),
 	}
 
-	return s.r.Save(&a)
+	return s.r.Save(&a), nil
 }
 
-func (s *ArchiveService) UpdateArchive(archive *models.Archive) *models.Archive {
+func (s *ArchiveService) UpdateArchive(archive *models.Archive) (*models.Archive, *services.AppError) {
 	if s.r.FindById(archive.ID) != nil {
-		return s.r.Save(archive)
+		return s.r.Save(archive), nil
 	} else {
-		return nil
+		return nil, &services.AppError{
+			Error:   fmt.Errorf("not found: %s", "UpdateArchive"),
+			Message: "not found",
+			Code:    int(services.UpdateArchiveNotFound),
+		}
 	}
 }
 
-func (s *ArchiveService) GetArchives() []*models.Archive {
-	return s.r.FindAll()
+func (s *ArchiveService) GetArchives() ([]*models.Archive, *services.AppError) {
+	return s.r.FindAll(), nil
 }
 
-func (s *ArchiveService) GetArchiveById(id int64) *models.Archive {
-	return s.r.FindById(id)
+func (s *ArchiveService) GetArchiveById(id int64) (*models.Archive, *services.AppError) {
+	return s.r.FindById(id), nil
 }

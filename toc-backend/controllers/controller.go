@@ -23,8 +23,8 @@ func NewBackup(params backup.NewBackupParams) middleware.Responder {
 
 	s := router.Route(params.HTTPRequest)
 
-	b := s.Backup.NewBackup()
-	if b != nil {
+	b, err := s.Backup.NewBackup()
+	if err == nil {
 		res = backup.NewNewBackupOK().WithPayload(b)
 	} else {
 		apires := models.APIResponse{
@@ -43,9 +43,9 @@ func UpdateBackup(params backup.UpdateBackupParams) middleware.Responder {
 
 	s := router.Route(params.HTTPRequest)
 
-	b := s.Backup.UpdateBackup(params.Body)
+	b, err := s.Backup.UpdateBackup(params.Body)
 
-	if b != nil {
+	if err == nil {
 		res = backup.NewUpdateBackupOK().WithPayload(b)
 	} else {
 		apires := models.APIResponse{
@@ -64,8 +64,8 @@ func GetBackups(params backup.GetBackupsParams) middleware.Responder {
 
 	s := router.Route(params.HTTPRequest)
 
-	b := s.Backup.GetBackups()
-	if b != nil {
+	b, err := s.Backup.GetBackups()
+	if err == nil {
 		res = backup.NewGetBackupsOK().WithPayload(b)
 	} else {
 		apires := models.APIResponse{
@@ -84,8 +84,8 @@ func GetBackupByID(params backup.GetBackupByIDParams) middleware.Responder {
 
 	s := router.Route(params.HTTPRequest)
 
-	b := s.Backup.GetBackupById(params.BackupID)
-	if b != nil {
+	b, err := s.Backup.GetBackupById(params.BackupID)
+	if err == nil {
 		res = backup.NewGetBackupByIDOK().WithPayload(b)
 	} else {
 		apires := models.APIResponse{
@@ -108,8 +108,8 @@ func NewRestoration(params restoration.NewRestorationParams) middleware.Responde
 
 	s := router.Route(params.HTTPRequest)
 
-	r := s.Restoration.NewRestoration(params.Body)
-	if r != nil {
+	r, err := s.Restoration.NewRestoration(params.Body)
+	if err == nil {
 		res = restoration.NewNewRestorationOK().WithPayload(r)
 	} else {
 		apires := models.APIResponse{
@@ -132,8 +132,8 @@ func GetRestorations(params restoration.GetRestorationsParams) middleware.Respon
 
 	s := router.Route(params.HTTPRequest)
 
-	r := s.Restoration.GetRestorations()
-	if r != nil {
+	r, err := s.Restoration.GetRestorations()
+	if err == nil {
 		res = restoration.NewGetRestorationsOK().WithPayload(r)
 	} else {
 		apires := models.APIResponse{
@@ -152,8 +152,8 @@ func GetRestorationByID(params restoration.GetRestorationByIDParams) middleware.
 
 	s := router.Route(params.HTTPRequest)
 
-	r := s.Restoration.GetRestorationById(params.RestorationID)
-	if r != nil {
+	r, err := s.Restoration.GetRestorationById(params.RestorationID)
+	if err == nil {
 		res = restoration.NewGetRestorationByIDOK().WithPayload(r)
 	} else {
 		apires := models.APIResponse{
@@ -176,8 +176,8 @@ func NewTransfer(params transfer.NewTransferParams) middleware.Responder {
 
 	s := router.Route(params.HTTPRequest)
 
-	t := s.Transfer.NewTransfer(params.Body)
-	if t != nil {
+	t, err := s.Transfer.NewTransfer(params.Body)
+	if err == nil {
 		res = transfer.NewNewTransferOK().WithPayload(t)
 	} else {
 		apires := models.APIResponse{
@@ -200,8 +200,8 @@ func GetTransfers(params transfer.GetTransfersParams) middleware.Responder {
 
 	s := router.Route(params.HTTPRequest)
 
-	t := s.Transfer.GetTransfers()
-	if t != nil {
+	t, err := s.Transfer.GetTransfers()
+	if err == nil {
 		res = transfer.NewGetTransfersOK().WithPayload(t)
 	} else {
 		apires := models.APIResponse{
@@ -220,8 +220,8 @@ func GetTransferByID(params transfer.GetTransferByIDParams) middleware.Responder
 
 	s := router.Route(params.HTTPRequest)
 
-	t := s.Transfer.GetTransferById(params.TransferID)
-	if t != nil {
+	t, err := s.Transfer.GetTransferById(params.TransferID)
+	if err == nil {
 		res = transfer.NewGetTransferByIDOK().WithPayload(t)
 	} else {
 		apires := models.APIResponse{
@@ -244,8 +244,8 @@ func NewSynchronization(params synchronization.NewSynchronizationParams) middlew
 
 	s := router.Route(params.HTTPRequest)
 
-	sync := s.Synchronization.NewSynchronization()
-	if sync != nil {
+	sync, err := s.Synchronization.NewSynchronization()
+	if err == nil {
 		res = synchronization.NewNewSynchronizationOK().WithPayload(sync)
 	} else {
 		res = synchronization.NewNewSynchronizationServiceUnavailable()
@@ -267,8 +267,8 @@ func GetQuotas(params quota.GetQuotasParams) middleware.Responder {
 
 	s := router.Route(params.HTTPRequest)
 
-	qs := s.Quota.GetQuotas()
-	if qs != nil {
+	qs, err := s.Quota.GetQuotas()
+	if err == nil {
 		res = quota.NewGetQuotasOK().WithPayload(qs)
 	} else {
 		res = quota.NewGetQuotasServiceUnavailable()
@@ -286,8 +286,8 @@ func ExportLog(params log.ExportLogParams) middleware.Responder {
 
 	s := router.Route(params.HTTPRequest)
 
-	l := s.Log.NewLog()
-	if l != nil {
+	l, err := s.Log.NewLog()
+	if err == nil {
 		res = log.NewExportLogOK().WithPayload(l)
 	} else {
 		res = log.NewExportLogInternalServerError()
@@ -309,8 +309,8 @@ func NewArchive(params archive.NewArchiveParams) middleware.Responder {
 
 	s := router.Route(params.HTTPRequest)
 
-	a := s.Archive.NewArchive()
-	if a != nil {
+	a, err := s.Archive.NewArchive()
+	if err == nil {
 		res = archive.NewNewArchiveOK().WithPayload(a)
 	} else {
 		apires := models.APIResponse{
@@ -333,8 +333,8 @@ func GetArchives(params archive.GetArchivesParams) middleware.Responder {
 
 	s := router.Route(params.HTTPRequest)
 
-	a := s.Archive.GetArchives()
-	if a != nil {
+	a, err := s.Archive.GetArchives()
+	if err == nil {
 		res = archive.NewGetArchivesOK().WithPayload(a)
 	} else {
 		apires := models.APIResponse{
@@ -353,8 +353,8 @@ func GetArchiveByID(params archive.GetArchiveByIDParams) middleware.Responder {
 
 	s := router.Route(params.HTTPRequest)
 
-	a := s.Archive.GetArchiveById(params.ArchiveID)
-	if a != nil {
+	a, err := s.Archive.GetArchiveById(params.ArchiveID)
+	if err == nil {
 		res = archive.NewGetArchiveByIDOK().WithPayload(a)
 	} else {
 		apires := models.APIResponse{
