@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -11,40 +12,22 @@ import (
 )
 
 type Router struct {
-	m map[string]services.Server
+	m map[string]*services.Server
 }
 
-var ctrl = services.Server{
-	Backup:          &controller.BackupService{},
-	Restoration:     &controller.RestorationService{},
-	Transfer:        &controller.TransferService{},
-	Synchronization: &controller.SynchronizationService{},
-	Quota:           &controller.QuotaService{},
-	Log:             &controller.LogService{},
-	Archive:         &controller.ArchiveService{},
+func NewRouter() *Router {
+	return &Router{
+		m: map[string]*services.Server{
+			"toc":  controller.NewController("toc"),
+			"db":   server.NewServer("db"),
+			"file": server.NewServer("file"),
+			"mail": server.NewServer("mail"),
+			"web":  server.NewServer("web"),
+		},
+	}
 }
 
-var srvr = services.Server{
-	Backup:          &server.BackupService{},
-	Restoration:     &server.RestorationService{},
-	Transfer:        &server.TransferService{},
-	Synchronization: &server.SynchronizationService{},
-	Quota:           &server.QuotaService{},
-	Log:             &server.LogService{},
-	Archive:         &server.ArchiveService{},
-}
-
-var router = Router{
-	m: map[string]services.Server{
-		"toc":  ctrl,
-		"db":   srvr,
-		"file": srvr,
-		"mail": srvr,
-		"web":  srvr,
-	},
-}
-
-func (r *Router) Route(HTTPRequest *http.Request) services.Server {
+func (r *Router) Route(HTTPRequest *http.Request) *services.Server {
 	s := r.m[HTTPRequest.Host]
 
 	if s.Backup == nil {
@@ -65,9 +48,10 @@ func (r *Router) Route(HTTPRequest *http.Request) services.Server {
 	}
 
 	if s.Backup == nil {
-		log.Printf("Fallback to last resort default server")
-		s = ctrl
+		panic(fmt.Sprintf("Unknown host name: %s", HTTPRequest.Host))
 	}
 
 	return s
 }
+
+var router *Router = NewRouter()

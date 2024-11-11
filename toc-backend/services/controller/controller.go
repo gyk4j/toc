@@ -12,6 +12,19 @@ import (
 	"github.com/gyk4j/toc/toc-backend/services"
 )
 
+func NewController(name string) (server *services.Server) {
+	return &services.Server{
+		Name:            name,
+		Backup:          &BackupService{},
+		Restoration:     &RestorationService{},
+		Transfer:        &TransferService{},
+		Synchronization: &SynchronizationService{},
+		Quota:           &QuotaService{},
+		Log:             &LogService{},
+		Archive:         &ArchiveService{},
+	}
+}
+
 //
 // Backup
 //
