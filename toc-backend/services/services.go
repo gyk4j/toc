@@ -3,6 +3,7 @@ package services
 import "github.com/gyk4j/toc/toc-backend/models"
 
 type Server struct {
+	Name            string
 	Backup          IBackupService
 	Restoration     IRestorationService
 	Transfer        ITransferService
