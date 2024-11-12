@@ -3,8 +3,11 @@ package server
 import (
 	"fmt"
 	"log"
+	"time"
 
+	"github.com/go-openapi/strfmt"
 	"github.com/gyk4j/toc/toc-backend/models"
+	"github.com/gyk4j/toc/toc-backend/repositories"
 	"github.com/gyk4j/toc/toc-backend/services"
 )
 
@@ -26,16 +29,42 @@ func NewServer(name string) (server *services.Server) {
 //
 
 type BackupService struct {
-	// r repositories.IBackupRepository
+	r repositories.IBackupRepository
 }
 
 func (s *BackupService) NewBackup() (*models.Backup, *services.AppError) {
-	log.Printf("not implemented: %s", "NewBackup")
-	return nil, &services.AppError{
-		Error:   fmt.Errorf("not implemented: %s", "NewBackup"),
-		Message: "not implemented",
-		Code:    int(services.NewBackupForbidden),
+	var err *services.AppError
+
+	b := models.Backup{
+		ID:        -1,
+		Time:      strfmt.DateTime(time.Now()),
+		Snapshots: make([]*models.Snapshot, 0),
 	}
+
+	// Get ID issued first.
+	o := s.r.Save(&b)
+	i := o.ID
+
+	ss := models.Snapshot{
+		ID:       int64(i),
+		File:     fmt.Sprintf("/toc/archives/%d-%s.tar.gz", i, s),
+		Status:   models.SnapshotStatusQueued,
+		Complete: false,
+	}
+	b.Snapshots = append(b.Snapshots, &ss)
+
+	// Update/resave with snapshots
+	o = s.r.Save(&b)
+
+	if o == nil {
+		err = &services.AppError{
+			Error:   fmt.Errorf("internal server error: %s", "NewBackup"),
+			Message: "internal server error",
+			Code:    int(services.NewBackupInternalServerError),
+		}
+	}
+
+	return o, err
 }
 
 func (s *BackupService) UpdateBackup(backup *models.Backup) (*models.Backup, *services.AppError) {

@@ -1,8 +1,12 @@
 package controller
 
 import (
+	"bytes"
+	"encoding/json"
 	"fmt"
+	"io"
 	"log"
+	"net/http"
 	"strconv"
 	"time"
 
@@ -11,6 +15,8 @@ import (
 	"github.com/gyk4j/toc/toc-backend/repositories"
 	"github.com/gyk4j/toc/toc-backend/services"
 )
+
+var servers = []string{"web", "file", "db", "mail"}
 
 func NewController(name string) (server *services.Server) {
 	return &services.Server{
@@ -42,18 +48,6 @@ func (s *BackupService) NewBackup() (*models.Backup, *services.AppError) {
 		Snapshots: make([]*models.Snapshot, 0),
 	}
 
-	servers := []string{"web", "file", "db", "mail"}
-
-	for i, s := range servers {
-		ss := models.Snapshot{
-			ID:       int64(i),
-			File:     fmt.Sprintf("/toc/archives/%s-%d.tar.gz", s, i),
-			Status:   models.SnapshotStatusQueued,
-			Complete: false,
-		}
-		b.Snapshots = append(b.Snapshots, &ss)
-	}
-
 	o := s.r.Save(&b)
 
 	if o == nil {
@@ -62,7 +56,37 @@ func (s *BackupService) NewBackup() (*models.Backup, *services.AppError) {
 			Message: "internal server error",
 			Code:    int(services.NewBackupInternalServerError),
 		}
+		return nil, err
 	}
+
+	fails := 0
+	for _, server := range servers {
+		url := fmt.Sprintf("http://%s/v1/Backup", server)
+		bodyReader := bytes.NewReader([]byte(""))
+		res, errHttp := http.Post(url, "text/json", bodyReader)
+
+		if errHttp != nil || (res.StatusCode != http.StatusOK && res.StatusCode != http.StatusAccepted) {
+			err = &services.AppError{
+				Error:   errHttp,
+				Message: res.Status,
+				Code:    res.StatusCode,
+			}
+			fails++
+		}
+
+		log.Printf("%s => %s\n", res.Status, url)
+
+		defer res.Body.Close()
+		body, err := io.ReadAll(res.Body)
+		if err != nil {
+			log.Println(body)
+		}
+	}
+
+	// if fails == len(servers) {
+	// 	o.Status = models.BackupStatusFailed
+	// 	o = s.r.Save(o)
+	// }
 
 	return o, err
 }
@@ -70,7 +94,8 @@ func (s *BackupService) NewBackup() (*models.Backup, *services.AppError) {
 func (s *BackupService) UpdateBackup(backup *models.Backup) (*models.Backup, *services.AppError) {
 	var err *services.AppError
 
-	if s.r.FindById(backup.ID) == nil {
+	b := s.r.FindById(backup.ID)
+	if b == nil {
 		err = &services.AppError{
 			Error:   fmt.Errorf("not found: %s", "UpdateBackup"),
 			Message: "not found",
@@ -79,7 +104,31 @@ func (s *BackupService) UpdateBackup(backup *models.Backup) (*models.Backup, *se
 		return nil, err
 	}
 
-	o := s.r.Save(backup)
+	log.Printf("Updating backup %d with %d snapshots\n", b.ID, len(backup.Snapshots))
+	b.Snapshots = append(b.Snapshots, backup.Snapshots...)
+
+	// Update backup status
+	done := 0
+	fail := 0
+
+	for _, ss := range b.Snapshots {
+		switch ss.Status {
+		case models.SnapshotStatusCompleted:
+			done++
+		case models.SnapshotStatusFailed:
+			fail++
+		}
+	}
+
+	// if done == len(b.Snapshots) {
+	// 	b.Status = models.BackupStatusCompleted
+	// } else if fail == len(r.Backup.Snapshots) {
+	// 	b.Status = models.BackupStatusFailed
+	// } else {
+	// 	b.Status = models.BackupStatusInDashProgress
+	// }
+
+	o := s.r.Save(b)
 
 	if o == nil {
 		err = &services.AppError{
@@ -87,6 +136,7 @@ func (s *BackupService) UpdateBackup(backup *models.Backup) (*models.Backup, *se
 			Message: "internal server error",
 			Code:    int(services.UpdateBackupInternalServerError),
 		}
+		return nil, err
 	}
 
 	return o, err
@@ -103,6 +153,7 @@ func (s *BackupService) GetBackups() ([]*models.Backup, *services.AppError) {
 			Message: "internal server error",
 			Code:    int(services.GetBackupsInternalServerError),
 		}
+		return nil, err
 	}
 
 	return o, err
@@ -119,6 +170,7 @@ func (s *BackupService) GetBackupById(id int64) (*models.Backup, *services.AppEr
 			Message: "not found",
 			Code:    int(services.GetBackupByIdNotFound),
 		}
+		return nil, err
 	}
 
 	return o, err
@@ -136,7 +188,7 @@ func (s *RestorationService) NewRestoration(backup *models.Backup) (*models.Rest
 	var err *services.AppError
 
 	b := backup // Trust client data?
-	//b := GetBackupByID((*backup).ID) // More robust method
+	// b := GetBackupByID(backup.ID) // More robust method
 
 	// Backup must exists before it can be restored.
 	// If an invalid ID is provided, then restoration is skipped.
@@ -149,7 +201,7 @@ func (s *RestorationService) NewRestoration(backup *models.Backup) (*models.Rest
 		return nil, err
 	}
 
-	log.Printf("Backup found: %d = %s\n", (*b).ID, (*b).Time)
+	log.Printf("Backup found: %d = %s\n", b.ID, b.Time)
 	r := models.Restoration{
 		ID:     -1,
 		Backup: b,
@@ -164,6 +216,41 @@ func (s *RestorationService) NewRestoration(backup *models.Backup) (*models.Rest
 			Message: "internal server error",
 			Code:    int(services.NewRestorationInternalServerError),
 		}
+		return nil, err
+	}
+
+	fails := 0
+	for _, server := range servers {
+		url := fmt.Sprintf("http://%s/v1/Restoration", server)
+		body, errJson := json.Marshal(b)
+		if errJson != nil {
+			log.Println("Error: JSON encoding failed")
+			continue
+		}
+		bodyReader := bytes.NewReader([]byte(body))
+		res, errHttp := http.Post(url, "text/json", bodyReader)
+
+		if errHttp != nil || (res.StatusCode != http.StatusOK && res.StatusCode != http.StatusAccepted) {
+			err = &services.AppError{
+				Error:   errHttp,
+				Message: res.Status,
+				Code:    res.StatusCode,
+			}
+			fails++
+		}
+
+		log.Printf("%s => %s\n", res.Status, url)
+
+		defer res.Body.Close()
+		body, err := io.ReadAll(res.Body)
+		if err != nil {
+			log.Println(body)
+		}
+	}
+
+	if fails == len(servers) {
+		o.Status = models.RestorationStatusFailed
+		o = s.r.Save(o)
 	}
 
 	return o, err
@@ -172,7 +259,8 @@ func (s *RestorationService) NewRestoration(backup *models.Backup) (*models.Rest
 func (s *RestorationService) UpdateRestoration(restoration *models.Restoration) (*models.Restoration, *services.AppError) {
 	var err *services.AppError
 
-	if s.r.FindById(restoration.ID) == nil {
+	r := s.r.FindById(restoration.ID)
+	if r == nil {
 		err = &services.AppError{
 			Error:   fmt.Errorf("not found: %s", "UpdateRestoration"),
 			Message: "not found",
@@ -181,7 +269,38 @@ func (s *RestorationService) UpdateRestoration(restoration *models.Restoration) 
 		return nil, err
 	}
 
-	o := s.r.Save(restoration)
+	// Update snapshots' status
+	for _, ssNew := range restoration.Backup.Snapshots {
+		for _, ssOld := range r.Backup.Snapshots {
+			if ssNew.File == ssOld.File {
+				ssOld.Status = ssNew.Status
+				ssOld.Complete = ssNew.Complete
+			}
+		}
+	}
+
+	// Update restoration status
+	done := 0
+	fail := 0
+
+	for _, ss := range r.Backup.Snapshots {
+		switch ss.Status {
+		case models.SnapshotStatusCompleted:
+			done++
+		case models.SnapshotStatusFailed:
+			fail++
+		}
+	}
+
+	if done == len(r.Backup.Snapshots) {
+		r.Status = models.RestorationStatusCompleted
+	} else if fail == len(r.Backup.Snapshots) {
+		r.Status = models.RestorationStatusFailed
+	} else {
+		r.Status = models.RestorationStatusInDashProgress
+	}
+
+	o := s.r.Save(r)
 
 	if o == nil {
 		err = &services.AppError{
@@ -189,6 +308,7 @@ func (s *RestorationService) UpdateRestoration(restoration *models.Restoration) 
 			Message: "internal server error",
 			Code:    int(services.UpdateRestorationInternalServerError),
 		}
+		return nil, err
 	}
 
 	return o, err
@@ -205,6 +325,7 @@ func (s *RestorationService) GetRestorations() ([]*models.Restoration, *services
 			Message: "internal server error",
 			Code:    int(services.UpdateRestorationInternalServerError),
 		}
+		return nil, err
 	}
 
 	return o, err
@@ -221,6 +342,7 @@ func (s *RestorationService) GetRestorationById(id int64) (*models.Restoration, 
 			Message: "not found",
 			Code:    int(services.UpdateRestorationNotFound),
 		}
+		return nil, err
 	}
 
 	return o, err
@@ -249,15 +371,14 @@ func (s *TransferService) NewTransfer(backup *models.Backup) (*models.Transfer, 
 			Message: "not found",
 			Code:    int(services.NewTransferNotFound),
 		}
-
 		return nil, err
 	}
 
-	log.Printf("Backup found: %d = %s\n", (*b).ID, (*b).Time)
+	log.Printf("Backup found: %d = %s\n", b.ID, b.Time)
 	t := models.Transfer{
 		ID:     -1,
 		Backup: b,
-		Status: models.RestorationStatusQueued,
+		Status: models.TransferStatusQueued,
 	}
 
 	o := s.r.Save(&t)
@@ -268,6 +389,41 @@ func (s *TransferService) NewTransfer(backup *models.Backup) (*models.Transfer, 
 			Message: "internal server error",
 			Code:    int(services.NewTransferInternalServerError),
 		}
+		return nil, err
+	}
+
+	fails := 0
+	for _, server := range servers {
+		url := fmt.Sprintf("http://%s/v1/Transfer", server)
+		body, errJson := json.Marshal(b)
+		if errJson != nil {
+			log.Println("Error: JSON encoding failed")
+			continue
+		}
+		bodyReader := bytes.NewReader([]byte(body))
+		res, errHttp := http.Post(url, "text/json", bodyReader)
+
+		if errHttp != nil || (res.StatusCode != http.StatusOK && res.StatusCode != http.StatusAccepted) {
+			err = &services.AppError{
+				Error:   errHttp,
+				Message: res.Status,
+				Code:    res.StatusCode,
+			}
+			fails++
+		}
+
+		log.Printf("%s => %s\n", res.Status, url)
+
+		defer res.Body.Close()
+		body, err := io.ReadAll(res.Body)
+		if err != nil {
+			log.Println(body)
+		}
+	}
+
+	if fails == len(servers) {
+		o.Status = models.TransferStatusFailed
+		o = s.r.Save(o)
 	}
 
 	return o, err
@@ -276,17 +432,51 @@ func (s *TransferService) NewTransfer(backup *models.Backup) (*models.Transfer, 
 func (s *TransferService) UpdateTransfer(transfer *models.Transfer) (*models.Transfer, *services.AppError) {
 	var err *services.AppError
 
-	if s.r.FindById(transfer.ID) == nil {
+	t := s.r.FindById(transfer.ID)
+
+	if t == nil {
 		err = &services.AppError{
 			Error:   fmt.Errorf("not found: %s", "UpdateTransfer"),
 			Message: "not found",
 			Code:    int(services.UpdateTransferNotFound),
 		}
-
 		return nil, err
 	}
 
-	o := s.r.Save(transfer)
+	// Update snapshots' status
+	for _, ssNew := range transfer.Backup.Snapshots {
+		for _, ssOld := range t.Backup.Snapshots {
+			if ssNew.File == ssOld.File {
+				ssOld.Status = ssNew.Status
+				ssOld.Complete = ssNew.Complete
+			}
+		}
+	}
+
+	t.Status = models.TransferStatusInDashProgress
+
+	// Update transfer status
+	done := 0
+	fail := 0
+
+	for _, ss := range t.Backup.Snapshots {
+		switch ss.Status {
+		case models.SnapshotStatusCompleted:
+			done++
+		case models.SnapshotStatusFailed:
+			fail++
+		}
+	}
+
+	if done == len(t.Backup.Snapshots) {
+		t.Status = models.TransferStatusCompleted
+	} else if fail == len(t.Backup.Snapshots) {
+		t.Status = models.TransferStatusFailed
+	} else {
+		t.Status = models.TransferStatusInDashProgress
+	}
+
+	o := s.r.Save(t)
 
 	if o == nil {
 		err = &services.AppError{
@@ -294,6 +484,7 @@ func (s *TransferService) UpdateTransfer(transfer *models.Transfer) (*models.Tra
 			Message: "internal server error",
 			Code:    int(services.UpdateTransferInternalServerError),
 		}
+		return nil, err
 	}
 
 	return o, err
