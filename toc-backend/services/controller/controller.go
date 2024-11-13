@@ -14,6 +14,7 @@ import (
 	"github.com/gyk4j/toc/toc-backend/models"
 	"github.com/gyk4j/toc/toc-backend/repositories"
 	"github.com/gyk4j/toc/toc-backend/services"
+	"github.com/gyk4j/toc/toc-backend/utils"
 )
 
 var servers = []string{"web", "file", "db", "mail"}
@@ -45,7 +46,7 @@ func (s *BackupService) NewBackup() (*models.Backup, *services.AppError) {
 	b := models.Backup{
 		ID:        -1,
 		Time:      strfmt.DateTime(time.Now()),
-		Snapshots: make([]*models.Snapshot, 0),
+		Snapshots: &models.Snapshots{},
 	}
 
 	o := s.r.Save(&b)
@@ -104,29 +105,13 @@ func (s *BackupService) UpdateBackup(backup *models.Backup) (*models.Backup, *se
 		return nil, err
 	}
 
-	log.Printf("Updating backup %d with %d snapshots\n", b.ID, len(backup.Snapshots))
-	b.Snapshots = append(b.Snapshots, backup.Snapshots...)
+	// Update snapshots' status
+	utils.UpdateBackupSnapshots(b.Snapshots, backup.Snapshots)
+
+	// Update restoration status
+	log.Printf("Restoration: %d, Status: %s\n", b.ID, utils.GetBackupStatus(b).String())
 
 	// Update backup status
-	done := 0
-	fail := 0
-
-	for _, ss := range b.Snapshots {
-		switch ss.Status {
-		case models.SnapshotStatusCompleted:
-			done++
-		case models.SnapshotStatusFailed:
-			fail++
-		}
-	}
-
-	// if done == len(b.Snapshots) {
-	// 	b.Status = models.BackupStatusCompleted
-	// } else if fail == len(r.Backup.Snapshots) {
-	// 	b.Status = models.BackupStatusFailed
-	// } else {
-	// 	b.Status = models.BackupStatusInDashProgress
-	// }
 
 	o := s.r.Save(b)
 
@@ -270,35 +255,10 @@ func (s *RestorationService) UpdateRestoration(restoration *models.Restoration) 
 	}
 
 	// Update snapshots' status
-	for _, ssNew := range restoration.Backup.Snapshots {
-		for _, ssOld := range r.Backup.Snapshots {
-			if ssNew.File == ssOld.File {
-				ssOld.Status = ssNew.Status
-				ssOld.Complete = ssNew.Complete
-			}
-		}
-	}
+	utils.UpdateBackupSnapshots(r.Backup.Snapshots, restoration.Backup.Snapshots)
 
 	// Update restoration status
-	done := 0
-	fail := 0
-
-	for _, ss := range r.Backup.Snapshots {
-		switch ss.Status {
-		case models.SnapshotStatusCompleted:
-			done++
-		case models.SnapshotStatusFailed:
-			fail++
-		}
-	}
-
-	if done == len(r.Backup.Snapshots) {
-		r.Status = models.RestorationStatusCompleted
-	} else if fail == len(r.Backup.Snapshots) {
-		r.Status = models.RestorationStatusFailed
-	} else {
-		r.Status = models.RestorationStatusInDashProgress
-	}
+	log.Printf("Restoration: %d, Status: %s\n", r.ID, utils.GetBackupStatus(r.Backup).String())
 
 	o := s.r.Save(r)
 
@@ -444,37 +404,10 @@ func (s *TransferService) UpdateTransfer(transfer *models.Transfer) (*models.Tra
 	}
 
 	// Update snapshots' status
-	for _, ssNew := range transfer.Backup.Snapshots {
-		for _, ssOld := range t.Backup.Snapshots {
-			if ssNew.File == ssOld.File {
-				ssOld.Status = ssNew.Status
-				ssOld.Complete = ssNew.Complete
-			}
-		}
-	}
-
-	t.Status = models.TransferStatusInDashProgress
+	utils.UpdateBackupSnapshots(t.Backup.Snapshots, transfer.Backup.Snapshots)
 
 	// Update transfer status
-	done := 0
-	fail := 0
-
-	for _, ss := range t.Backup.Snapshots {
-		switch ss.Status {
-		case models.SnapshotStatusCompleted:
-			done++
-		case models.SnapshotStatusFailed:
-			fail++
-		}
-	}
-
-	if done == len(t.Backup.Snapshots) {
-		t.Status = models.TransferStatusCompleted
-	} else if fail == len(t.Backup.Snapshots) {
-		t.Status = models.TransferStatusFailed
-	} else {
-		t.Status = models.TransferStatusInDashProgress
-	}
+	log.Printf("Transfer: %d, Status: %s\n", t.ID, utils.GetBackupStatus(t.Backup).String())
 
 	o := s.r.Save(t)
 
