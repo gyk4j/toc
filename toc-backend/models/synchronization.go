@@ -16,7 +16,7 @@ import (
 )
 
 // Synchronization synchronization
-// Example: {"id":1,"status":"in-progress","time":"2024-12-31T23:59:59Z"}
+// Example: {"id":1,"status":"running","time":"2024-12-31T23:59:59Z"}
 //
 // swagger:model Synchronization
 type Synchronization struct {
@@ -25,7 +25,7 @@ type Synchronization struct {
 	ID int64 `json:"id"`
 
 	// Synchronization Status
-	// Enum: [queued in-progress completed failed]
+	// Enum: [queued running completed failed]
 	Status string `json:"status"`
 
 	// time
@@ -55,7 +55,7 @@ var synchronizationTypeStatusPropEnum []interface{}
 
 func init() {
 	var res []string
-	if err := json.Unmarshal([]byte(`["queued","in-progress","completed","failed"]`), &res); err != nil {
+	if err := json.Unmarshal([]byte(`["queued","running","completed","failed"]`), &res); err != nil {
 		panic(err)
 	}
 	for _, v := range res {
@@ -68,8 +68,8 @@ const (
 	// SynchronizationStatusQueued captures enum value "queued"
 	SynchronizationStatusQueued string = "queued"
 
-	// SynchronizationStatusInDashProgress captures enum value "in-progress"
-	SynchronizationStatusInDashProgress string = "in-progress"
+	// SynchronizationStatusRunning captures enum value "running"
+	SynchronizationStatusRunning string = "running"
 
 	// SynchronizationStatusCompleted captures enum value "completed"
 	SynchronizationStatusCompleted string = "completed"

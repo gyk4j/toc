@@ -28,7 +28,7 @@ type Transfer struct {
 	ID int64 `json:"id"`
 
 	// Transfer Status
-	// Enum: [queued in-progress completed failed]
+	// Enum: [queued running completed failed]
 	Status string `json:"status"`
 }
 
@@ -73,7 +73,7 @@ var transferTypeStatusPropEnum []interface{}
 
 func init() {
 	var res []string
-	if err := json.Unmarshal([]byte(`["queued","in-progress","completed","failed"]`), &res); err != nil {
+	if err := json.Unmarshal([]byte(`["queued","running","completed","failed"]`), &res); err != nil {
 		panic(err)
 	}
 	for _, v := range res {
@@ -86,8 +86,8 @@ const (
 	// TransferStatusQueued captures enum value "queued"
 	TransferStatusQueued string = "queued"
 
-	// TransferStatusInDashProgress captures enum value "in-progress"
-	TransferStatusInDashProgress string = "in-progress"
+	// TransferStatusRunning captures enum value "running"
+	TransferStatusRunning string = "running"
 
 	// TransferStatusCompleted captures enum value "completed"
 	TransferStatusCompleted string = "completed"
