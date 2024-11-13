@@ -11,6 +11,8 @@ import (
 	"github.com/gyk4j/toc/toc-backend/services"
 )
 
+var servers = []string{"web", "file", "db", "mail"}
+
 func NewServer(name string) (server *services.Server) {
 	return &services.Server{
 		Name:            name,
@@ -38,20 +40,33 @@ func (s *BackupService) NewBackup() (*models.Backup, *services.AppError) {
 	b := models.Backup{
 		ID:        -1,
 		Time:      strfmt.DateTime(time.Now()),
-		Snapshots: make([]*models.Snapshot, 0),
+		Snapshots: &models.Snapshots{},
 	}
 
 	// Get ID issued first.
 	o := s.r.Save(&b)
 	i := o.ID
 
-	ss := models.Snapshot{
-		ID:       int64(i),
-		File:     fmt.Sprintf("/toc/archives/%d-%s.tar.gz", i, s),
-		Status:   models.SnapshotStatusQueued,
-		Complete: false,
+	for _, server := range servers {
+		ss := models.Snapshot{
+			ID:     int64(i),
+			File:   fmt.Sprintf("/toc/archives/%d-%s.tar.gz", i, server),
+			Status: models.SnapshotStatusQueued,
+		}
+
+		switch server {
+		case "db":
+			b.Snapshots.Db = &ss
+		case "file":
+			b.Snapshots.File = &ss
+		case "mail":
+			b.Snapshots.Mail = &ss
+		case "web":
+			b.Snapshots.Web = &ss
+		default:
+			log.Printf("Unknown server: %s", server)
+		}
 	}
-	b.Snapshots = append(b.Snapshots, &ss)
 
 	// Update/resave with snapshots
 	o = s.r.Save(&b)
