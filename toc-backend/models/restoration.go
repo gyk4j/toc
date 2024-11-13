@@ -28,7 +28,7 @@ type Restoration struct {
 	ID int64 `json:"id"`
 
 	// Restoration Status
-	// Enum: [queued in-progress completed failed]
+	// Enum: [queued running completed failed]
 	Status string `json:"status"`
 }
 
@@ -73,7 +73,7 @@ var restorationTypeStatusPropEnum []interface{}
 
 func init() {
 	var res []string
-	if err := json.Unmarshal([]byte(`["queued","in-progress","completed","failed"]`), &res); err != nil {
+	if err := json.Unmarshal([]byte(`["queued","running","completed","failed"]`), &res); err != nil {
 		panic(err)
 	}
 	for _, v := range res {
@@ -86,8 +86,8 @@ const (
 	// RestorationStatusQueued captures enum value "queued"
 	RestorationStatusQueued string = "queued"
 
-	// RestorationStatusInDashProgress captures enum value "in-progress"
-	RestorationStatusInDashProgress string = "in-progress"
+	// RestorationStatusRunning captures enum value "running"
+	RestorationStatusRunning string = "running"
 
 	// RestorationStatusCompleted captures enum value "completed"
 	RestorationStatusCompleted string = "completed"

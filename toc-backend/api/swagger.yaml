@@ -67,7 +67,7 @@ definitions:
     # type: string
     # enum: &STATUSES
       # - queued
-      # - in-progress
+      # - running
       # - completed
       # - failed
   # Servers:
@@ -110,17 +110,31 @@ definitions:
         type: "string"
         x-omitempty: false
         description: "Snapshot Status"
-        enum: [ queued, in-progress, completed, failed ]
-      complete:
-        type: "boolean"
+        enum: [ queued, creating, created, uncreated, transferring, transferred, untransferred, restoring, restored, unrestored ]
         x-omitempty: false
     xml:
-      name: "snapshot"
+      name: "Snapshot"
     example:
       file: "/var/opt/toc/archive/20241231T235959Z-server.tar.gz"
       id: 1
-      status: "completed"
-      complete: true
+      status: "restored"
+  Snapshots:
+    type: "object"
+    properties:
+      db:
+        $ref: "#/definitions/Snapshot"
+        x-omitempty: false       
+      file:
+        $ref: "#/definitions/Snapshot"
+        x-omitempty: false
+      mail:
+        $ref: "#/definitions/Snapshot"
+        x-omitempty: false
+      web:
+        $ref: "#/definitions/Snapshot"
+        x-omitempty: false
+    xml:
+      name: "Snapshots"
   Backup:
     type: "object"
     properties:
@@ -133,10 +147,8 @@ definitions:
         format: "date-time"
         x-omitempty: false
       snapshots:
-        type: "array"
+        $ref: "#/definitions/Snapshots"
         x-omitempty: false
-        items:
-          $ref: "#/definitions/Snapshot"
     xml:
       name: "Backup"
     example:
@@ -156,7 +168,7 @@ definitions:
         type: "string"
         x-omitempty: false
         description: "Restoration Status"
-        enum: [ queued, in-progress, completed, failed ]
+        enum: [ queued, running, completed, failed ]
     xml:
       name: "Restoration"
     example:
@@ -175,7 +187,7 @@ definitions:
         type: "string"
         x-omitempty: false
         description: "Transfer Status"
-        enum: [ queued, in-progress, completed, failed ]
+        enum: [ queued, running, completed, failed ]
     xml:
       name: "Transfer"
     example:
@@ -196,13 +208,13 @@ definitions:
         type: "string"
         x-omitempty: false
         description: "Synchronization Status"
-        enum: [ queued, in-progress, completed, failed ]
+        enum: [ queued, running, completed, failed ]
     xml:
       name: "Synchronization"
     example:
       id: 1
       time: "2024-12-31T23:59:59Z"
-      status: "in-progress"
+      status: "running"
   Quota:
     type: "object"
     properties:
@@ -243,7 +255,7 @@ definitions:
         type: "string"
         x-omitempty: false
         description: "Archive Status"
-        enum: [ queued, in-progress, completed, failed ]
+        enum: [ queued, running, completed, failed ]
       url:
         type: "string"
         x-omitempty: false
@@ -269,7 +281,7 @@ definitions:
         type: "string"
         x-omitempty: false
         description: "Archive Status"
-        enum: [ queued, in-progress, completed, failed ]
+        enum: [ queued, running, completed, failed ]
       url:
         type: "string"
         x-omitempty: false

@@ -7,7 +7,6 @@ package models
 
 import (
 	"context"
-	"strconv"
 
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
@@ -25,7 +24,7 @@ type Backup struct {
 	ID int64 `json:"id"`
 
 	// snapshots
-	Snapshots []*Snapshot `json:"snapshots"`
+	Snapshots *Snapshots `json:"snapshots,omitempty"`
 
 	// time
 	// Format: date-time
@@ -55,22 +54,15 @@ func (m *Backup) validateSnapshots(formats strfmt.Registry) error {
 		return nil
 	}
 
-	for i := 0; i < len(m.Snapshots); i++ {
-		if swag.IsZero(m.Snapshots[i]) { // not required
-			continue
-		}
-
-		if m.Snapshots[i] != nil {
-			if err := m.Snapshots[i].Validate(formats); err != nil {
-				if ve, ok := err.(*errors.Validation); ok {
-					return ve.ValidateName("snapshots" + "." + strconv.Itoa(i))
-				} else if ce, ok := err.(*errors.CompositeError); ok {
-					return ce.ValidateName("snapshots" + "." + strconv.Itoa(i))
-				}
-				return err
+	if m.Snapshots != nil {
+		if err := m.Snapshots.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("snapshots")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("snapshots")
 			}
+			return err
 		}
-
 	}
 
 	return nil
@@ -104,24 +96,20 @@ func (m *Backup) ContextValidate(ctx context.Context, formats strfmt.Registry) e
 
 func (m *Backup) contextValidateSnapshots(ctx context.Context, formats strfmt.Registry) error {
 
-	for i := 0; i < len(m.Snapshots); i++ {
+	if m.Snapshots != nil {
 
-		if m.Snapshots[i] != nil {
-
-			if swag.IsZero(m.Snapshots[i]) { // not required
-				return nil
-			}
-
-			if err := m.Snapshots[i].ContextValidate(ctx, formats); err != nil {
-				if ve, ok := err.(*errors.Validation); ok {
-					return ve.ValidateName("snapshots" + "." + strconv.Itoa(i))
-				} else if ce, ok := err.(*errors.CompositeError); ok {
-					return ce.ValidateName("snapshots" + "." + strconv.Itoa(i))
-				}
-				return err
-			}
+		if swag.IsZero(m.Snapshots) { // not required
+			return nil
 		}
 
+		if err := m.Snapshots.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("snapshots")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("snapshots")
+			}
+			return err
+		}
 	}
 
 	return nil

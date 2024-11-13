@@ -1362,7 +1362,7 @@ func init() {
           "type": "string",
           "enum": [
             "queued",
-            "in-progress",
+            "running",
             "completed",
             "failed"
           ],
@@ -1397,11 +1397,8 @@ func init() {
           "x-omitempty": false
         },
         "snapshots": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/Snapshot"
-          },
-          "x-omitempty": false
+          "x-omitempty": false,
+          "$ref": "#/definitions/Snapshots"
         },
         "time": {
           "type": "string",
@@ -1430,7 +1427,7 @@ func init() {
           "type": "string",
           "enum": [
             "queued",
-            "in-progress",
+            "running",
             "completed",
             "failed"
           ],
@@ -1506,7 +1503,7 @@ func init() {
           "type": "string",
           "enum": [
             "queued",
-            "in-progress",
+            "running",
             "completed",
             "failed"
           ],
@@ -1523,10 +1520,6 @@ func init() {
     "Snapshot": {
       "type": "object",
       "properties": {
-        "complete": {
-          "type": "boolean",
-          "x-omitempty": false
-        },
         "file": {
           "type": "string",
           "x-omitempty": false
@@ -1541,21 +1534,50 @@ func init() {
           "type": "string",
           "enum": [
             "queued",
-            "in-progress",
-            "completed",
-            "failed"
+            "creating",
+            "created",
+            "uncreated",
+            "transferring",
+            "transferred",
+            "untransferred",
+            "restoring",
+            "restored",
+            "unrestored"
           ],
           "x-omitempty": false
         }
       },
       "xml": {
-        "name": "snapshot"
+        "name": "Snapshot"
       },
       "example": {
-        "complete": true,
         "file": "/var/opt/toc/archive/20241231T235959Z-server.tar.gz",
         "id": 1,
-        "status": "completed"
+        "status": "restored"
+      }
+    },
+    "Snapshots": {
+      "type": "object",
+      "properties": {
+        "db": {
+          "x-omitempty": false,
+          "$ref": "#/definitions/Snapshot"
+        },
+        "file": {
+          "x-omitempty": false,
+          "$ref": "#/definitions/Snapshot"
+        },
+        "mail": {
+          "x-omitempty": false,
+          "$ref": "#/definitions/Snapshot"
+        },
+        "web": {
+          "x-omitempty": false,
+          "$ref": "#/definitions/Snapshot"
+        }
+      },
+      "xml": {
+        "name": "Snapshots"
       }
     },
     "Synchronization": {
@@ -1571,7 +1593,7 @@ func init() {
           "type": "string",
           "enum": [
             "queued",
-            "in-progress",
+            "running",
             "completed",
             "failed"
           ],
@@ -1588,7 +1610,7 @@ func init() {
       },
       "example": {
         "id": 1,
-        "status": "in-progress",
+        "status": "running",
         "time": "2024-12-31T23:59:59Z"
       }
     },
@@ -1609,7 +1631,7 @@ func init() {
           "type": "string",
           "enum": [
             "queued",
-            "in-progress",
+            "running",
             "completed",
             "failed"
           ],
@@ -3033,7 +3055,7 @@ func init() {
           "type": "string",
           "enum": [
             "queued",
-            "in-progress",
+            "running",
             "completed",
             "failed"
           ],
@@ -3068,11 +3090,8 @@ func init() {
           "x-omitempty": false
         },
         "snapshots": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/Snapshot"
-          },
-          "x-omitempty": false
+          "x-omitempty": false,
+          "$ref": "#/definitions/Snapshots"
         },
         "time": {
           "type": "string",
@@ -3101,7 +3120,7 @@ func init() {
           "type": "string",
           "enum": [
             "queued",
-            "in-progress",
+            "running",
             "completed",
             "failed"
           ],
@@ -3177,7 +3196,7 @@ func init() {
           "type": "string",
           "enum": [
             "queued",
-            "in-progress",
+            "running",
             "completed",
             "failed"
           ],
@@ -3194,10 +3213,6 @@ func init() {
     "Snapshot": {
       "type": "object",
       "properties": {
-        "complete": {
-          "type": "boolean",
-          "x-omitempty": false
-        },
         "file": {
           "type": "string",
           "x-omitempty": false
@@ -3212,21 +3227,50 @@ func init() {
           "type": "string",
           "enum": [
             "queued",
-            "in-progress",
-            "completed",
-            "failed"
+            "creating",
+            "created",
+            "uncreated",
+            "transferring",
+            "transferred",
+            "untransferred",
+            "restoring",
+            "restored",
+            "unrestored"
           ],
           "x-omitempty": false
         }
       },
       "xml": {
-        "name": "snapshot"
+        "name": "Snapshot"
       },
       "example": {
-        "complete": true,
         "file": "/var/opt/toc/archive/20241231T235959Z-server.tar.gz",
         "id": 1,
-        "status": "completed"
+        "status": "restored"
+      }
+    },
+    "Snapshots": {
+      "type": "object",
+      "properties": {
+        "db": {
+          "x-omitempty": false,
+          "$ref": "#/definitions/Snapshot"
+        },
+        "file": {
+          "x-omitempty": false,
+          "$ref": "#/definitions/Snapshot"
+        },
+        "mail": {
+          "x-omitempty": false,
+          "$ref": "#/definitions/Snapshot"
+        },
+        "web": {
+          "x-omitempty": false,
+          "$ref": "#/definitions/Snapshot"
+        }
+      },
+      "xml": {
+        "name": "Snapshots"
       }
     },
     "Synchronization": {
@@ -3242,7 +3286,7 @@ func init() {
           "type": "string",
           "enum": [
             "queued",
-            "in-progress",
+            "running",
             "completed",
             "failed"
           ],
@@ -3259,7 +3303,7 @@ func init() {
       },
       "example": {
         "id": 1,
-        "status": "in-progress",
+        "status": "running",
         "time": "2024-12-31T23:59:59Z"
       }
     },
@@ -3280,7 +3324,7 @@ func init() {
           "type": "string",
           "enum": [
             "queued",
-            "in-progress",
+            "running",
             "completed",
             "failed"
           ],

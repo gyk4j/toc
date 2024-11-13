@@ -16,13 +16,10 @@ import (
 )
 
 // Snapshot snapshot
-// Example: {"complete":true,"file":"/var/opt/toc/archive/20241231T235959Z-server.tar.gz","id":1,"status":"completed"}
+// Example: {"file":"/var/opt/toc/archive/20241231T235959Z-server.tar.gz","id":1,"status":"restored"}
 //
 // swagger:model Snapshot
 type Snapshot struct {
-
-	// complete
-	Complete bool `json:"complete"`
 
 	// file
 	File string `json:"file"`
@@ -31,7 +28,7 @@ type Snapshot struct {
 	ID int64 `json:"id"`
 
 	// Snapshot Status
-	// Enum: [queued in-progress completed failed]
+	// Enum: [queued creating created uncreated transferring transferred untransferred restoring restored unrestored]
 	Status string `json:"status"`
 }
 
@@ -53,7 +50,7 @@ var snapshotTypeStatusPropEnum []interface{}
 
 func init() {
 	var res []string
-	if err := json.Unmarshal([]byte(`["queued","in-progress","completed","failed"]`), &res); err != nil {
+	if err := json.Unmarshal([]byte(`["queued","creating","created","uncreated","transferring","transferred","untransferred","restoring","restored","unrestored"]`), &res); err != nil {
 		panic(err)
 	}
 	for _, v := range res {
@@ -66,14 +63,32 @@ const (
 	// SnapshotStatusQueued captures enum value "queued"
 	SnapshotStatusQueued string = "queued"
 
-	// SnapshotStatusInDashProgress captures enum value "in-progress"
-	SnapshotStatusInDashProgress string = "in-progress"
+	// SnapshotStatusCreating captures enum value "creating"
+	SnapshotStatusCreating string = "creating"
 
-	// SnapshotStatusCompleted captures enum value "completed"
-	SnapshotStatusCompleted string = "completed"
+	// SnapshotStatusCreated captures enum value "created"
+	SnapshotStatusCreated string = "created"
 
-	// SnapshotStatusFailed captures enum value "failed"
-	SnapshotStatusFailed string = "failed"
+	// SnapshotStatusUncreated captures enum value "uncreated"
+	SnapshotStatusUncreated string = "uncreated"
+
+	// SnapshotStatusTransferring captures enum value "transferring"
+	SnapshotStatusTransferring string = "transferring"
+
+	// SnapshotStatusTransferred captures enum value "transferred"
+	SnapshotStatusTransferred string = "transferred"
+
+	// SnapshotStatusUntransferred captures enum value "untransferred"
+	SnapshotStatusUntransferred string = "untransferred"
+
+	// SnapshotStatusRestoring captures enum value "restoring"
+	SnapshotStatusRestoring string = "restoring"
+
+	// SnapshotStatusRestored captures enum value "restored"
+	SnapshotStatusRestored string = "restored"
+
+	// SnapshotStatusUnrestored captures enum value "unrestored"
+	SnapshotStatusUnrestored string = "unrestored"
 )
 
 // prop value enum

@@ -25,7 +25,7 @@ type Log struct {
 	ID int64 `json:"id"`
 
 	// Archive Status
-	// Enum: [queued in-progress completed failed]
+	// Enum: [queued running completed failed]
 	Status string `json:"status"`
 
 	// time
@@ -58,7 +58,7 @@ var logTypeStatusPropEnum []interface{}
 
 func init() {
 	var res []string
-	if err := json.Unmarshal([]byte(`["queued","in-progress","completed","failed"]`), &res); err != nil {
+	if err := json.Unmarshal([]byte(`["queued","running","completed","failed"]`), &res); err != nil {
 		panic(err)
 	}
 	for _, v := range res {
@@ -71,8 +71,8 @@ const (
 	// LogStatusQueued captures enum value "queued"
 	LogStatusQueued string = "queued"
 
-	// LogStatusInDashProgress captures enum value "in-progress"
-	LogStatusInDashProgress string = "in-progress"
+	// LogStatusRunning captures enum value "running"
+	LogStatusRunning string = "running"
 
 	// LogStatusCompleted captures enum value "completed"
 	LogStatusCompleted string = "completed"

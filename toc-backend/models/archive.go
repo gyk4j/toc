@@ -25,7 +25,7 @@ type Archive struct {
 	ID int64 `json:"id"`
 
 	// Archive Status
-	// Enum: [queued in-progress completed failed]
+	// Enum: [queued running completed failed]
 	Status string `json:"status"`
 
 	// time
@@ -58,7 +58,7 @@ var archiveTypeStatusPropEnum []interface{}
 
 func init() {
 	var res []string
-	if err := json.Unmarshal([]byte(`["queued","in-progress","completed","failed"]`), &res); err != nil {
+	if err := json.Unmarshal([]byte(`["queued","running","completed","failed"]`), &res); err != nil {
 		panic(err)
 	}
 	for _, v := range res {
@@ -71,8 +71,8 @@ const (
 	// ArchiveStatusQueued captures enum value "queued"
 	ArchiveStatusQueued string = "queued"
 
-	// ArchiveStatusInDashProgress captures enum value "in-progress"
-	ArchiveStatusInDashProgress string = "in-progress"
+	// ArchiveStatusRunning captures enum value "running"
+	ArchiveStatusRunning string = "running"
 
 	// ArchiveStatusCompleted captures enum value "completed"
 	ArchiveStatusCompleted string = "completed"
