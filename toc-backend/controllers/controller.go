@@ -4,7 +4,6 @@ import (
 	"net/http"
 
 	"github.com/go-openapi/runtime/middleware"
-	"github.com/gyk4j/toc/toc-backend/models"
 	"github.com/gyk4j/toc/toc-backend/restapi/operations/archive"
 	"github.com/gyk4j/toc/toc-backend/restapi/operations/backup"
 	"github.com/gyk4j/toc/toc-backend/restapi/operations/log"
@@ -12,6 +11,7 @@ import (
 	"github.com/gyk4j/toc/toc-backend/restapi/operations/restoration"
 	"github.com/gyk4j/toc/toc-backend/restapi/operations/synchronization"
 	"github.com/gyk4j/toc/toc-backend/restapi/operations/transfer"
+	"github.com/gyk4j/toc/toc-backend/utils"
 )
 
 //
@@ -27,12 +27,8 @@ func NewBackup(params backup.NewBackupParams) middleware.Responder {
 	if err == nil {
 		res = backup.NewNewBackupOK().WithPayload(b)
 	} else {
-		apires := models.APIResponse{
-			Code:    http.StatusInternalServerError,
-			Message: "Internal server error",
-			Type:    models.APIResponseTypeError,
-		}
-		res = backup.NewNewBackupInternalServerError().WithPayload(&apires)
+		apires := utils.NewAPIResponseFactory().GetAPIResponse(http.StatusInternalServerError)
+		res = backup.NewNewBackupInternalServerError().WithPayload(apires)
 	}
 
 	return res
@@ -48,12 +44,8 @@ func UpdateBackup(params backup.UpdateBackupParams) middleware.Responder {
 	if err == nil {
 		res = backup.NewUpdateBackupOK().WithPayload(b)
 	} else {
-		apires := models.APIResponse{
-			Code:    http.StatusInternalServerError,
-			Message: "Internal server error",
-			Type:    models.APIResponseTypeError,
-		}
-		res = backup.NewUpdateBackupInternalServerError().WithPayload(&apires)
+		apires := utils.NewAPIResponseFactory().GetAPIResponse(http.StatusInternalServerError)
+		res = backup.NewUpdateBackupInternalServerError().WithPayload(apires)
 	}
 
 	return res
@@ -68,12 +60,8 @@ func GetBackups(params backup.GetBackupsParams) middleware.Responder {
 	if err == nil {
 		res = backup.NewGetBackupsOK().WithPayload(b)
 	} else {
-		apires := models.APIResponse{
-			Code:    http.StatusServiceUnavailable,
-			Message: "Service unavailable",
-			Type:    models.APIResponseTypeError,
-		}
-		res = backup.NewGetBackupsServiceUnavailable().WithPayload(&apires)
+		apires := utils.NewAPIResponseFactory().GetAPIResponse(http.StatusServiceUnavailable)
+		res = backup.NewGetBackupsServiceUnavailable().WithPayload(apires)
 	}
 
 	return res
@@ -88,12 +76,8 @@ func GetBackupByID(params backup.GetBackupByIDParams) middleware.Responder {
 	if err == nil {
 		res = backup.NewGetBackupByIDOK().WithPayload(b)
 	} else {
-		apires := models.APIResponse{
-			Code:    http.StatusNotFound,
-			Message: "Not found",
-			Type:    models.APIResponseTypeError,
-		}
-		res = backup.NewGetBackupByIDNotFound().WithPayload(&apires)
+		apires := utils.NewAPIResponseFactory().GetAPIResponse(http.StatusNotFound)
+		res = backup.NewGetBackupByIDNotFound().WithPayload(apires)
 	}
 
 	return res
@@ -112,19 +96,20 @@ func NewRestoration(params restoration.NewRestorationParams) middleware.Responde
 	if err == nil {
 		res = restoration.NewNewRestorationOK().WithPayload(r)
 	} else {
-		apires := models.APIResponse{
-			Code:    http.StatusInternalServerError,
-			Message: "Internal server error",
-			Type:    models.APIResponseTypeError,
-		}
-		res = restoration.NewNewRestorationInternalServerError().WithPayload(&apires)
+		apires := utils.NewAPIResponseFactory().GetAPIResponse(http.StatusInternalServerError)
+		res = restoration.NewNewRestorationInternalServerError().WithPayload(apires)
 	}
 
 	return res
 }
 
 func UpdateRestoration(params restoration.UpdateRestorationParams) middleware.Responder {
-	return middleware.NotImplemented("operation UpdateRestoration has not yet been implemented")
+	var res middleware.Responder
+
+	apires := utils.NewAPIResponseFactory().GetAPIResponse(http.StatusNotImplemented)
+	res = restoration.NewUpdateRestorationMethodNotAllowed().WithPayload(apires)
+
+	return res
 }
 
 func GetRestorations(params restoration.GetRestorationsParams) middleware.Responder {
@@ -136,12 +121,8 @@ func GetRestorations(params restoration.GetRestorationsParams) middleware.Respon
 	if err == nil {
 		res = restoration.NewGetRestorationsOK().WithPayload(r)
 	} else {
-		apires := models.APIResponse{
-			Code:    http.StatusServiceUnavailable,
-			Message: "Service unavailable",
-			Type:    models.APIResponseTypeError,
-		}
-		res = restoration.NewGetRestorationsServiceUnavailable().WithPayload(&apires)
+		apires := utils.NewAPIResponseFactory().GetAPIResponse(http.StatusServiceUnavailable)
+		res = restoration.NewGetRestorationsServiceUnavailable().WithPayload(apires)
 	}
 
 	return res
@@ -156,12 +137,8 @@ func GetRestorationByID(params restoration.GetRestorationByIDParams) middleware.
 	if err == nil {
 		res = restoration.NewGetRestorationByIDOK().WithPayload(r)
 	} else {
-		apires := models.APIResponse{
-			Code:    http.StatusNotFound,
-			Message: "Not found",
-			Type:    models.APIResponseTypeError,
-		}
-		res = restoration.NewGetRestorationByIDNotFound().WithPayload(&apires)
+		apires := utils.NewAPIResponseFactory().GetAPIResponse(http.StatusNotFound)
+		res = restoration.NewGetRestorationByIDNotFound().WithPayload(apires)
 	}
 
 	return res
@@ -180,19 +157,20 @@ func NewTransfer(params transfer.NewTransferParams) middleware.Responder {
 	if err == nil {
 		res = transfer.NewNewTransferOK().WithPayload(t)
 	} else {
-		apires := models.APIResponse{
-			Code:    http.StatusInternalServerError,
-			Message: "Internal server error",
-			Type:    models.APIResponseTypeError,
-		}
-		res = transfer.NewNewTransferInternalServerError().WithPayload(&apires)
+		apires := utils.NewAPIResponseFactory().GetAPIResponse(http.StatusInternalServerError)
+		res = transfer.NewNewTransferInternalServerError().WithPayload(apires)
 	}
 
 	return res
 }
 
 func UpdateTransfer(params transfer.UpdateTransferParams) middleware.Responder {
-	return middleware.NotImplemented("operation UpdateTransfer has not yet been implemented")
+	var res middleware.Responder
+
+	apires := utils.NewAPIResponseFactory().GetAPIResponse(http.StatusNotImplemented)
+	res = transfer.NewUpdateTransferMethodNotAllowed().WithPayload(apires)
+
+	return res
 }
 
 func GetTransfers(params transfer.GetTransfersParams) middleware.Responder {
@@ -204,12 +182,8 @@ func GetTransfers(params transfer.GetTransfersParams) middleware.Responder {
 	if err == nil {
 		res = transfer.NewGetTransfersOK().WithPayload(t)
 	} else {
-		apires := models.APIResponse{
-			Code:    http.StatusServiceUnavailable,
-			Message: "Service unavailable",
-			Type:    models.APIResponseTypeError,
-		}
-		res = transfer.NewGetTransfersServiceUnavailable().WithPayload(&apires)
+		apires := utils.NewAPIResponseFactory().GetAPIResponse(http.StatusServiceUnavailable)
+		res = transfer.NewGetTransfersServiceUnavailable().WithPayload(apires)
 	}
 
 	return res
@@ -224,12 +198,8 @@ func GetTransferByID(params transfer.GetTransferByIDParams) middleware.Responder
 	if err == nil {
 		res = transfer.NewGetTransferByIDOK().WithPayload(t)
 	} else {
-		apires := models.APIResponse{
-			Code:    http.StatusNotFound,
-			Message: "Not found",
-			Type:    models.APIResponseTypeError,
-		}
-		res = transfer.NewGetTransferByIDNotFound().WithPayload(&apires)
+		apires := utils.NewAPIResponseFactory().GetAPIResponse(http.StatusNotFound)
+		res = transfer.NewGetTransferByIDNotFound().WithPayload(apires)
 	}
 
 	return res
@@ -248,14 +218,20 @@ func NewSynchronization(params synchronization.NewSynchronizationParams) middlew
 	if err == nil {
 		res = synchronization.NewNewSynchronizationOK().WithPayload(sync)
 	} else {
-		res = synchronization.NewNewSynchronizationServiceUnavailable()
+		apires := utils.NewAPIResponseFactory().GetAPIResponse(http.StatusServiceUnavailable)
+		res = synchronization.NewNewSynchronizationServiceUnavailable().WithPayload(apires)
 	}
 
 	return res
 }
 
 func UpdateSynchronization(params synchronization.UpdateSynchronizationParams) middleware.Responder {
-	return middleware.NotImplemented("operation UpdateSynchronization has not yet been implemented")
+	var res middleware.Responder
+
+	apires := utils.NewAPIResponseFactory().GetAPIResponse(http.StatusNotImplemented)
+	res = synchronization.NewUpdateSynchronizationMethodNotAllowed().WithPayload(apires)
+
+	return res
 }
 
 //
@@ -271,7 +247,8 @@ func GetQuotas(params quota.GetQuotasParams) middleware.Responder {
 	if err == nil {
 		res = quota.NewGetQuotasOK().WithPayload(qs)
 	} else {
-		res = quota.NewGetQuotasServiceUnavailable()
+		apires := utils.NewAPIResponseFactory().GetAPIResponse(http.StatusServiceUnavailable)
+		res = quota.NewGetQuotasServiceUnavailable().WithPayload(apires)
 	}
 
 	return res
@@ -290,14 +267,20 @@ func ExportLog(params log.ExportLogParams) middleware.Responder {
 	if err == nil {
 		res = log.NewExportLogOK().WithPayload(l)
 	} else {
-		res = log.NewExportLogInternalServerError()
+		apires := utils.NewAPIResponseFactory().GetAPIResponse(http.StatusInternalServerError)
+		res = log.NewExportLogInternalServerError().WithPayload(apires)
 	}
 
 	return res
 }
 
 func UpdateLog(params log.UpdateLogParams) middleware.Responder {
-	return middleware.NotImplemented("operation UpdateLog has not yet been implemented")
+	var res middleware.Responder
+
+	apires := utils.NewAPIResponseFactory().GetAPIResponse(http.StatusNotImplemented)
+	res = log.NewUpdateLogMethodNotAllowed().WithPayload(apires)
+
+	return res
 }
 
 //
@@ -313,19 +296,20 @@ func NewArchive(params archive.NewArchiveParams) middleware.Responder {
 	if err == nil {
 		res = archive.NewNewArchiveOK().WithPayload(a)
 	} else {
-		apires := models.APIResponse{
-			Code:    http.StatusInternalServerError,
-			Message: "Internal server error",
-			Type:    models.APIResponseTypeError,
-		}
-		res = archive.NewNewArchiveInternalServerError().WithPayload(&apires)
+		apires := utils.NewAPIResponseFactory().GetAPIResponse(http.StatusInternalServerError)
+		res = archive.NewNewArchiveInternalServerError().WithPayload(apires)
 	}
 
 	return res
 }
 
 func UpdateArchive(params archive.UpdateArchiveParams) middleware.Responder {
-	return middleware.NotImplemented("operation UpdateArchive has not yet been implemented")
+	var res middleware.Responder
+
+	apires := utils.NewAPIResponseFactory().GetAPIResponse(http.StatusNotImplemented)
+	res = archive.NewUpdateArchiveMethodNotAllowed().WithPayload(apires)
+
+	return res
 }
 
 func GetArchives(params archive.GetArchivesParams) middleware.Responder {
@@ -337,12 +321,8 @@ func GetArchives(params archive.GetArchivesParams) middleware.Responder {
 	if err == nil {
 		res = archive.NewGetArchivesOK().WithPayload(a)
 	} else {
-		apires := models.APIResponse{
-			Code:    http.StatusNotFound,
-			Message: "Not found",
-			Type:    models.APIResponseTypeError,
-		}
-		res = archive.NewGetArchivesNotFound().WithPayload(&apires)
+		apires := utils.NewAPIResponseFactory().GetAPIResponse(http.StatusNotFound)
+		res = archive.NewGetArchivesNotFound().WithPayload(apires)
 	}
 
 	return res
@@ -357,12 +337,8 @@ func GetArchiveByID(params archive.GetArchiveByIDParams) middleware.Responder {
 	if err == nil {
 		res = archive.NewGetArchiveByIDOK().WithPayload(a)
 	} else {
-		apires := models.APIResponse{
-			Code:    http.StatusNotFound,
-			Message: "Not found",
-			Type:    models.APIResponseTypeError,
-		}
-		res = archive.NewGetArchiveByIDNotFound().WithPayload(&apires)
+		apires := utils.NewAPIResponseFactory().GetAPIResponse(http.StatusNotFound)
+		res = archive.NewGetArchiveByIDNotFound().WithPayload(apires)
 	}
 
 	return res
