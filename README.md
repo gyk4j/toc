@@ -31,5 +31,6 @@ To learn more, please visit the [project wiki][wiki].
 [s6-overlay]: https://skarnet.org/software/s6/
 [golang]: https://go.dev/
 [swagger]: https://swagger.io/
+[react]: https://react.dev/
 [mdb]: https://mdbootstrap.com/
 [wiki]: ../../wiki/Home
