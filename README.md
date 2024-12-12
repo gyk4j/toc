@@ -8,6 +8,7 @@ between a local and remote site.
 *TOC* began life as a prototype to test out various modern software technologies 
 for learning and experimentation. It uses the following technologies:
 
+- [Terraform][terraform]
 - [Vagrant][vagrant]
 - [Docker][docker], [Docker Compose][docker-compose], [s6 process supervisor][s6-overlay]
 - [Go][golang], [Swagger][swagger]
@@ -25,6 +26,7 @@ for learning and experimentation. It uses the following technologies:
 
 To learn more, please visit the [project wiki][wiki].
 
+[terraform]: https://www.terraform.io/
 [vagrant]: https://www.vagrantup.com/
 [docker]: https://www.docker.com/community/open-source/
 [docker-compose]: https://docs.docker.com/compose/
