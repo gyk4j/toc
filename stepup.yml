@@ -1,0 +1,5 @@
+---
+- hosts: stepup
+  roles:
+    - common
+    - stepup
